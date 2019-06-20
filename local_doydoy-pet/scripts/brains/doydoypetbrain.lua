@@ -87,8 +87,8 @@ local function updateDescription(inst)
 
 	
 	if inst.eatTimes > 0 then
-		--lifespan = math.floor(inst.eatTimes * 10 / TUNING.DOYDOYPET_DIE_OLD_AGE)
-		lifespan = inst.eatTimes..'/'..TUNING.DOYDOYPET_DIE_OLD_AGE
+		lifespan = math.floor(inst.eatTimes * 10 / TUNING.DOYDOYPET_DIE_OLD_AGE)
+		--lifespan = inst.eatTimes..'/'..TUNING.DOYDOYPET_DIE_OLD_AGE
 	end	
 	
 	if #items > 0 then

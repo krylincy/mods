@@ -103,7 +103,7 @@ function shopinteriorOverwrite(self,inst)
 								{ "magnifying_glass",   "oinc", 10 },                     
 								{ "ballpein_hammer",   "oinc", 10 },                     
 								{ "multitool_axe_pickaxe", "oinc", 50 },                            
-								{ "gasmaskhat", "oinc", 40 }, 
+								--{ "gasmaskhat", "oinc", 40 }, 
 								{ "orangeamulet", "oinc", 30 },       
 							},
 		["pig_shop_general_fiesta"] = {                            
@@ -124,14 +124,14 @@ function shopinteriorOverwrite(self,inst)
 		["pig_shop_hoofspa"] = {
 								
 								--{ "thulecite",      "oinc", 10 },
-								{ "infused_iron",      "oinc", 20 },
+								--{ "infused_iron",      "oinc", 20 },
 								--{ "antivenom",    "oinc", 5 },
-								{ "alloy",              "oinc", 4  },                            
+								{ "alloy",              "oinc", 3  },                            
 								{ "iron",              "oinc", 1  },                            
 								{ "rocks",  "oinc", 1 }, 
-								--{ "nitre",  "oinc", 2 }, 
-								--{ "houndstooth",       "oinc", 5  },
-								--{ "boneshard",			"oinc", 5  },
+								{ "nitre",  "oinc", 2 }, 
+								{ "houndstooth",       "oinc", 3  },
+								{ "boneshard",			"oinc", 3  },
 							},
 
 		["pig_shop_produce"] = {
