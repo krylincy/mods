@@ -16,7 +16,6 @@ local function EatFoodAction(inst)  --Look for food to eat
 	end	
 	
 	local time_since_eat = inst.components.eater:TimeSinceLastEating()	
-
 	if time_since_eat == nil or time_since_eat > TUNING.DOYDOYPET_EAT_INVERVALL then
 	
 		if inst.components.inventory and inst.components.eater then	

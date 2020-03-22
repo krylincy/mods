@@ -24,9 +24,9 @@ local prefabs =
 	"goldnugget",
 }
 
-local babyloot = {"charcoal"}
-local teenloot = {"charcoal", "ash"}
-local adultloot = {'charcoal', 'ash', 'ash'}
+local babyloot = {"boneshard"}
+local teenloot = {"boneshard", "ash"}
+local adultloot = {'boneshard', 'ash', 'ash'}
 
 local babyfoodprefs = {"SEEDS"}
 local teenfoodprefs = {"VEGGIE", "SEEDS"}
@@ -123,8 +123,10 @@ local function OnEat(inst, food)
 			local newEgg = SpawnPrefab("doydoypetbaby")
 			newEgg.Transform:SetPosition(inst.Transform:GetWorldPosition())	
 		else
+			if math.random() < 0.3 then 
+				SpawnPrefab("poop").Transform:SetPosition(inst.Transform:GetWorldPosition())
+			end	
 			if math.random() < 0.6 then 
-				--SpawnPrefab("poop").Transform:SetPosition(inst.Transform:GetWorldPosition())
 				inst.eatTimes = inst.eatTimes + 1
 			end	
 		end

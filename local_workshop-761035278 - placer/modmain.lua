@@ -50,7 +50,8 @@ local SNAP_INFO = {
 	{OnlyPrefab('marsh_bush'), 'dug_marsh_bush_placer', 'dug_marsh_bush'},
 	{OnlyPrefab('bambootree'), 'dug_bambootree_placer', 'dug_bambootree'},
 	{OnlyPrefab('nettle'), 'dug_nettle_placer', 'dug_nettle'},
-	{OnlyPrefab('vine'), 'dug_bush_vine_placer', 'dug_bush_vine'},
+	{OnlyPrefab('bush_vine'), 'dug_bush_vine_placer', 'dug_bush_vine'},
+	{OnlyPrefab('coffeebush'), 'dug_coffeebush_placer', 'dug_coffeebush'},
 	
 	{OnlyPrefab('reeds'), 'dug_reeds_placer', 'dug_reeds'},
 	{OnlyPrefab('mushrooms'), 'dug_red_mushroom_placer', 'dug_red_mushroom'},

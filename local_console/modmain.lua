@@ -19,9 +19,8 @@ local function custom_console( inst )
 	
 	inst:DoTaskInTime( 0.001, function()
 		
-		GetPlayer().components.locomotor.runspeed = 9
-		GetPlayer().components.health:SetMaxHealth(400)
-		--GLOBAL.GetAction().COOK.priority = 10
+		--GetPlayer().components.locomotor.runspeed = 9
+		--GetPlayer().components.health:SetMaxHealth(400)
 		
 	end)
 end
@@ -32,11 +31,11 @@ function custom_tuning()
     TUNING["STACK_SIZE_LARGEITEM"] = 10000
     TUNING["STACK_SIZE_MEDITEM"] = 10000
     TUNING["STACK_SIZE_SMALLITEM"] = 10000
-	TUNING.WILSON_WALK_SPEED = 5
-	TUNING.WILSON_RUN_SPEED = 9
+	--TUNING.WILSON_WALK_SPEED = 5
+	--TUNING.WILSON_RUN_SPEED = 9
 	
 	TUNING.PIPE_DART_DAMAGE = 500
-	TUNING.TORNADOSTAFF_USES = 50
+	TUNING.TORNADOSTAFF_USES = 500
 	--TUNING.TORNADO_DAMAGE = 100
 	
 	TUNING.ABIGAIL_SPEED = 9
@@ -47,9 +46,11 @@ function custom_tuning()
 	TUNING.FLIPPABLE_ROCK_REPOPULATE_VARIANCE = 0
 	TUNING.FLIPPABLE_ROCK_CYCLES = 999
 	
-	TUNING.ORANGEAMULET_USES = 1000
+	TUNING.ORANGEAMULET_USES = 2000
 	TUNING.ORANGEAMULET_RANGE = 20
 	TUNING.ORANGEAMULET_ICD = 0.15
+	
+	TUNING.BERRYBUSH_CYCLES = 100
 		
 	
 	-- local world = GetWorld()
@@ -66,45 +67,50 @@ function shopinteriorOverwrite(self,inst)
 		["pig_shop_deli"] = {
 								{ "tea",     "oinc", 1  },
 								{ "coffee",     "oinc", 1  },
-								{ "spicyvegstinger",     "oinc", 2  },
-								{ "feijoada",    "oinc", 3  },
-								{ "snakebonesoup",    "oinc", 3  },
+								--{ "spicyvegstinger",     "oinc", 2  },
+								--{ "feijoada",    "oinc", 3  },
+								--{ "snakebonesoup",    "oinc", 3  },
 								{ "lobsterdinner",       "oinc", 3 },
-								{ "nettlelosange",       "oinc", 5 },
-								{ "bonestew",       "oinc", 5 },
-								{ "freshfruitcrepes",       "oinc", 5 },
+								{ "nettlelosange",       "oinc", 3 },
+								--{ "bonestew",       "oinc", 5 },
+								{ "freshfruitcrepes",       "oinc", 4 },
 							},
 		
 		["pig_shop_florist"] = {								
 								{ "seeds",        "oinc", 1  },
-								{ "seeds",        "oinc", 1  },
+								--{ "pumpkin_seeds",        "oinc", 2  },
 								--{ "asparagus_seeds",             "oinc", 2  },
-								--{ "dragonfruit_seeds",             "oinc", 2  },
+								--{ "dragonfruit_seeds",             "oinc", 10  },
 								--{ "eggplant_seeds",             "oinc", 2  },
 								{ "acorn",             "oinc", 2  },
 								{ "pinecone",          "oinc", 2  },
 								{ "burr",    "oinc", 2  },
 								{ "teatree_nut",    "oinc", 2  },
-								--{ "teatree_nut",    "oinc", 2  },
 								{ "jungletreeseed",    "oinc", 2  },
+								{ "dug_sapling",     "oinc", 2  },
 								{ "dug_berrybush",     "oinc", 5  },
+								{ "dug_berrybush2",     "oinc", 5  },
 								--{ "dug_bush_vine",     "oinc", 3  },
 								--{ "dug_bambootree",     "oinc", 3  },
 							},
 
 		["pig_shop_general"] = {										
-								{ "minerhat",   "oinc", 20 },
+								--{ "minerhat",   "oinc", 20 },
 								{ "bandage",      "oinc", 3  },
-								{ "bugnet",      "oinc", 10  },
-								{ "shears",      "oinc", 10  },
-								{ "sewing_kit",      "oinc", 10  },
-								{ "bugrepellent",   "oinc", 10 },                     
-								{ "walkingstick",   "oinc", 10 },                     
-								{ "magnifying_glass",   "oinc", 10 },                     
-								{ "ballpein_hammer",   "oinc", 10 },                     
+								{ "bandage",      "oinc", 3  },
+								{ "antivenom",    "oinc", 5 },
+								--{ "bugnet",      "oinc", 10  },
+								--{ "shears",      "oinc", 10  },
+								{ "sewing_kit",      "oinc", 5  },
+								--{ "bugrepellent",   "oinc", 10 },                     
+								--{ "walkingstick",   "oinc", 10 },                     
+								--{ "magnifying_glass",   "oinc", 10 },                     
+								--{ "ballpein_hammer",   "oinc", 10 },                     
 								{ "multitool_axe_pickaxe", "oinc", 50 },                            
 								--{ "gasmaskhat", "oinc", 40 }, 
 								{ "orangeamulet", "oinc", 30 },       
+								--{ "boards", "oinc", 1 },       
+								{ "cutstone", "oinc", 1 },       
 							},
 		["pig_shop_general_fiesta"] = {                            
 								{ "firecrackers",  "oinc", 1  },
@@ -123,44 +129,51 @@ function shopinteriorOverwrite(self,inst)
 							},
 		["pig_shop_hoofspa"] = {
 								
-								--{ "thulecite",      "oinc", 10 },
+								{ "thulecite",      "oinc", 5 },
+								{ "thulecite",      "oinc", 5 },
 								--{ "infused_iron",      "oinc", 20 },
-								--{ "antivenom",    "oinc", 5 },
-								{ "alloy",              "oinc", 3  },                            
+								--{ "alloy",              "oinc", 3  },                            
 								{ "iron",              "oinc", 1  },                            
-								{ "rocks",  "oinc", 1 }, 
-								{ "nitre",  "oinc", 2 }, 
-								{ "houndstooth",       "oinc", 3  },
-								{ "boneshard",			"oinc", 3  },
+								{ "rocks",  "oinc", 0 }, 
+								{ "rocks",  "oinc", 0 }, 
+								{ "rocks",  "oinc", 0 }, 
+								{ "nitre",  "oinc", 1 }, 
+								{ "houndstooth",       "oinc", 2  },
+								{ "houndstooth",       "oinc", 2  },
+								{ "living_artifact",  "oinc", 100 }, 
+								--{ "boneshard",			"oinc", 2  },
 							},
 
 		["pig_shop_produce"] = {
 								--{ "rainbowjellyfish_dead",    "oinc", 5 },					
-								{ "cave_banana",  "oinc", 2 },
-								{ "cave_banana",  "oinc", 2 },
-								{ "coconut",      "oinc", 3 },
-								{ "coconut",      "oinc", 3 },
+								{ "cave_banana",  "oinc", 1 },
+								{ "coconut",      "oinc", 1 },
+								{ "coconut",      "oinc", 1 },
 								{ "venus_stalk",      "oinc", 5 },
-								--{ "clippings",     "oinc", 1  },
+								{ "clippings",     "oinc", 1  },
+								{ "clippings",     "oinc", 1  },
 								--{ "bird_egg",     "oinc", 1  },
 								--{ "butter",     "oinc", 5  },    
 								--{ "butterflywings",     "oinc", 2  },
 								--{ "tuber_bloom_crop",     "oinc", 3  },
 								--{ "bramble_bulb",     "oinc", 5  },
 								{ "waterdrop",      "oinc", 100 },	
-								{ "honeycomb",             "oinc", 10 },								
+								{ "honeycomb",             "oinc", 5 },								
+								--{ "blubber",             "oinc", 3 },								
+								--{ "bundlewrap",             "oinc", 10 },								
 							},
 
 		["pig_shop_antiquities"] = {                     
 								--{ "gears",             "oinc", 10 },								
-								--{ "bamboo",            "oinc", 3  },                          
-								{ "cutreeds",            "oinc", 3  },                          
-								--{ "fabric",     "oinc", 2  },
+								--{ "bamboo",            "oinc", 3  },                            
+								{ "cutreeds",            "oinc", 2  },                          
+								{ "fabric",     "oinc", 2  },
 								{ "livinglog",    "oinc", 10  },
 								{ "lightbulb",  "oinc", 2 }, 
 								{ "lightbulb",  "oinc", 2 }, 
 								{ "pigskin",     "oinc", 2  },
 								{ "pigskin",     "oinc", 2  },
+								{ "beefalowool",     "oinc", 1  },
 								--{ "wormlight",         "oinc", 10 },
 								
 							},
@@ -169,34 +182,40 @@ function shopinteriorOverwrite(self,inst)
 							},
 
 		["pig_shop_arcane"] = {	
-								{ "kingfisher",  "oinc", 20 }, 
-								{ "toucan",  "oinc", 20 }, 
+								--{ "kingfisher",  "oinc", 10 }, 
+								--{ "toucan",  "oinc", 20 }, 
 								--{ "parrot_blue",  "oinc", 20 }, 
+								--{ "parrot_pirate",  "oinc", 20 }, 
+								{ "parrot",  "oinc", 20 }, 
+								{ "peagawk",  "oinc", 20 },  
 								{ "mole",  "oinc", 10 },  
+								{ "rabbit",  "oinc", 5 }, 
 								-- { "primeape",  "oinc", 20 },  
-								{ "rabbit",  "oinc", 5 }, 
-								{ "rabbit",  "oinc", 5 }, 
+								--{ "rabbit",  "oinc", 5 }, 
 								--{ "crab",  "oinc", 10 }, 
-								{ "piko",  "oinc", 5 }, 
-								{ "spidereggsack",  "oinc", 50 }, 
+								--{ "piko",  "oinc", 5 }, 
+								{ "spidereggsack",  "oinc", 20 }, 
+								{ "doydoybaby",  "oinc", 50 }, 
 								{ "butterfly",  "oinc", 1 },
 								{ "butterfly",  "oinc", 1 },
 								{ "butterfly",  "oinc", 1 },
 							},  
 		["pig_shop_weapons"] = {
-								{ "footballhat",          "oinc", 5  },
+								--{ "footballhat",          "oinc", 5  },
 								{ "halberd",          "oinc", 5  },
 								--{ "armor_metalplate",        "oinc", 20  },
-								{ "antsuit",        "oinc", 30  },
-								{ "antmaskhat",        "oinc", 30  },
-								{ "armordragonfly",        "oinc", 50 },
-								{ "armor_weevole",     "oinc", 10 },
-								{ "ruinshat",        "oinc", 50 },
-								{ "armorruins",        "oinc", 50 },
+								--{ "antsuit",        "oinc", 30  },
+								--{ "antmaskhat",        "oinc", 30  },
+								--{ "armordragonfly",        "oinc", 50 },
+								--{ "armor_weevole",     "oinc", 10 },
+								{ "ruinshat",        "oinc", 20 },
+								{ "armorruins",        "oinc", 20 },
 								{ "eyeturret_item", "oinc", 200 },
+								{ "cutlass", "oinc", 10 },
+								{ "ruins_bat", "oinc", 10 },
 							},                      
 		["pig_shop_hatshop"] = {                        
-								{ "tophat",      "oinc", 10 },
+								--{ "tophat",      "oinc", 10 },
 								{ "molehat",     "oinc", 20 },
 								--{ "featherhat",  "oinc", 5  },
 								{ "brainjellyhat",    "oinc", 100  },
@@ -206,7 +225,8 @@ function shopinteriorOverwrite(self,inst)
 								--{ "beehat",     "oinc", 10 },
 								--{ "gashat",     "oinc", 20 },
 								{ "reflectivevest",     "oinc", 20 },
-								{ "eyebrellahat",     "oinc", 30 },
+								{ "armor_windbreaker",     "oinc", 20 },
+								--{ "eyebrellahat",     "oinc", 30 },
 								{ "double_umbrellahat",     "oinc", 40 },
 							},  
 		["pig_shop_bank"] = {                        
@@ -218,13 +238,13 @@ function shopinteriorOverwrite(self,inst)
 								
 								--{ "turf_savanna", "oinc", 1 },  
 								--{ "turf_desertdirt", "oinc", 1 },  
-								--{ "turf_meadow", "oinc", 1 },	
+								{ "turf_meadow", "oinc", 1 },	
 								{ "turf_fields", "oinc", 1 },  
 								{ "turf_lawn", "oinc", 1 },  
-								{ "turf_foundation", "oinc", 1 },  
+								--{ "turf_foundation", "oinc", 1 },  
 								
-								{ "turf_cobbleroad", "oinc", 2 },  
-								{ "turf_road", "oinc", 2 },   
+								--{ "turf_cobbleroad", "oinc", 1 },  
+								--{ "turf_road", "oinc", 2 },   
 							},                                                  
 		["pig_shop_academy"] = {
 							},
@@ -253,21 +273,21 @@ end
 
 function economyOverwrite(self,inst)
 	local TRADER = {
-		pigman_collector = 		{ items= {"hippo_antler","bill_quill","tallbirdegg", "horn", "dragoonheart", "lureplantbulb", "shark_fin", "turbine_blades", "snakeoil", "shark_gills", "magic_seal"},					
+		pigman_collector = 		{ items= {"hippo_antler","bill_quill","tallbirdegg", "doydoyegg","horn", "dragoonheart", "lureplantbulb", "tigereye","spidereggsack", "shark_fin", "turbine_blades", "snakeoil", "shark_gills", "magic_seal"},					
 									delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_COLLECTOR_TRADE,  reward = "oinc",   rewardqty=10},
 		pigman_banker = 		{ items= {"redgem","bluegem","greengem", "orangegem", "yellowgem"},
 									delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_BANKER_TRADE, 	 reward = "oinc", rewardqty=10},
-		pigman_beautician = 	{ items= {"feather_crow","feather_robin","feather_robin_winter","peagawkfeather", "feather_thunder"},					
+		pigman_beautician = 	{ items= {"feather_crow","feather_robin","feather_robin_winter","peagawkfeather", "feather_thunder", "doydoyfeather"},					
 									delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_BEAUTICIAN_TRADE, reward = "oinc",   rewardqty=2},
 		pigman_mechanic = 		{ items= {"boards","rope","cutstone","papyrus"},
 									delay=0, reset=1, current=0, desc=STRINGS.CITY_PIG_MECHANIC_TRADE, 	 reward = "oinc",   rewardqty=2},
 		pigman_professor =		{ items= {"relic_1", "relic_2", "relic_3","bandithat"}, 
 									delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_PROFESSOR_TRADE,  reward = "oinc", rewardqty=10},								
 	 
-		pigman_hunter = 		{ items= {"houndstooth","stinger"},	   delay=0, reset=1, current=0, desc=STRINGS.CITY_PIG_HUNTER_TRADE, 	reward = "oinc",   rewardqty=5},
+		pigman_hunter = 		{ items= {"houndstooth","stinger", "meat", "cookedmeat"},	   delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_HUNTER_TRADE, 	reward = "oinc",   rewardqty=3},
 		pigman_mayor = 			{ items= {"goldnugget"},	   delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_MAYOR_TRADE, 	    reward = "oinc",   rewardqty=5},
 		pigman_florist = 		{ items= {"petals"},   		   delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_FLORIST_TRADE,    reward = "oinc",   rewardqty=1},
-		pigman_storeowner = 	{ items= {"clippings"},		   delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_STOREOWNER_TRADE, reward = "oinc",   rewardqty=1},
+		pigman_storeowner = 	{ items= {"clippings","waxpaper"},		   delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_STOREOWNER_TRADE, reward = "oinc",   rewardqty=1},
 		pigman_farmer = 		{ items= {"cutgrass","twigs"}, delay=0, reset=1, current=0, desc=STRINGS.CITY_PIG_FARMER_TRADE, 	reward = "oinc",   rewardqty=1},
 		pigman_miner = 			{ items= {"rocks"},			   delay=0, reset=1, current=0, desc=STRINGS.CITY_PIG_MINER_TRADE, 	    reward = "oinc",   rewardqty=1},
 		pigman_erudite = 		{ items= {"nightmarefuel"},	   delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_ERUDITE_TRADE,    reward = "oinc",   rewardqty=5},
@@ -311,150 +331,6 @@ function economyOverwrite(self,inst)
 	end
 end
 
-function banditmanagerOverwrite(self,inst)
-	function self:SpawnTreasureChest(pt)
-	
-		local chest = SpawnPrefab("treasurechest")
-		if chest then
-			chest.Transform:SetPosition(pt.x, pt.y, pt.z)
-			SpawnPrefab("collapse_small").Transform:SetPosition(pt.x, pt.y, pt.z)
-
-			if chest.components.container then
-				
-				local player = GetPlayer()
-				local lootprefabs = self:GetLoot()
-
-				for p, n in pairs(lootprefabs) do
-					for i = 1, n, 1 do
-						local loot = SpawnPrefab(p)
-						if loot.components.inventoryitem and not loot.components.container then
-							chest.components.container:GiveItem(loot, nil, nil, true, false)
-						else
-							local pos = Vector3(pt.x, pt.y, pt.z)
-							local start_angle = math.random()*PI*2
-							local rad = 1
-							if chest.Physics then
-								rad = rad + chest.Physics:GetRadius()
-							end
-							local offset = FindWalkableOffset(pos, start_angle, rad, 8, false)
-							if offset == nil then
-								return
-							end
-
-							pos = pos + offset
-
-							loot.Transform:SetPosition(pos.x, pos.y, pos.z)
-							-- attacker?
-							if loot.components.combat then
-								loot.components.combat:SuggestTarget(player)
-							end
-						end
-					end
-				end
-			else
-				SpawnTreasureLoot(name, lootdropper, pt)
-			end
-		end
-		self.loot = {}
-	end
-	
-	function self:GetLoot()
-		local temploot = {}
-
-		local treasurelist = {
-			{	
-				weight = 5,
-				loot = {					
-					goldnugget = 2,
-					oinc10 = 1,
-					meat_dried = 2,		
-				},
-			},
-			
-			{	
-				weight = 3,
-				loot = {
-					goldnugget = 4,
-					oinc = 5,
-					meat_dried = 2,
-				},
-			},
-
-			{	
-				weight = 3,
-				loot = {
-					oinc10 = 2,
-					sewing_kit = 1,	
-					meat_dried = 1,
-				},
-			},	
-
-			{	
-				weight = 5,
-				loot = {
-					meat_dried = 2,
-					oinc = 15,	
-					drumstick = 2,
-					oinc10 = 1,				
-				},
-			},
-
-			{	
-				weight = 2,
-				loot = {
-					goldnugget = 4,
-					oinc10 = 3,	
-					meat_dried = 2,
-				},
-			},
-
-			{	
-				weight = 1,
-				loot = {
-					drumstick = 2,
-					oinc = 15,	
-					oinc10 = 2,
-				},
-			},						
-		}	
-
-		local range = 0
-
-		for i,set in ipairs(treasurelist) do
-			range = range + set.weight
-		end
-
-		local final = math.random(1,range)
-		--print("BANDIT MAP", range,final)
-		range = 0
-		for i,set in ipairs(treasurelist) do
-
-			range = range + set.weight
-			--print("range",range)
-			if range >= final then
-				for p,n in pairs(set.loot) do
-					if not temploot[p] then
-						temploot[p] = n
-					else
-						temploot[p] = temploot[p] +n
-					end
-				end
-				break
-			end
-		end	
-
-		for p, n in pairs(self.loot) do		
-			if not temploot[p] then			
-				temploot[p] = n
-			else
-				temploot[p] = temploot[p] +n
-			end
-		end
-		return temploot 
-	end
-end
-
-
 AddPrefabPostInit("gashat", function(inst) inst:AddTag("gasmask") end)
 AddPrefabPostInit("honeycomb", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("grass", function(inst) 
@@ -466,6 +342,8 @@ AddPrefabPostInit("grass", function(inst)
 
 	inst:AddTag("fireimmune") 
 	inst.components.pickable.ontransplantfn = ontransplantfn
+	inst.components.pickable.max_cycles = 100
+	inst.components.pickable.cycles_left = 100
 end)
 AddPrefabPostInit("sapling", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("berrybush", function(inst) 
@@ -507,20 +385,32 @@ AddPrefabPostInit("fence", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("fence_gate", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("plant_normal", function(inst) inst:AddTag("fireimmune") end)
 
+AddPrefabPostInit("flower", function(inst) inst:RemoveComponent("blowinwindgust") end)
+AddPrefabPostInit("flower_evil", function(inst) inst:RemoveComponent("blowinwindgust") end)
+
 AddPrefabPostInit("tentaclespike", function(inst) 
 inst:AddTag("burnable") 
 end)
 
-AddPrefabPostInit("tentacle", function(inst) 
-GLOBAL.SetSharedLootTable( 'tentacle',
-{
-    {'monstermeat',   1.0},
-    {'monstermeat',   1.0},
-    {'tentaclespots', 0.5},
-})
-
-	 inst.components.lootdropper:SetChanceLootTable('tentacle')
+AddPrefabPostInit("peagawk", function(inst) 
+	inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.nobounce = true
+	inst.components.inventoryitem.canbepickedup = false
+	inst.components.inventoryitem.longpickup = true
+	inst.components.inventoryitem.imagename = "wall_peagawk"	
+	
 end)
+
+-- AddPrefabPostInit("tentacle", function(inst) 
+-- GLOBAL.SetSharedLootTable( 'tentacle',
+-- {
+    -- {'monstermeat',   1.0},
+    -- {'monstermeat',   1.0},
+    -- {'tentaclespots', 0.5},
+-- })
+
+	 -- inst.components.lootdropper:SetChanceLootTable('tentacle')
+-- end)
 
 AddPrefabPostInit("multitool_axe_pickaxe", function(inst) 
 	--inst:RemoveComponent("finiteuses") 
@@ -578,6 +468,14 @@ end)
 AddPrefabPostInit("silvernecklace", function(inst) 
     inst.components.equippable.equipslot = EQUIPSLOTS.NECK or EQUIPSLOTS.BODY
 end)
+AddPrefabPostInit("clippings", function(inst) 
+    inst:AddTag("noautopickup")
+	GLOBAL.MakeBlowInHurricane(inst, 0.01, 0.05) -- HEAVY
+end)
+AddPrefabPostInit("berries", function(inst) 
+    inst:AddTag("noautopickup")
+	GLOBAL.MakeBlowInHurricane(inst, 0.01, 0.05) -- HEAVY
+end)
 
 AddPrefabPostInit("orangeamulet", function(inst) 
 	local function SpawnEffect(inst)
@@ -588,12 +486,13 @@ AddPrefabPostInit("orangeamulet", function(inst)
 	end
 
 	local function getitem(player, amulet, item)
-		--Amulet will only ever pick up items one at a time. Even from stacks.
+		--Amulet will only ever pick up items one at a time. Even from stacks. NOOOOO MORE! =)
 		SpawnEffect(item)
 		amulet.components.finiteuses:Use(1)
 		
 		if item.components.stackable then
-			item = item.components.stackable:Get()
+			local stackAmount = item.components.stackable:StackSize()
+			item = item.components.stackable:Get(stackAmount)
 		end
 		
 		if item.components.trap and item.components.trap:IsSprung() then
@@ -610,7 +509,7 @@ AddPrefabPostInit("orangeamulet", function(inst)
 
 		for k,v in pairs(ents) do
 			if v.components.inventoryitem and v.components.inventoryitem.canbepickedup and v.components.inventoryitem.cangoincontainer and not
-				v.components.inventoryitem:IsHeld() and not v:HasTag("projectile") then
+				v.components.inventoryitem:IsHeld() and not v:HasTag("projectile") and not v:HasTag("doydoy") and not v:HasTag("trap") and not v:HasTag("noautopickup") then
 
 				if not owner.components.inventory:IsFull() then
 					--Your inventory isn't full, you can pick something up.
@@ -670,12 +569,11 @@ AddPrefabPostInit("bundle", function(inst)
 end)
 
 
-AddSimPostInit(custom_console)
+--AddSimPostInit(custom_console)
 
 custom_tuning()
 AddGamePostInit(custom_tuning)
 AddSimPostInit(custom_tuning)
 AddComponentPostInit("shopinterior",shopinteriorOverwrite)
 AddComponentPostInit("economy",economyOverwrite)
-AddComponentPostInit("banditmanager",banditmanagerOverwrite)
 
