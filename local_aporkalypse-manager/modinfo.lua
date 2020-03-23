@@ -1,7 +1,7 @@
 name = "Aporkalypse Manager"
 description = ""
 author = "krylincy"
-version = "1.1"
+version = "1.2"
 
 description = [[With a start and stop engine.
 
@@ -17,7 +17,7 @@ icon_atlas = "aporkalypse_manager.xml"
 dont_starve_compatible = true
 reign_of_giants_compatible = true
 shipwrecked_compatible = true
-porkland_compatable = true
+hamlet_compatible = true
 
 configuration_options = {
 	{
@@ -28,6 +28,15 @@ configuration_options = {
 			{description = "Yes", data = true},
 		},
 		default = false,
+	},
+	{
+		name = "WITH_FUNCTION",
+		label = "With Function",
+		options = {
+			{description = "No", data = false},
+			{description = "Yes", data = true},
+		},
+		default = true,
 	},
 	{
 		name = "CHANGE_SANITY",
