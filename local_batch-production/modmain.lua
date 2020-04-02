@@ -4,7 +4,12 @@ Recipe = GLOBAL.Recipe
 Ingredient = GLOBAL.Ingredient
 TECH = GLOBAL.TECH
 
+local goldnugget = GetModConfigData("goldnugget")
+
 local function AddModRecipe(_recName, _ingrList, _tab, _techLevel, _recType, _placer, _spacing, _proxyLock, _amount)
+	if goldnugget > 0 then
+		table.insert(_ingrList, Ingredient("goldnugget", goldnugget))
+	end
 	if GLOBAL.CAPY_DLC and GLOBAL.IsDLCEnabled(GLOBAL.CAPY_DLC) or GLOBAL.IsDLCEnabled(GLOBAL.PORKLAND_DLC) then
 		return GLOBAL.Recipe(_recName, _ingrList , _tab, _techLevel, _recType, _placer, _spacing, _proxyLock, _amount)
 	else

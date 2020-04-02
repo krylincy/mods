@@ -63,6 +63,16 @@ babybeefalo.image = "brush.tex"
 STRINGS.NAMES.BABYBEEFALO = "Babybeefalo"
 STRINGS.RECIPE_DESC.BABYBEEFALO = ""
 
+local pog = AddModRecipe("pog", {Ingredient("smallmeat", 4),Ingredient("meat", 1),Ingredient("goldnugget", 1)}, RECIPETABS.FARM, TECH.NONE)
+pog.image = "brush.tex"
+STRINGS.NAMES.POG = "Pog"
+STRINGS.RECIPE_DESC.POG = ""
+
+local peagawk = AddModRecipe("peagawk", {Ingredient("drumstick", 2),Ingredient("meat", 1),Ingredient("doydoyfeather", 5)}, RECIPETABS.FARM, TECH.NONE)
+peagawk.image = "brush.tex"
+STRINGS.NAMES.PEAGAWK = "Peagawk"
+STRINGS.RECIPE_DESC.PEAGAWK = ""
+
 local doydoyfoodclipping = AddModRecipe("clippings", {Ingredient("pumpkin", 5)}, RECIPETABS.FARM, TECH.NONE)
 doydoyfoodclipping.image = "clippings.tex"
 doydoyfoodclipping.numtogive = 20
