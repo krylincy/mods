@@ -647,9 +647,9 @@ function Casket_container (inst)
 
 	end
 
-	inst.GetItemByName = GetItemByNameOverride
+	--inst.GetItemByName = GetItemByNameOverride
 	inst.HasItemOrNull = HasItemOrNull
-	inst.RemoveItem = RemoveItemOverwrite
+	--inst.RemoveItem = RemoveItemOverwrite
 end
 
 AddComponentPostInit("container", Casket_container)
