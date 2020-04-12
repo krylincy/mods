@@ -17,12 +17,12 @@ local function custom_console( inst )
 
 	GLOBAL.RunScript("consolecommands")
 	
-	inst:DoTaskInTime( 0.001, function()
+	--inst:DoTaskInTime( 0.001, function()
 		
 		--GetPlayer().components.locomotor.runspeed = 9
 		--GetPlayer().components.health:SetMaxHealth(400)
 		
-	end)
+	--end)
 end
 
 function custom_tuning()
@@ -41,10 +41,10 @@ function custom_tuning()
 	TUNING.ABIGAIL_SPEED = 9
 	TUNING.ABIGAIL_DAMAGE_PER_SECOND = 80
 	
-	TUNING.FLIPPABLE_ROCK_REPOPULATE_TIME = total_day_time*1
-	TUNING.FLIPPABLE_ROCK_REPOPULATE_INCREASE = 0
-	TUNING.FLIPPABLE_ROCK_REPOPULATE_VARIANCE = 0
-	TUNING.FLIPPABLE_ROCK_CYCLES = 999
+	--TUNING.FLIPPABLE_ROCK_REPOPULATE_TIME = total_day_time*1
+	--TUNING.FLIPPABLE_ROCK_REPOPULATE_INCREASE = 0
+	--TUNING.FLIPPABLE_ROCK_REPOPULATE_VARIANCE = 0
+	--TUNING.FLIPPABLE_ROCK_CYCLES = 999
 	
 	TUNING.ORANGEAMULET_USES = 2000
 	TUNING.ORANGEAMULET_RANGE = 20
@@ -71,13 +71,13 @@ function shopinteriorOverwrite(self,inst)
 								--{ "feijoada",    "oinc", 3  },
 								--{ "snakebonesoup",    "oinc", 3  },
 								{ "lobsterdinner",       "oinc", 3 },
-								{ "nettlelosange",       "oinc", 3 },
+								--{ "nettlelosange",       "oinc", 3 },
 								--{ "bonestew",       "oinc", 5 },
 								{ "freshfruitcrepes",       "oinc", 4 },
 							},
 		
 		["pig_shop_florist"] = {								
-								{ "seeds",        "oinc", 1  },
+								--{ "seeds",        "oinc", 1  },
 								--{ "pumpkin_seeds",        "oinc", 2  },
 								--{ "asparagus_seeds",             "oinc", 2  },
 								--{ "dragonfruit_seeds",             "oinc", 10  },
@@ -88,7 +88,7 @@ function shopinteriorOverwrite(self,inst)
 								{ "teatree_nut",    "oinc", 2  },
 								{ "jungletreeseed",    "oinc", 2  },
 								{ "dug_sapling",     "oinc", 2  },
-								{ "dug_berrybush",     "oinc", 5  },
+								--{ "dug_berrybush",     "oinc", 5  },
 								{ "dug_berrybush2",     "oinc", 5  },
 								--{ "dug_bush_vine",     "oinc", 3  },
 								--{ "dug_bambootree",     "oinc", 3  },
@@ -97,18 +97,20 @@ function shopinteriorOverwrite(self,inst)
 		["pig_shop_general"] = {										
 								--{ "minerhat",   "oinc", 20 },
 								{ "bandage",      "oinc", 3  },
-								{ "bandage",      "oinc", 3  },
+								--{ "bandage",      "oinc", 3  },
 								{ "antivenom",    "oinc", 5 },
-								--{ "bugnet",      "oinc", 10  },
+								{ "bugnet",      "oinc", 10  },
 								--{ "shears",      "oinc", 10  },
-								{ "sewing_kit",      "oinc", 5  },
+								--{ "sewing_kit",      "oinc", 5  },
 								--{ "bugrepellent",   "oinc", 10 },                     
 								--{ "walkingstick",   "oinc", 10 },                     
 								--{ "magnifying_glass",   "oinc", 10 },                     
 								--{ "ballpein_hammer",   "oinc", 10 },                     
 								{ "multitool_axe_pickaxe", "oinc", 50 },                            
+								{ "yellowstaff", "oinc", 40 },                            
 								--{ "gasmaskhat", "oinc", 40 }, 
 								{ "orangeamulet", "oinc", 30 },       
+								{ "yellowamulet", "oinc", 30 },       
 								--{ "boards", "oinc", 1 },       
 								{ "cutstone", "oinc", 1 },       
 							},
@@ -129,7 +131,7 @@ function shopinteriorOverwrite(self,inst)
 							},
 		["pig_shop_hoofspa"] = {
 								
-								{ "thulecite",      "oinc", 5 },
+								--{ "thulecite",      "oinc", 5 },
 								{ "thulecite",      "oinc", 5 },
 								--{ "infused_iron",      "oinc", 20 },
 								--{ "alloy",              "oinc", 3  },                            
@@ -138,8 +140,8 @@ function shopinteriorOverwrite(self,inst)
 								--{ "rocks",  "oinc", 0 }, 
 								{ "rocks",  "oinc", 1 }, 
 								{ "nitre",  "oinc", 1 }, 
-								{ "houndstooth",       "oinc", 2  },
-								{ "houndstooth",       "oinc", 2  },
+								{ "houndstooth",       "oinc", 2  },							
+								{ "lightbulb",  "oinc", 2 },
 								--{ "living_artifact",  "oinc", 100 }, 
 								--{ "boneshard",			"oinc", 2  },
 							},
@@ -147,7 +149,7 @@ function shopinteriorOverwrite(self,inst)
 		["pig_shop_produce"] = {
 								--{ "rainbowjellyfish_dead",    "oinc", 5 },					
 								{ "cave_banana",  "oinc", 1 },
-								{ "coconut",      "oinc", 1 },
+								{ "mandrake",      "oinc", 20 },
 								{ "coconut",      "oinc", 1 },
 								{ "venus_stalk",      "oinc", 5 },
 								{ "clippings",     "oinc", 1  },
@@ -160,7 +162,8 @@ function shopinteriorOverwrite(self,inst)
 								{ "waterdrop",      "oinc", 100 },	
 								{ "honeycomb",             "oinc", 5 },								
 								--{ "blubber",             "oinc", 3 },								
-								--{ "bundlewrap",             "oinc", 10 },								
+								--{ "bundlewrap",             "oinc", 10 },	
+								{ "wormlight",         "oinc", 10 },							
 							},
 
 		["pig_shop_antiquities"] = {                     
@@ -169,12 +172,10 @@ function shopinteriorOverwrite(self,inst)
 								{ "cutreeds",            "oinc", 2  },                          
 								{ "fabric",     "oinc", 2  },
 								{ "livinglog",    "oinc", 10  },
-								{ "lightbulb",  "oinc", 2 }, 
-								{ "lightbulb",  "oinc", 2 }, 
+								--{ "lightbulb",  "oinc", 2 },  
 								{ "pigskin",     "oinc", 2  },
 								{ "pigskin",     "oinc", 2  },
 								{ "beefalowool",     "oinc", 1  },
-								--{ "wormlight",         "oinc", 10 },
 								
 							},
 
@@ -182,15 +183,13 @@ function shopinteriorOverwrite(self,inst)
 							},
 
 		["pig_shop_arcane"] = {	
-								--{ "kingfisher",  "oinc", 10 }, 
+								{ "kingfisher",  "oinc", 10 }, 
 								--{ "toucan",  "oinc", 20 }, 
 								--{ "parrot_blue",  "oinc", 20 }, 
-								--{ "parrot_pirate",  "oinc", 20 }, 
 								{ "parrot",  "oinc", 20 }, 
 								--{ "peagawk",  "oinc", 20 },  
-								{ "mole",  "oinc", 10 },  
-								{ "rabbit",  "oinc", 5 }, 
-								-- { "primeape",  "oinc", 20 },  
+								--{ "mole",  "oinc", 10 },  
+								{ "rabbit",  "oinc", 5 },   
 								--{ "rabbit",  "oinc", 5 }, 
 								--{ "crab",  "oinc", 10 }, 
 								{ "piko",  "oinc", 5 }, 
@@ -201,6 +200,7 @@ function shopinteriorOverwrite(self,inst)
 								{ "butterfly",  "oinc", 1 },
 								{ "butterfly",  "oinc", 1 },
 								{ "butterfly",  "oinc", 1 },
+								{ "fireflies",       "oinc", 5  },	
 							},  
 		["pig_shop_weapons"] = {
 								--{ "footballhat",          "oinc", 5  },
@@ -226,6 +226,8 @@ function shopinteriorOverwrite(self,inst)
 								{ "pithhat",     "oinc", 10 },
 								--{ "beehat",     "oinc", 10 },
 								--{ "gashat",     "oinc", 20 },
+								{ "bathat",     "oinc", 20 },
+								{ "gasmaskhat",     "oinc", 20 },
 								{ "reflectivevest",     "oinc", 20 },
 								{ "armor_windbreaker",     "oinc", 20 },
 								--{ "eyebrellahat",     "oinc", 30 },
@@ -385,22 +387,14 @@ AddPrefabPostInit("flower_cave_triple", function(inst) inst:AddTag("fireimmune")
 AddPrefabPostInit("nettle", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("fence", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("fence_gate", function(inst) inst:AddTag("fireimmune") end)
+AddPrefabPostInit("wall_wood", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("plant_normal", function(inst) inst:AddTag("fireimmune") end)
 
 AddPrefabPostInit("flower", function(inst) inst:RemoveComponent("blowinwindgust") end)
 AddPrefabPostInit("flower_evil", function(inst) inst:RemoveComponent("blowinwindgust") end)
 
 AddPrefabPostInit("tentaclespike", function(inst) 
-inst:AddTag("burnable") 
-end)
-
-AddPrefabPostInit("peagawk", function(inst) 
-	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.nobounce = true
-	inst.components.inventoryitem.canbepickedup = false
-	inst.components.inventoryitem.longpickup = true
-	inst.components.inventoryitem.imagename = "wall_peagawk"	
-	
+    inst:AddTag("burnable")
 end)
 
 -- AddPrefabPostInit("tentacle", function(inst) 
@@ -416,14 +410,16 @@ end)
 
 AddPrefabPostInit("multitool_axe_pickaxe", function(inst) 
 	--inst:RemoveComponent("finiteuses") 
+	inst.components.tool:SetAction(ACTIONS.DISLODGE, 10)
+	inst.components.tool:SetAction(ACTIONS.DISARM, 10)
 	inst.components.tool:SetAction(ACTIONS.CHOP, 10)
 	inst.components.tool:SetAction(ACTIONS.MINE, 10)
 	inst.components.tool:SetAction(ACTIONS.HACK, 10)
 	inst.components.tool:SetAction(ACTIONS.SHEAR, 10)
-	inst.components.tool:SetAction(ACTIONS.DISLODGE, 10)
 	--inst.components.tool:SetAction(ACTIONS.DIG, 10)
 	--inst.components.tool:SetAction(ACTIONS.HAMMER)
 	inst:AddComponent("dislodger")
+	inst:AddComponent("disarming")
 end)
 AddPrefabPostInit("lightbulb", function(inst) 
 	inst:RemoveComponent("edible") 
@@ -475,6 +471,10 @@ AddPrefabPostInit("clippings", function(inst)
 	GLOBAL.MakeBlowInHurricane(inst, 0.01, 0.05) -- HEAVY
 end)
 AddPrefabPostInit("berries", function(inst) 
+    inst:AddTag("noautopickup")
+	GLOBAL.MakeBlowInHurricane(inst, 0.01, 0.05) -- HEAVY
+end)
+AddPrefabPostInit("seeds_cooked", function(inst)
     inst:AddTag("noautopickup")
 	GLOBAL.MakeBlowInHurricane(inst, 0.01, 0.05) -- HEAVY
 end)
