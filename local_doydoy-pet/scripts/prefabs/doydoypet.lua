@@ -2,6 +2,8 @@ require("brains/doydoypetbrain")
 require "stategraphs/SGdoydoy"
 require "behaviours/panic"
 
+local KEYP1 = KEY_SPACE
+
 local assets =
 {
 	Asset("ANIM", "anim/doydoypet_adult_tarn.zip"),
@@ -10,6 +12,19 @@ local assets =
 	Asset("ANIM", "anim/doydoypet_teen_default.zip"),
 	Asset("ANIM", "anim/doydoypet_baby_tarn.zip"),
 	Asset("ANIM", "anim/doydoypet_baby_default.zip"),
+	
+    Asset("ATLAS", "images/inventoryimages/doydoypet_adult_default.xml"),
+    Asset("IMAGE", "images/inventoryimages/doydoypet_adult_default.tex"),
+    Asset("ATLAS", "images/inventoryimages/doydoypet_adult_tarn.xml"),
+    Asset("IMAGE", "images/inventoryimages/doydoypet_adult_tarn.tex"),
+    Asset("ATLAS", "images/inventoryimages/doydoypet_baby_default.xml"),
+    Asset("IMAGE", "images/inventoryimages/doydoypet_baby_default.tex"),
+    Asset("ATLAS", "images/inventoryimages/doydoypet_baby_tarn.xml"),
+    Asset("IMAGE", "images/inventoryimages/doydoypet_baby_tarn.tex"),
+    Asset("ATLAS", "images/inventoryimages/doydoypet_teen_default.xml"),
+    Asset("IMAGE", "images/inventoryimages/doydoypet_teen_default.tex"),
+    Asset("ATLAS", "images/inventoryimages/doydoypet_teen_tarn.xml"),
+    Asset("IMAGE", "images/inventoryimages/doydoypet_teen_tarn.tex"),
 }
 
 local prefabs_baby =
@@ -24,9 +39,9 @@ local prefabs =
 	"goldnugget",
 }
 
-local babyloot = {"boneshard"}
-local teenloot = {"boneshard", "ash"}
-local adultloot = {'boneshard', 'ash', 'ash'}
+local babyloot = {"butterfly"}
+local teenloot = {"butterfly", "ash"}
+local adultloot = {'butterfly', 'ash', 'ash'}
 
 local babyfoodprefs = {"SEEDS"}
 local teenfoodprefs = {"VEGGIE", "SEEDS"}
@@ -123,7 +138,7 @@ local function OnEat(inst, food)
 			local newEgg = SpawnPrefab("doydoypetbaby")
 			newEgg.Transform:SetPosition(inst.Transform:GetWorldPosition())	
 		else
-			if math.random() < 0.3 then 
+			if math.random() < 0.2 then
 				SpawnPrefab("poop").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			end	
 			if math.random() < 0.6 then 
@@ -173,8 +188,12 @@ local function SetTeen(inst)
 	
 	if inst:HasTag("doydoypet_female") then
 		inst.AnimState:SetBuild("doydoypet_teen_tarn")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_teen_tarn.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_teen_tarn"
 	else
 		inst.AnimState:SetBuild("doydoypet_teen_default")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_teen_default.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_teen_default"
 	end
 
 	inst.AnimState:SetBank("doydoypet")
@@ -203,8 +222,12 @@ local function SetFullyGrown(inst)
 
 	if inst:HasTag("doydoypet_female") then
 		inst.AnimState:SetBuild("doydoypet_adult_tarn")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_tarn.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_adult_tarn"
 	else
 		inst.AnimState:SetBuild("doydoypet_adult_default")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_default.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_adult_default"
 	end
 	
 	inst.AnimState:SetBank("doydoypet")
@@ -249,7 +272,7 @@ end
 
 
 local function OnEntityWake(inst)
-	inst:ClearBufferedAction()		
+	inst:ClearBufferedAction()	
 end
 
 local function onsave(inst, data)
@@ -311,11 +334,6 @@ local function commonfn(Sim)
 	
 	inst.eatTimes = 0	
 
-	if inst:HasTag("doydoypet_female") then
-		inst.AnimState:SetBuild("doydoypet_adult_tarn")
-	else
-		inst.AnimState:SetBuild("doydoypet_adult_default")
-	end
 
 	shadow:SetSize(1.5, 0.8)	
 	inst.Transform:SetFourFaced()	
@@ -326,7 +344,8 @@ local function commonfn(Sim)
 	setColor(inst)
 	
 	inst:AddTag("doydoypet")
-		
+	inst:AddTag("noautopickup")
+	
 	inst:AddComponent("health")
 	--inst:AddComponent("combat")
 	inst:AddComponent("sizetweener")
@@ -363,6 +382,28 @@ local function commonfn(Sim)
     inst.components.trader.onrefuse = OnRefuseItem
     inst.components.trader:Enable()
 
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.nobounce = true
+    inst.components.inventoryitem.canbepickedup = false
+    inst.components.inventoryitem.longpickup = true	
+	
+	if inst:HasTag("doydoypet_female") then
+		inst.AnimState:SetBuild("doydoypet_adult_tarn")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_tarn.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_adult_tarn"
+	else
+		inst.AnimState:SetBuild("doydoypet_adult_default")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_default.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_adult_default"
+	end
+
+    inst:ListenForEvent("ondropped", function(inst, data)
+        inst.components.knownlocations:RememberLocation("home", Point(inst.Transform:GetWorldPosition()), false)
+    end)
+	
+	inst:ListenForEvent("gotosleep", function(inst) inst.components.inventoryitem.canbepickedup = true end)
+    inst:ListenForEvent("onwakeup", function(inst) inst.components.inventoryitem.canbepickedup = false end)
+
 	
 	inst.OnSave = onsave --set the save
 	inst.OnLoad = onload --and the load functions
@@ -375,8 +416,12 @@ local function babyfn(Sim)
 	
 	if inst:HasTag("doydoypet_female") then
 		inst.AnimState:SetBuild("doydoypet_baby_tarn")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_baby_tarn.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_baby_tarn"
 	else
 		inst.AnimState:SetBuild("doydoypet_baby_default")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_baby_default.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_baby_default"
 	end
 
 	inst.AnimState:SetBank("doydoypet_baby")
@@ -414,8 +459,12 @@ local function adultfn(Sim)
 
 	if inst:HasTag("doydoypet_female") then
 		inst.AnimState:SetBuild("doydoypet_adult_tarn")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_tarn.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_adult_tarn"
 	else
 		inst.AnimState:SetBuild("doydoypet_adult_default")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_default.xml"
+		inst.components.inventoryitem.imagename = "doydoypet_adult_default"
 	end
 	
 	setColor(inst)

@@ -129,8 +129,9 @@ local function checkAgeAction(inst)
 	if calculateLimit > math.random(0, 5) then
 		--inst.components.talker:Say("It's time to go", 3)
 		--GetPlayer().components.talker:Say("I suddenly feel sad …")
-		inst.components.lootdropper:SetLoot({'meat', 'meat', 'trinket_19'})
-		
+		--inst.components.lootdropper:SetLoot({'meat', 'meat', 'trinket_19'})
+		inst.components.lootdropper:SetLoot({'trinket_19'})
+
 		if not inst:HasTag("doydoypet_female") then
 			local gem_prefab = {
 				"goldnugget",
