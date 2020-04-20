@@ -23,7 +23,7 @@ local function AddModRecipe(_recName, _ingrList, _tab, _techLevel, _recType, _pl
 	end
 end
 
-local goodlampRecipe = AddModRecipe("goodlampRecipe", {Ingredient("boards", 5),Ingredient("cutstone", 2),Ingredient("fireflies", 1)}, RECIPETABS.LIGHT, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.COMMON, 'goodlamp_placer')
+local goodlampRecipe = AddModRecipe("goodlampRecipe", {Ingredient("boards", 5),Ingredient("cutstone", 5)}, RECIPETABS.LIGHT, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.COMMON)
 goodlampRecipe.product = "goodlamp"
 goodlampRecipe.image = "path_light.tex"
 STRINGS.NAMES.GOODLAMP = "Lamp"

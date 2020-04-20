@@ -6,6 +6,8 @@ local assets=
 	Asset("ANIM", "anim/swap_lantern.zip"),
     Asset("SOUND", "sound/wilson.fsb"),
     Asset("INV_IMAGE", "lantern_lit"),
+    Asset("ATLAS", "images/inventoryimages/path_light.xml"),
+    Asset("IMAGE", "images/inventoryimages/path_light.tex"),
 }
 
 
@@ -57,8 +59,44 @@ local function OnLoad(inst, data)
     end
 end
 
+local function ondropped(inst)
+    turnoff(inst)
+    turnon(inst)
+end
+
+local function onpickup(inst)
+	turnon(inst)
+end
+
+local function onputininventory(inst)
+    turnoff(inst)
+end
+--
+local function onequip(inst, owner) 
+    owner.AnimState:Show("ARM_carry") 
+    owner.AnimState:Hide("ARM_normal")
+    owner.AnimState:OverrideSymbol("lantern_overlay", "swap_lantern", "lantern_overlay")
+	
+    if inst.components.fueled:IsEmpty() then
+        owner.AnimState:OverrideSymbol("swap_object", "swap_lantern", "swap_lantern_off")
+		owner.AnimState:Hide("LANTERN_OVERLAY") 
+    else
+        owner.AnimState:OverrideSymbol("swap_object", "swap_lantern", "swap_lantern_on")
+		owner.AnimState:Show("LANTERN_OVERLAY") 
+    end
+    turnon(inst)
+end
+
+local function onunequip(inst, owner) 
+    owner.AnimState:Hide("ARM_carry") 
+    owner.AnimState:Show("ARM_normal")
+    owner.AnimState:ClearOverrideSymbol("lantern_overlay")
+	owner.AnimState:Hide("LANTERN_OVERLAY") 	
+end
+
 local function nofuel(inst)
     turnoff(inst)
+	inst:Remove()
 end
 
 local function fuelupdate(inst)
@@ -106,15 +144,18 @@ local function fn(Sim)
 	inst.components.fueled:SetUpdateFn(fuelupdate)
 	
 	fuelupdate(inst)
-	
-	inst:AddComponent("lootdropper")
-	inst.components.lootdropper:SetLoot({"boards","boards","boards","boards","boards","goldnugget","goldnugget"})
-	
-	inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
-    inst.components.workable:SetWorkLeft(3)
-	inst.components.workable:SetOnFinishCallback(onhammered)
-	inst.components.workable:SetOnWorkCallback(onhit) 
+
+-- inst:AddComponent("equippable")
+	-- inst.components.equippable:SetOnEquip( onequip )
+    -- inst.components.equippable:SetOnUnequip( onunequip )
+
+	inst:AddComponent("inventoryitem")
+
+    inst.components.inventoryitem:SetOnDroppedFn(ondropped)
+    inst.components.inventoryitem:SetOnPutInInventoryFn(onputininventory)    
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/path_light.xml"
+	inst.components.inventoryitem.imagename = "path_light"
+
 
     inst:AddComponent("machine")
     inst.components.machine.turnonfn = turnon
@@ -129,7 +170,7 @@ local function fn(Sim)
 		return true
 	end
 
-	local maxfuledLantern = TUNING.LANTERN_LIGHTTIME * 6
+	local maxfuledLantern = TUNING.LANTERN_LIGHTTIME * 10
     inst.components.fueled:InitializeFuelLevel(maxfuledLantern)
     inst.components.fueled:SetDepletedFn(nofuel)
 	inst.components.fueled:SetSections(100)
@@ -154,7 +195,8 @@ local function fn(Sim)
     inst.components.playerprox:SetOnPlayerFar(onfar)
 	
 	inst:ListenForEvent( "daytime", function() turnoff(inst) end, GetWorld()) 
-	inst:ListenForEvent( "dusktime", function() 
+	--inst:ListenForEvent( "dusktime", function() 
+	inst:ListenForEvent( "nighttime", function() 
 		if inst.components.playerprox:IsPlayerClose() then
 			turnon(inst)
 		end
