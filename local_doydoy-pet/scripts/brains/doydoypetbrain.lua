@@ -4,7 +4,7 @@ require "behaviours/panic"
 require "behaviours/minperiod"
 
 local FOOD_TAGS = {"edible"}
-local NO_TAGS = {"FX", "NOCLICK", "DECOR", "INLIMBO", "AQUATIC"}
+local NO_TAGS = {"FX", "NOCLICK", "DECOR", "INLIMBO"}
 
 local function EatFoodAction(inst)  --Look for food to eat
 	local target = nil
@@ -16,6 +16,8 @@ local function EatFoodAction(inst)  --Look for food to eat
 	end	
 	
 	local time_since_eat = inst.components.eater:TimeSinceLastEating()	
+	--print('time_since_eat ', time_since_eat)
+	--print('TUNING.DOYDOYPET_EAT_INVERVALL '..TUNING.DOYDOYPET_EAT_INVERVALL)
 	if time_since_eat == nil or time_since_eat > TUNING.DOYDOYPET_EAT_INVERVALL then
 	
 		if inst.components.inventory and inst.components.eater then	
@@ -86,8 +88,7 @@ local function updateDescription(inst)
 
 	
 	if inst.eatTimes > 0 then
-		lifespan = math.floor(inst.eatTimes * 10 / TUNING.DOYDOYPET_DIE_OLD_AGE)
-		--lifespan = inst.eatTimes..'/'..TUNING.DOYDOYPET_DIE_OLD_AGE
+		lifespan = math.floor(inst.eatTimes / TUNING.DOYDOYPET_EAT_PER_DAY / TUNING.DOYDOYPET_DIE_OLD_AGE * 10)
 	end	
 	
 	if #items > 0 then
@@ -112,8 +113,7 @@ local function updateDescription(inst)
 end
 
 local function checkAgeAction(inst)		
-	
-	
+
 	if inst.eatTimes > TUNING.DOYDOYPET_TO_TEEN and inst:HasTag("baby") then
 		inst.components.growable:DoGrowth()
 		inst.components.growable:SetStage(2)
@@ -124,8 +124,8 @@ local function checkAgeAction(inst)
 		inst.components.growable:SetStage(3)
 	end 
 	
-	local calculateLimit = (inst.eatTimes - TUNING.DOYDOYPET_DIE_OLD_AGE) / TUNING.DOYDOYPET_EAT_INVERVALL
-	
+	local calculateLimit = (inst.eatTimes / TUNING.DOYDOYPET_EAT_PER_DAY) - TUNING.DOYDOYPET_DIE_OLD_AGE
+	--print('calculateLimit '..calculateLimit)
 	if calculateLimit > math.random(0, 5) then
 		--inst.components.talker:Say("It's time to go", 3)
 		--GetPlayer().components.talker:Say("I suddenly feel sad …")

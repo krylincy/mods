@@ -87,7 +87,7 @@ function shopinteriorOverwrite(self,inst)
 								{ "burr",    "oinc", 2  },
 								{ "teatree_nut",    "oinc", 2  },
 								{ "jungletreeseed",    "oinc", 2  },
-								{ "dug_sapling",     "oinc", 2  },
+								--{ "dug_sapling",     "oinc", 2  },
 								--{ "dug_berrybush",     "oinc", 5  },
 								{ "dug_berrybush2",     "oinc", 5  },
 								--{ "dug_bush_vine",     "oinc", 3  },
@@ -141,9 +141,9 @@ function shopinteriorOverwrite(self,inst)
 								{ "rocks",  "oinc", 1 }, 
 								{ "nitre",  "oinc", 1 }, 
 								{ "houndstooth",       "oinc", 2  },							
-								{ "lightbulb",  "oinc", 2 },
+								--{ "lightbulb",  "oinc", 2 },
 								--{ "living_artifact",  "oinc", 100 }, 
-								--{ "boneshard",			"oinc", 2  },
+								{ "boneshard",			"oinc", 2  },
 							},
 
 		["pig_shop_produce"] = {
@@ -172,7 +172,7 @@ function shopinteriorOverwrite(self,inst)
 								{ "cutreeds",            "oinc", 2  },                          
 								{ "fabric",     "oinc", 2  },
 								{ "livinglog",    "oinc", 10  },
-								--{ "lightbulb",  "oinc", 2 },  
+								{ "lightbulb",  "oinc", 2 },  
 								{ "pigskin",     "oinc", 2  },
 								{ "pigskin",     "oinc", 2  },
 								{ "beefalowool",     "oinc", 1  },
@@ -477,6 +477,12 @@ end)
 AddPrefabPostInit("seeds_cooked", function(inst)
     inst:AddTag("noautopickup")
 	GLOBAL.MakeBlowInHurricane(inst, 0.01, 0.05) -- HEAVY
+end)
+
+AddPrefabPostInit("yellowamulet", function(inst) 
+	inst.Light:SetRadius(10)
+    inst.Light:SetFalloff(0.7)
+    inst.Light:SetIntensity(.65)
 end)
 
 AddPrefabPostInit("orangeamulet", function(inst) 

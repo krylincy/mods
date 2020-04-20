@@ -44,8 +44,9 @@ local teenloot = {"butterfly", "ash"}
 local adultloot = {'butterfly', 'ash', 'ash'}
 
 local babyfoodprefs = {"SEEDS"}
-local teenfoodprefs = {"VEGGIE", "SEEDS"}
-local adultfoodprefs = {"VEGGIE", "SEEDS"}
+local teenfoodprefs = {"SEEDS"}
+local adultfoodprefs = {"SEEDS"}
+local adultfoodprefs_female = {"VEGGIE", "SEEDS"}
 
 
 local babysounds = 
@@ -94,7 +95,7 @@ local function updateDescription(inst)
 
 	
 	if inst.eatTimes > 0 then
-		lifespan = math.floor(inst.eatTimes * 10 / TUNING.DOYDOYPET_DIE_OLD_AGE)
+		lifespan = math.floor(inst.eatTimes / TUNING.DOYDOYPET_EAT_PER_DAY / TUNING.DOYDOYPET_DIE_OLD_AGE * 10)
 	end	
 	
 	if #items > 0 then
@@ -124,8 +125,11 @@ local function OnEat(inst, food)
 		local chance = math.random()
 		--print("Doydoypet female chance: "..chance)
 		if chance < 0.25 then
-			inst:AddTag("doydoypet_female")
-			inst.AnimState:SetBuild("doydoypet_baby_tarn")			
+			inst:AddTag("doydoypet_female")						
+		end
+		
+		if inst:HasTag("doydoypet_female") then
+			inst.AnimState:SetBuild("doydoypet_baby_tarn")
 		end
 
 		setColor(inst)
@@ -135,8 +139,11 @@ local function OnEat(inst, food)
 		if inst:HasTag("doydoypet_female") and inst:HasTag("adult") then	
 			--SpawnPrefab("seeds_cooked").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			
-			local newEgg = SpawnPrefab("doydoypetbaby")
-			newEgg.Transform:SetPosition(inst.Transform:GetWorldPosition())	
+			
+			if math.random() < TUNING.DOYDOYPET_BREED_CHANCE then 
+				SpawnPrefab("seeds_cooked").Transform:SetPosition(inst.Transform:GetWorldPosition())
+				SpawnPrefab("doydoypetbaby").Transform:SetPosition(inst.Transform:GetWorldPosition())	
+			end	
 		else
 			if math.random() < 0.2 then
 				SpawnPrefab("poop").Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -224,10 +231,12 @@ local function SetFullyGrown(inst)
 		inst.AnimState:SetBuild("doydoypet_adult_tarn")
 		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_tarn.xml"
 		inst.components.inventoryitem.imagename = "doydoypet_adult_tarn"
+		inst.components.eater.foodprefs = adultfoodprefs_female	
 	else
 		inst.AnimState:SetBuild("doydoypet_adult_default")
 		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_default.xml"
 		inst.components.inventoryitem.imagename = "doydoypet_adult_default"
+		inst.components.eater.foodprefs = adultfoodprefs
 	end
 	
 	inst.AnimState:SetBank("doydoypet")
@@ -246,7 +255,7 @@ local function SetFullyGrown(inst)
 	
 	inst.components.growable:StopGrowing()
 
-	inst.components.eater.foodprefs = adultfoodprefs	
+	
 	
 	inst:ClearBufferedAction()
 end
@@ -399,6 +408,9 @@ local function commonfn(Sim)
 
     inst:ListenForEvent("ondropped", function(inst, data)
         inst.components.knownlocations:RememberLocation("home", Point(inst.Transform:GetWorldPosition()), false)
+		if inst.components.sleeper:IsAsleep() then
+			inst.components.sleeper:WakeUp()
+		end
     end)
 	
 	inst:ListenForEvent("gotosleep", function(inst) inst.components.inventoryitem.canbepickedup = true end)
@@ -461,10 +473,12 @@ local function adultfn(Sim)
 		inst.AnimState:SetBuild("doydoypet_adult_tarn")
 		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_tarn.xml"
 		inst.components.inventoryitem.imagename = "doydoypet_adult_tarn"
+		inst.components.eater.foodprefs = adultfoodprefs_female	
 	else
 		inst.AnimState:SetBuild("doydoypet_adult_default")
 		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_default.xml"
 		inst.components.inventoryitem.imagename = "doydoypet_adult_default"
+		inst.components.eater.foodprefs = adultfoodprefs
 	end
 	
 	setColor(inst)
@@ -477,8 +491,6 @@ local function adultfn(Sim)
 	inst.components.health:SetMaxHealth(TUNING.DOYDOYPET_HEALTH)
 	inst.components.locomotor.walkspeed = TUNING.DOYDOYPET_WALK_SPEED
 	inst.components.lootdropper:SetLoot(adultloot)
-
-	inst.components.eater.foodprefs = adultfoodprefs
 	
 	inst:SetStateGraph("SGdoydoy")
 	local brain = require("brains/doydoypetbrain")
