@@ -34,6 +34,9 @@ function custom_tuning()
 	--TUNING.WILSON_WALK_SPEED = 5
 	--TUNING.WILSON_RUN_SPEED = 9
 	
+	--WILSON_HUNGER_RATE = calories_per_day/total_day_time, --calories burnt per day
+	TUNING.WILSON_HUNGER_RATE = 300/480 -- default: 75/480
+	
 	TUNING.PIPE_DART_DAMAGE = 500
 	TUNING.TORNADOSTAFF_USES = 500
 	--TUNING.TORNADO_DAMAGE = 100
@@ -65,7 +68,7 @@ function shopinteriorOverwrite(self,inst)
 		["DEFAULT"] = {"rocks", "flint", "goldnugget"},
 
 		["pig_shop_deli"] = {
-								{ "tea",     "oinc", 1  },
+								--{ "tea",     "oinc", 1  },
 								{ "coffee",     "oinc", 1  },
 								--{ "spicyvegstinger",     "oinc", 2  },
 								--{ "feijoada",    "oinc", 3  },
@@ -82,7 +85,7 @@ function shopinteriorOverwrite(self,inst)
 								--{ "asparagus_seeds",             "oinc", 2  },
 								--{ "dragonfruit_seeds",             "oinc", 10  },
 								--{ "eggplant_seeds",             "oinc", 2  },
-								{ "acorn",             "oinc", 2  },
+								--{ "acorn",             "oinc", 2  },
 								{ "pinecone",          "oinc", 2  },
 								{ "burr",    "oinc", 2  },
 								{ "teatree_nut",    "oinc", 2  },
@@ -99,7 +102,7 @@ function shopinteriorOverwrite(self,inst)
 								{ "bandage",      "oinc", 3  },
 								--{ "bandage",      "oinc", 3  },
 								{ "antivenom",    "oinc", 5 },
-								{ "bugnet",      "oinc", 10  },
+								--{ "bugnet",      "oinc", 10  },
 								--{ "shears",      "oinc", 10  },
 								--{ "sewing_kit",      "oinc", 5  },
 								--{ "bugrepellent",   "oinc", 10 },                     
@@ -107,10 +110,11 @@ function shopinteriorOverwrite(self,inst)
 								--{ "magnifying_glass",   "oinc", 10 },                     
 								--{ "ballpein_hammer",   "oinc", 10 },                     
 								{ "multitool_axe_pickaxe", "oinc", 50 },                            
-								{ "yellowstaff", "oinc", 40 },                            
+								--{ "yellowstaff", "oinc", 40 },                            
 								--{ "gasmaskhat", "oinc", 40 }, 
 								{ "orangeamulet", "oinc", 30 },       
-								{ "yellowamulet", "oinc", 30 },       
+								--{ "yellowamulet", "oinc", 30 },       
+								{ "greenamulet", "oinc", 30 },       
 								--{ "boards", "oinc", 1 },       
 								{ "cutstone", "oinc", 1 },       
 							},
@@ -223,12 +227,13 @@ function shopinteriorOverwrite(self,inst)
 								{ "brainjellyhat",    "oinc", 100  },
 								{ "blubbersuit",     "oinc", 20 },
 								{ "beargervest",     "oinc", 20 },
+								{ "hawaiianshirt",     "oinc", 20 },
 								{ "pithhat",     "oinc", 10 },
 								--{ "beehat",     "oinc", 10 },
 								--{ "gashat",     "oinc", 20 },
-								{ "bathat",     "oinc", 20 },
+								--{ "bathat",     "oinc", 20 },
 								{ "gasmaskhat",     "oinc", 20 },
-								{ "reflectivevest",     "oinc", 20 },
+								--{ "reflectivevest",     "oinc", 20 },
 								{ "armor_windbreaker",     "oinc", 20 },
 								--{ "eyebrellahat",     "oinc", 30 },
 								{ "double_umbrellahat",     "oinc", 40 },
@@ -468,16 +473,25 @@ AddPrefabPostInit("silvernecklace", function(inst)
 end)
 AddPrefabPostInit("clippings", function(inst) 
     inst:AddTag("noautopickup")
-	GLOBAL.MakeBlowInHurricane(inst, 0.01, 0.05) -- HEAVY
+	GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
 end)
 AddPrefabPostInit("berries", function(inst) 
     inst:AddTag("noautopickup")
-	GLOBAL.MakeBlowInHurricane(inst, 0.01, 0.05) -- HEAVY
+	GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
 end)
 AddPrefabPostInit("seeds_cooked", function(inst)
     inst:AddTag("noautopickup")
-	GLOBAL.MakeBlowInHurricane(inst, 0.01, 0.05) -- HEAVY
+	GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
 end)
+AddPrefabPostInit("corn", function(inst)
+    inst:AddTag("noautopickup")
+	GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
+end)
+AddPrefabPostInit("corn_cooked", function(inst)
+    inst:AddTag("noautopickup")
+	GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
+end)
+AddPrefabPostInit("seatrap", function(inst) inst:AddTag("noautopickup") end)
 
 AddPrefabPostInit("yellowamulet", function(inst) 
 	inst.Light:SetRadius(10)
