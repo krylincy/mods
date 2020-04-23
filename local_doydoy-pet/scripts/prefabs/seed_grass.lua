@@ -42,7 +42,7 @@ local function fn(Sim)
 	--minimap:SetIcon( "reeds.png" )
 	
 	local seg_time = 30 --each segment of the clock is 30 seconds
-	local total_day_time = seg_time*6 + math.random() -- one day has 16 segments
+	local total_day_time = seg_time*14 + math.random() -- one day has 16 segments
     
     anim:SetBank("grass")
     anim:SetBuild("seed_grass")
