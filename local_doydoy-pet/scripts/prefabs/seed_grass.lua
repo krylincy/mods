@@ -42,7 +42,7 @@ local function fn(Sim)
 	--minimap:SetIcon( "reeds.png" )
 	
 	local seg_time = 30 --each segment of the clock is 30 seconds
-	local total_day_time = seg_time*14 + math.random() -- one day has 16 segments
+	local regrow_time = seg_time*14 + math.random() -- one day has 16 segments
     
     anim:SetBank("grass")
     anim:SetBuild("seed_grass")
@@ -54,7 +54,7 @@ local function fn(Sim)
 
     inst:AddComponent("pickable")
     inst.components.pickable.picksound = "dontstarve/wilson/pickup_reeds"
-    inst.components.pickable:SetUp("seeds", total_day_time)
+    inst.components.pickable:SetUp("seeds", regrow_time)
 	inst.components.pickable.onregenfn = onregenfn
 	inst.components.pickable.onpickedfn = onpickedfn
     inst.components.pickable.makeemptyfn = makeemptyfn

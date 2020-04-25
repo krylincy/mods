@@ -45,7 +45,8 @@ local adultloot = {'butterfly', 'ash', 'ash'}
 
 local babyfoodprefs = {"SEEDS"}
 local teenfoodprefs = {"SEEDS"}
-local adultfoodprefs = {"SEEDS"}
+--local adultfoodprefs = {"SEEDS"}
+local adultfoodprefs = {"VEGGIE", "SEEDS"}
 local adultfoodprefs_female = {"VEGGIE", "SEEDS"}
 
 
@@ -147,6 +148,9 @@ local function OnEat(inst, food)
 		else
 			if math.random() < 0.2 then
 				SpawnPrefab("poop").Transform:SetPosition(inst.Transform:GetWorldPosition())
+			end	
+			if math.random() < 0.3 then
+				SpawnPrefab("seeds_cooked").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			end	
 			if math.random() < 0.6 then 
 				inst.eatTimes = inst.eatTimes + 1
