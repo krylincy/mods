@@ -1,5 +1,5 @@
 name = "Casket"
-version = "1.4"
+version = "1.7"
 author = "krylincy"
 
 description = "A small casket for your pocket."

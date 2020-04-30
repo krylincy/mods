@@ -76,7 +76,9 @@ local function fn(Sim)
 	inst.entity:AddMiniMapEntity()
 	inst.MiniMapEntity:SetIcon("casket.tex")
 	
-	MakeInventoryFloatable(inst, "idle", "idle")
+	if CAPY_DLC and IsDLCEnabled(CAPY_DLC) or IsDLCEnabled(PORKLAND_DLC) then 
+	  MakeInventoryFloatable(inst, "idle", "idle")
+	end
 	
 	inst:AddComponent("container")
 	inst.components.container:SetNumSlots(#slotpos)
