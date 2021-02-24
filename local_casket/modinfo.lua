@@ -1,5 +1,5 @@
 name = "Casket"
-version = "1.7"
+version = "2"
 author = "krylincy"
 
 description = "A small casket for your pocket."
@@ -26,6 +26,15 @@ configuration_options = {
 			{description = "Shadow Manipulator", data = 3}
 		},
 		default = 0,
+	}, {
+		name = "FRIDGE_FUNCTION",
+		label = "Food spoilage:",
+		options = {
+			{description = "Default Backpack", data = 1},
+			{description = "Insulated Pack", data = 2},
+			{description = "Ice Box", data = 3}
+		},
+		default = 1,
 	}, {
 		name = "purplegem",
 		label = "Recipe:",

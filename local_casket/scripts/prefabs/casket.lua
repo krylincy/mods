@@ -80,6 +80,15 @@ local function fn(Sim)
 	  MakeInventoryFloatable(inst, "idle", "idle")
 	end
 	
+	if TUNING.CASKET_FRIDGE_FUNCTION == 2 then
+		inst:AddTag("fridge") 
+		inst:AddTag("nocool")
+	end
+
+	if TUNING.CASKET_FRIDGE_FUNCTION == 3 then
+		inst:AddTag("fridge")
+	end
+	
 	inst:AddComponent("container")
 	inst.components.container:SetNumSlots(#slotpos)
 	

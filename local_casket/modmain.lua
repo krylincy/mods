@@ -26,11 +26,15 @@ GLOBAL.STRINGS.NAMES.CASKET = "Casket"
 GLOBAL.STRINGS.CHARACTERS.GENERIC.DESCRIBE.CASKET = "With this small thing I feel so big."
 GLOBAL.STRINGS.RECIPE_DESC.CASKET = "A small casket for your pocket."
 
+
 RECIPETABS = GLOBAL.RECIPETABS
 RECIPE_GAME_TYPE = GLOBAL.RECIPE_GAME_TYPE
 Recipe = GLOBAL.Recipe
 Ingredient = GLOBAL.Ingredient
 TECH = GLOBAL.TECH
+TUNING = GLOBAL.TUNING
+
+TUNING.CASKET_FRIDGE_FUNCTION = GetModConfigData("FRIDGE_FUNCTION")
 
 local machine = GetModConfigData("machine")
 local purplegem = GetModConfigData("purplegem")
