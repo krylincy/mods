@@ -46,6 +46,8 @@ local function updateStatus(inst)
 	
 	if aclock then
 		local timeLeft = math.floor((aclock.begin_date - GetClock():GetTotalTime()) / TUNING.TOTAL_DAY_TIME)
+		local fiestaTimeLeft = aclock.fiesta_duration - (GetClock():GetTotalTime() - aclock.fiesta_begin_date)
+		
 		if aclock:IsActive() then
 			inst.components.inspectable:SetDescription("APORKALYPSE")
 			
@@ -68,7 +70,7 @@ local function updateStatus(inst)
 				end)	
 			end			
 		elseif aclock:GetFiestaActive() then
-			inst.components.inspectable:SetDescription("Fiesta")
+			inst.components.inspectable:SetDescription(fiestaTimeLeft.." days Fiesta")
 			
 			if WITH_FUNCTION then
 				inst.components.useableitem.verb = "Stop Fiesta"	
