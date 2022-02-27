@@ -137,6 +137,7 @@ local function fn(Sim)
     inst.AnimState:PlayAnimation("idle_off")
 
     inst:AddTag("light")
+    inst:AddTag("noautopickup")
 
     inst:AddComponent("inspectable")
 
@@ -185,7 +186,7 @@ local function fn(Sim)
     local light = inst.entity:AddLight()
 	light:SetFalloff(0.9)
 	light:SetIntensity(0.7)
-	light:SetRadius(12)
+	light:SetRadius(14)
 	inst.Light:SetColour(180/255, 195/255, 170/255)
 	inst.Light:Enable(false)
 	

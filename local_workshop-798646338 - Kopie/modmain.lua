@@ -38,3 +38,6 @@ Recipe("goose_feather", { Ingredient("feather_crow", 5), Ingredient("nightmarefu
 STRINGS.RECIPE_DESC.DRAGON_SCALES = "Keeps reptile's temperature resistance"
 Recipe("dragon_scales", { Ingredient("pigskin", 12), Ingredient("fish", 3), Ingredient("nightmarefuel", 5), }, RECIPETABS.MAGIC, TECH.MAGIC_THREE )
 
+STRINGS.RECIPE_DESC.LIGHTBULB = "Keeps your way"
+Recipe("lightbulb", { Ingredient("torch", 2) }, RECIPETABS.LIGHT, TECH.NONE )
+

@@ -126,13 +126,10 @@ local function OnEat(inst, food)
 		local chance = math.random()
 		--print("Doydoypet female chance: "..chance)
 		if chance < 0.25 then
-			inst:AddTag("doydoypet_female")						
+			inst:AddTag("doydoypet_female")	
+			inst.AnimState:SetBuild("doydoypet_baby_tarn")			
 		end
 		
-		if inst:HasTag("doydoypet_female") then
-			inst.AnimState:SetBuild("doydoypet_baby_tarn")
-		end
-
 		setColor(inst)
 	end
 	
@@ -145,14 +142,14 @@ local function OnEat(inst, food)
 				SpawnPrefab("seeds_cooked").Transform:SetPosition(inst.Transform:GetWorldPosition())
 				SpawnPrefab("doydoypetbaby").Transform:SetPosition(inst.Transform:GetWorldPosition())	
 			end	
-		else
-			if math.random() < 0.2 then
+		else			
+			if math.random() < 0.1 then
 				SpawnPrefab("poop").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			end	
-			if math.random() < 0.3 then
+			if math.random() < 0.4 then
 				SpawnPrefab("seeds_cooked").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			end	
-			if math.random() < 0.6 then 
+			if math.random() < 0.8 then 
 				inst.eatTimes = inst.eatTimes + 1
 			end	
 		end

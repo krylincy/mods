@@ -31,16 +31,30 @@ local function EatFoodAction(inst)  --Look for food to eat
 		local pt = inst:GetPosition()
 		local ents = TheSim:FindEntities(pt.x, pt.y, pt.z, TUNING.DOYDOYPET_SEE_FOOD_DIST, FOOD_TAGS, NO_TAGS) 
 
+		
+		local otherTarget = nil
 		if not target then
 			for k,v in pairs(ents) do
 				if v and v:IsOnValidGround() and 
 				inst.components.eater:CanEat(v) and
 				v:GetTimeAlive() > 5 then
-					target = v
-					break
+					-- find veggie first
+					if v.components.edible.foodtype == "VEGGIE" then
+						target = v
+						break
+					else
+						otherTarget = v
+					end
 				end
 			end
-		end    
+			
+			-- if no verggie found, take other food
+			if not target then
+				target = otherTarget
+			end			
+		end
+		
+	
 
 		if target then
 			local action = BufferedAction(inst,target,ACTIONS.EAT)
@@ -130,10 +144,14 @@ local function checkAgeAction(inst)
 		--inst.components.talker:Say("It's time to go", 3)
 		--GetPlayer().components.talker:Say("I suddenly feel sad …")
 		--inst.components.lootdropper:SetLoot({'meat', 'meat', 'trinket_19'})
-		inst.components.lootdropper:SetLoot({'trinket_19'})
+		-- earring trinket_19(cloud pill)
+		inst.components.lootdropper:SetLoot({'earring'})
 
 		if not inst:HasTag("doydoypet_female") then
 			local gem_prefab = {
+				"goldnugget",
+				"goldnugget",
+				"goldnugget",
 				"goldnugget",
 				"goldnugget",
 				"goldnugget",
@@ -148,9 +166,6 @@ local function checkAgeAction(inst)
 				"greengem",
 				"orangegem",
 				"yellowgem",
-				"goldnugget",
-				"goldnugget",
-				"goldnugget",
 			}
 			
 			local selectGem = math.random(1, 17)
