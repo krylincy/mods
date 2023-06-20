@@ -288,7 +288,7 @@ end
 
 function economyOverwrite(self,inst)
 	local TRADER = {
-		pigman_collector = 		{ items= {"hippo_antler","bill_quill","tallbirdegg", "doydoyegg","horn", "dragoonheart", "lureplantbulb", "tigereye","spidereggsack", "shark_fin", "turbine_blades", "snakeoil", "shark_gills", "magic_seal"},					
+		pigman_collector = 		{ items= {"hippo_antler","bill_quill","tallbirdegg", "doydoyegg","horn", "dragoonheart", "lureplantbulb", "tigereye","spidereggsack", "shark_fin", "turbine_blades", "snakeoil", "shark_gills", "magic_seal","earring"},					
 									delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_COLLECTOR_TRADE,  reward = "oinc",   rewardqty=15},
 		pigman_banker = 		{ items= {"redgem","bluegem","greengem", "orangegem", "yellowgem"},
 									delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_BANKER_TRADE, 	 reward = "oinc", rewardqty=20},

@@ -162,7 +162,7 @@ local function checkAgeAction(inst)
 				"bluegem",
 				"bluegem",
 				"purplegem",
-				"purplegem",
+				"greengem",
 				"greengem",
 				"orangegem",
 				"yellowgem",
