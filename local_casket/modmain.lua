@@ -254,12 +254,12 @@ local function Casket_inventory(inst)
 	        if inst.prevcontainer.inst.components.inventoryitem and inst.prevcontainer.inst.components.inventoryitem.owner == self.inst and inst.prevcontainer:IsOpen() and inst.prevcontainer:GetItemInSlot(inst.prevslot) == nil then
 	            if inst.prevcontainer:GiveItem(inst, inst.prevslot, false) then
 	                return true
-	            else
-	                inst.prevcontainer = nil
-	                inst.prevslot = nil
-	                slot = nil
 	            end
 	        end
+
+			inst.prevcontainer = nil
+			inst.prevslot = nil
+			slot = nil
 	    end
 
 	    if slot then
@@ -299,6 +299,7 @@ local function Casket_inventory(inst)
 	                if self.itemslots[slot].components.stackable:IsFull() then
 	                    leftovers = inst
 	                    inst.prevslot = nil
+						inst.prevcontainer = nil
 	                else
 	                    leftovers = self.itemslots[slot].components.stackable:Put(inst, screen_src_pos)
 	                end
@@ -351,6 +352,9 @@ local function Casket_inventory(inst)
 	    if not self.activeitem and not GLOBAL.TheInput:ControllerAttached() then
 	        inst.components.inventoryitem:OnPutInInventory(self.inst)
 	        self:SetActiveItem(inst)
+
+			self.inst:PushEvent("inventoryfull", {item=inst})
+
 	        return true
 	    else
 	        self:DropItem(inst, true, true)
@@ -358,7 +362,7 @@ local function Casket_inventory(inst)
 	    
 	end
 
-	local function RemoveItemOverwrite(self, item, wholestack)
+	local function RemoveItemOverwrite(self, item, wholestack, checkallcontainers)
 
 	    local dec_stack = not wholestack and item and item.components.stackable and item.components.stackable:IsStack() and item.components.stackable:StackSize() > 1
 		
@@ -366,7 +370,9 @@ local function Casket_inventory(inst)
 
 	    if dec_stack then
 	        local dec = item.components.stackable:Get()
+			dec.components.inventoryitem:OnRemoved()
 	        dec.prevslot = prevslot
+			dec.prevcontainer = nil
 	        return dec
 	    else
 	        for k,v in pairs(self.itemslots) do
@@ -379,6 +385,7 @@ local function Casket_inventory(inst)
 	                end
 	                
 					item.prevslot = prevslot
+                	item.prevcontainer = nil
 	                return item	                
 	            end
 	        end
@@ -401,6 +408,7 @@ local function Casket_inventory(inst)
 	            if ret.components.inventoryitem and ret.components.inventoryitem.OnRemoved then
 	                ret.components.inventoryitem:OnRemoved()
 					ret.prevslot = prevslot
+					ret.prevcontainer = nil
 	                return ret
 	            end
 	        else
@@ -421,7 +429,22 @@ local function Casket_inventory(inst)
 
 	    end
 	    
-	    return item
+	    local overflow = self.overflow and self.overflow.components.container
+	    local casket = self.casket and self.casket.components.container
+
+		if checkallcontainers then
+			for container_inst in pairs(self.opencontainers) do
+				local container = container_inst.components.container or container_inst.components.inventory
+				if container and container ~= overflow and container ~= casket and not container.excludefromcrafting then
+					local container_item = container:RemoveItem(item, wholestack)
+					if container_item then
+						return container_item
+					end
+				end
+			end
+		end
+
+		return item
 
 	end
 
@@ -478,6 +501,24 @@ local function Casket_inventory(inst)
 				total_num_found = total_num_found + tryconsume(self.activeitem)
 			end
 
+			local overflow = self.overflow and self.overflow.components.container
+			local casket = self.casket and self.casket.components.container
+
+			if checkallcontainers then
+				for container_inst in pairs(self.opencontainers) do
+					local container = container_inst.components.container or container_inst.components.inventory
+					if container and container ~= overflow and container ~= casket and not container.excludefromcrafting then
+						for k = 1, #container.slots do
+							local v = container.slots[k]
+							total_num_found = total_num_found + tryconsume(v)
+							if total_num_found >= amount then
+								return
+							end
+						end
+					end
+				end
+			end
+
 			
 			if self.overflow and total_num_found < amount then
 				dumpvar, howmanyitemswereinoverflow = self.overflow.components.container:Has(item, 0)
@@ -501,7 +542,7 @@ local function Casket_inventory(inst)
 		inst.ConsumeByName = ConsumeByNameOverwrite
 	end
 
-	local function GetItemByNameOverwrite (self, item, amount)
+	local function GetItemByNameOverwrite (self, item, amount, checkallcontainers)
 		local total_num_found = 0
 		local items = {}
 		
@@ -556,7 +597,94 @@ local function Casket_inventory(inst)
 			end
 		end	
 
+		if checkallcontainers and total_num_found < amount then
+			local containers = self.opencontainers
+	
+			for container_inst in pairs(containers) do
+				local container = container_inst.components.container or container_inst.components.inventory
+				if container and container ~= overflow and container ~= casket and not container.excludefromcrafting then
+					local container_items = container:GetItemByName(item, (amount - total_num_found))
+					for k,v in pairs(container_items) do
+						items[k] = v
+						total_num_found = total_num_found + v
+					end
+				end
+				if total_num_found >= amount then
+					break
+				end
+			end
+		end
+
 		return items
+	end
+
+	local function GetCraftingIngredientOverwrite(self, item, amount)
+		local overflow = self.overflow and self.overflow.components.container or nil
+		local casket = self.casket and self.casket.components.container or nil
+		local crafting_items = {}
+		local total_num_found = 0
+	
+		for container_inst in pairs(self.opencontainers) do
+			local container = container_inst.components.container or container_inst.components.inventory
+			if container and container ~= overflow and container ~= casket and not container.excludefromcrafting then
+				for k, v in pairs(container:GetCraftingIngredient(item, amount - total_num_found, true)) do
+					crafting_items[k] = v
+					total_num_found = total_num_found + v
+				end
+			end
+			if total_num_found >= amount then
+				return crafting_items
+			end
+		end
+	
+		local items = {}
+		for i = 1, self.maxslots do
+			local v = self.itemslots[i]
+			if v ~= nil and v.prefab == item then
+				table.insert(items, {
+					item = v,
+					stacksize = GetStackSize(v),
+					slot = i,
+				})
+			end
+		end
+	
+		table.sort(items, crafting_priority_fn)
+	
+		for i, v in ipairs(items) do
+			local stacksize = math.min(v.stacksize, amount - total_num_found)
+			crafting_items[v.item] = stacksize
+			total_num_found = total_num_found + stacksize
+			if total_num_found >= amount then
+				return crafting_items
+			end
+		end
+	
+		if overflow then
+			for k,v in pairs(overflow:GetCraftingIngredient(item, amount - total_num_found)) do
+				crafting_items[k] = v
+				total_num_found = total_num_found + v
+			end
+			if total_num_found >= amount then
+				return crafting_items
+			end
+		end
+
+		if casket then
+			for k,v in pairs(casket:GetCraftingIngredient(item, amount - total_num_found)) do
+				crafting_items[k] = v
+				total_num_found = total_num_found + v
+			end
+			if total_num_found >= amount then
+				return crafting_items
+			end
+		end
+	
+		if self.activeitem ~= nil and self.activeitem.prefab == item then
+			crafting_items[self.activeitem] = math.min(GetStackSize(self.activeitem), amount - total_num_found)
+		end
+	
+		return crafting_items
 	end
 
 	inst.FindItem = FindItemOverwrite
@@ -566,6 +694,7 @@ local function Casket_inventory(inst)
 	inst.RemoveItem = RemoveItemOverwrite
 	inst.Has = HasOverwrite
 	inst.GetItemByName = GetItemByNameOverwrite
+	inst.GetCraftingIngredient = GetItemByNameOverwrite
 	inst.SetCasket = SetCasket
 end
 
@@ -627,6 +756,7 @@ function Casket_container (inst)
 		local slot = self:GetItemSlot(item)
 	    if dec_stack then
 	        local dec = item.components.stackable:Get()
+			dec.components.inventoryitem:OnRemoved()
 	        dec.prevslot = slot
 	        dec.prevcontainer = self
 	        return dec
