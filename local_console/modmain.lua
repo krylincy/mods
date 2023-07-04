@@ -59,6 +59,8 @@ function custom_tuning()
 	TUNING.ORANGEAMULET_ICD = 0.15
 	
 	TUNING.BERRYBUSH_CYCLES = 1000 -- pickable before barren
+	--TUNING.WALLHAY_WINDBLOWN_DAMAGE = 0 
+	--TUNING.WALLWOOD_WINDBLOWN_DAMAGE = 0 
 		
 	
 	-- local world = GetWorld()
@@ -319,6 +321,10 @@ function economyOverwrite(self,inst)
 	--	pigman_shopkeep = 		{items={},						num=5, current=0,	desc=STRINGS.CITY_PIG_SHOPKEEP_TRADE, 	reward = "oinc"},
 	}
 
+	for i=1,GLOBAL.NUM_TRINKETS do
+		table.insert(TRADER.pigman_collector.items, "trinket_" .. i)
+	end
+
 
 	function self:GetTradeItems(traderprefab)
 		if TRADER[traderprefab] then
@@ -332,17 +338,18 @@ function economyOverwrite(self,inst)
 		return TRADER[traderprefab].desc
 	end
 
+	function self:MakeTrade(traderprefab,city,inst)
+		self.cities[city][traderprefab].GUIDS[inst.GUID] = TRADER[traderprefab].reset
+	
+		return TRADER[traderprefab].reward, TRADER[traderprefab].rewardqty
+	end
 
 	function self:AddCity(city)  
-		self.cities[city] = GLOBAL.deepcopy(TRADER)
+		self.cities[city] = {}
 
-		for i,item in pairs(self.cities[city]) do
-			item.GUIDS = {}
+		for traderprefab, data in pairs(TRADER) do
+			self.cities[city][traderprefab] = {GUIDS = {}}
 		end
-	end
-	
-	for i=1,GLOBAL.NUM_TRINKETS do
-		table.insert(TRADER.pigman_collector.items, "trinket_" .. i)
 	end
 end
 
@@ -401,6 +408,7 @@ AddPrefabPostInit("fence", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("fence_gate", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("wall_wood", function(inst) inst:AddTag("fireimmune") end)
 AddPrefabPostInit("plant_normal", function(inst) inst:AddTag("fireimmune") end)
+AddPrefabPostInit("hedge", function(inst) inst:AddTag("fireimmune") end)
 
 AddPrefabPostInit("flower", function(inst) inst:RemoveComponent("blowinwindgust") end)
 AddPrefabPostInit("flower_evil", function(inst) inst:RemoveComponent("blowinwindgust") end)
@@ -595,6 +603,20 @@ AddPrefabPostInit("bundle", function(inst)
 	end
 	inst.components.inspectable:SetDescription(getName)
 	inst.displaynamefn = getName 
+end)
+
+AddPrefabPostInit("volcano_altar", function(inst) 
+	local function OnHammered(inst, worker)
+		inst.SoundEmitter:PlaySound("dontstarve/common/destroy_metal")
+		inst.meterprefab:Remove()
+		inst.towerprefab:Remove()
+		inst:Remove()
+	end
+
+	inst:AddComponent("workable")
+	inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
+	inst.components.workable:SetWorkLeft(4)
+	inst.components.workable:SetOnFinishCallback(OnHammered)
 end)
 
 

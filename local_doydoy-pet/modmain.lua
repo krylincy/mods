@@ -68,21 +68,23 @@ TUNING.DOYDOYPET_TO_ADULT = EAT_INVERVALL + TUNING.DOYDOYPET_TO_TEEN
 TUNING.DOYDOYPET_DIE_OLD_AGE = GetModConfigData("DOYDOYPET_DIE_OLD_AGE")
 TUNING.DOYDOYPET_EAT_INVERVALL = (total_day_time / EAT_INVERVALL)
 
-TUNING.DOYDOYPET_BREED_CHANCE = 1.4 / EAT_INVERVALL
+TUNING.DOYDOYPET_BREED_CHANCE = 0.8 --1.6 / EAT_INVERVALL
 
 
 local doydoypeteggMenu
 local doydoypeteggRecipe = {Ingredient("bird_egg", 5), Ingredient("wetgoop", 1)}
 
 local doydoypetfoodMenu
-local doydoypetfoodRecipe = {Ingredient("cutgrass", 2), Ingredient("seeds", 6), Ingredient("poop", 2)}
+local doydoypetfoodRecipe = {Ingredient("seeds", 20), Ingredient("poop", 1)}
 
 if GLOBAL.IsDLCEnabled(GLOBAL.CAPY_DLC) or GLOBAL.IsDLCEnabled(GLOBAL.PORKLAND_DLC) then
 	doydoypeteggMenu = Recipe("doydoypetegg",doydoypeteggRecipe , RECIPETABS.FARM, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.COMMON, nil, 1)
 	doydoypetfoodMenu = Recipe("dug_seed_grass",doydoypetfoodRecipe , RECIPETABS.FARM, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.COMMON, nil, 1)
+    doydoypetfoodMenu.numtogive = 5
 else
 	doydoypeteggMenu = Recipe("doydoypetegg",doydoypeteggRecipe , RECIPETABS.FARM, TECH.SCIENCE_ONE, nil, 1)
 	doydoypetfoodMenu = Recipe("dug_seed_grass",doydoypetfoodRecipe , RECIPETABS.FARM, TECH.SCIENCE_ONE, nil, 1)
+    doydoypetfoodMenu.numtogive = 5
 end
 
 doydoypeteggMenu.atlas = "images/doydoypetegg.xml"

@@ -93,10 +93,17 @@ local playerhouse_city = AddModRecipe("playerhouse_city", {Ingredient("boards", 
 local construction_permit = AddModRecipe("construction_permit", {Ingredient("oinc", 10)}, RECIPETABS.HOME, TECH.HOME_TWO, cityRecipeGameTypes, nil, nil, true)
 local city_lamp = AddModRecipe("city_lamp", {Ingredient("cutstone", 2), Ingredient("transistor", 1),Ingredient("lightbulb",5)}, RECIPETABS.CITY, TECH.NONE, cityRecipeGameTypes, "city_lamp_placer", nil, true)
 local turf_foundation = AddModRecipe("turf_foundation", {Ingredient("cutstone", 1)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true)
-turf_foundation.numtogive = 5
+turf_foundation.numtogive = 30
 local turf_cobbleroad = AddModRecipe("turf_cobbleroad", {Ingredient("cutstone", 1), Ingredient("boards", 1)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true)
-turf_cobbleroad.numtogive = 5
+turf_cobbleroad.numtogive = 30
 local thulecite = AddModRecipe("thulecite", {Ingredient("rocks", 1), Ingredient("goldnugget", 2)}, RECIPETABS.ANCIENT, TECH.ANCIENT_FOUR, mergedGameTypes, nil, nil, true)
+
+local volcano_altar = AddModRecipe("volcano_altar", {Ingredient("cutstone", 10)}, RECIPETABS.TOWN, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.SHIPWRECKED, "beebox_placer")
+volcano_altar.image = "walls.tex"
+STRINGS.NAMES.VOLCANO_ALTAR = "Volcano Altar of Snackrifice"
+STRINGS.RECIPE_DESC.VOLCANO_ALTAR = "Delays or speeds up eruptions."
+
+
 
 
 
