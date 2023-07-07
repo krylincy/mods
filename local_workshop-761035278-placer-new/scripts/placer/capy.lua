@@ -1,2 +1,0 @@
--- Shipwrecked
--- steamapps\common\dont_starve\data\DLC0002\scripts\components\placer.lua
