@@ -68,7 +68,6 @@ local SNAP_INFO = {
 	{OnlyPrefab('cactus'), 'dug_cactus_placer', 'dug_cactus'},
 	{OnlyPrefab('seed_grass'), 'dug_seed_grass_placer', 'dug_seed_grass'},
 
-	{PrefabMatch('^.+_farmplot$'), 'farmplot_placer'},
 	{OnlyPrefab('slow_farmplot'), 'slow_farmplot_placer', 'slow_farmplot'},
 	{OnlyPrefab('fast_farmplot'), 'fast_farmplot_placer', 'fast_farmplot'},
 	{OnlyPrefab('ashfarmplot'), 'ashfarmplot_placer', 'ashfarmplot'},
@@ -290,6 +289,9 @@ local function DLC001PlacerOnUpdate(self, _)
 
 	local color = self.can_build and Vector3(.25,.75,.25) or Vector3(.75,.25,.25)
 	self.inst.AnimState:SetAddColour(color.x, color.y, color.z ,0)
+	for i, v in ipairs(self.linked) do
+		v.AnimState:SetAddColour(color.x, color.y, color.z, 1)
+	end
 
 end
 
@@ -358,9 +360,9 @@ local function DLC002PlacerOnUpdateOLD(self, _)
 	end
 
 	if self.fixedcameraoffset then
-					local rot = GLOBAL.TheCamera:GetHeading()
-				 self.inst.Transform:SetRotation(-rot+self.fixedcameraoffset) -- rotate against the camera
-		end
+		local rot = GLOBAL.TheCamera:GetHeading()
+	 	self.inst.Transform:SetRotation(-rot+self.fixedcameraoffset) -- rotate against the camera
+	end
 
 	self.can_build = true
 	if self.testfn then
@@ -384,6 +386,9 @@ local function DLC002PlacerOnUpdateOLD(self, _)
 		self.inst:Show()
 		local color = self.can_build and Vector3(.25,.75,.25) or Vector3(.75,.25,.25)
 		self.inst.AnimState:SetAddColour(color.x, color.y, color.z ,0)
+		for i, v in ipairs(self.linked) do
+			v.AnimState:SetAddColour(color.x, color.y, color.z, 1)
+		end
 	end
 
 end
@@ -447,12 +452,9 @@ local function DLC003PlacerOnUpdate(self, _)
 	end
 
 	if self.fixedcameraoffset then
-       	local rot = GLOBAL.TheCamera:GetHeading()
-        self.inst.Transform:SetRotation(-rot+self.fixedcameraoffset) -- rotate against the camera
-        for i, v in ipairs(self.linked) do
-            v.Transform:SetRotation(rot)
-        end         
-    end
+		local rot = GLOBAL.TheCamera:GetHeading()
+	 	self.inst.Transform:SetRotation(-rot+self.fixedcameraoffset) -- rotate against the camera
+	end
 	
 	self.can_build = true
 
@@ -490,6 +492,9 @@ local function DLC003PlacerOnUpdate(self, _)
 		self.inst:Show()
 		local color = self.can_build and Vector3(.25, .75, .25) or Vector3(.75, .25, .25)		
 		self.inst.AnimState:SetAddColour(color.x, color.y, color.z, 1)
+		for i, v in ipairs(self.linked) do
+			v.AnimState:SetAddColour(color.x, color.y, color.z, 1)
+		end
 	end
 end
 
@@ -526,9 +531,9 @@ AddComponentPostInit("deployable", function(deployable)
 		return CanDeploy(self, pt)
 	end
 
-	function deployable:Deploy(pt, deployer)
+	function deployable:Deploy(pt, deployer, rot)
 		local ok, to = Snap(pt, DEPLOYABLE_RECIPE_SNAPS[self.inst.prefab])
 		if ok then pt = to end
-		return Deploy(self, pt, deployer)
+		return Deploy(self, pt, deployer, rot)
 	end
 end)

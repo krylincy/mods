@@ -79,7 +79,7 @@ function shopinteriorOverwrite(self,inst)
 								{ "coffee",     "oinc", 1  },
 								{ "coffee",     "oinc", 1  },
 								--{ "spicyvegstinger",     "oinc", 2  },
-								{ "feijoada",    "oinc", 3  },
+								--{ "feijoada",    "oinc", 3  },
 								--{ "snakebonesoup",    "oinc", 3  },
 								{ "lobsterdinner",       "oinc", 3 },
 								--{ "nettlelosange",       "oinc", 3 },
@@ -107,8 +107,8 @@ function shopinteriorOverwrite(self,inst)
 
 		["pig_shop_general"] = {										
 								--{ "minerhat",   "oinc", 20 },
+								-- { "bandage",      "oinc", 3  },
 								{ "bandage",      "oinc", 3  },
-								--{ "bandage",      "oinc", 3  },
 								{ "antivenom",    "oinc", 5 },
 								--{ "bugnet",      "oinc", 10  },
 								--{ "shears",      "oinc", 10  },
@@ -164,8 +164,8 @@ function shopinteriorOverwrite(self,inst)
 								{ "mandrake",      "oinc", 20 },
 								{ "coconut",      "oinc", 1 },
 								{ "venus_stalk",      "oinc", 5 },
-								{ "clippings",     "oinc", 1  },
-								{ "clippings",     "oinc", 1  },
+								--{ "clippings",     "oinc", 1  },
+								--{ "corn",     "oinc", 1  },
 								--{ "bird_egg",     "oinc", 1  },
 								--{ "butter",     "oinc", 5  },    
 								--{ "butterflywings",     "oinc", 2  },
@@ -230,7 +230,7 @@ function shopinteriorOverwrite(self,inst)
 							},                      
 		["pig_shop_hatshop"] = {                        
 								--{ "tophat",      "oinc", 10 },
-								{ "molehat",     "oinc", 20 },
+								--{ "molehat",     "oinc", 20 },
 								--{ "featherhat",  "oinc", 5  },
 								{ "brainjellyhat",    "oinc", 100  },
 								{ "blubbersuit",     "oinc", 20 },

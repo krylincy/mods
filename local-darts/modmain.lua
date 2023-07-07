@@ -73,11 +73,11 @@ peagawk.image = "brush.tex"
 STRINGS.NAMES.PEAGAWK = "Peagawk"
 STRINGS.RECIPE_DESC.PEAGAWK = ""
 
-local doydoyfoodclipping = AddModRecipe("seeds_cooked", {Ingredient("clippings", 1)}, RECIPETABS.FARM, TECH.NONE)
+local doydoyfoodclipping = AddModRecipe("seeds_cooked", {Ingredient("berries", 1)}, RECIPETABS.FARM, TECH.NONE)
 doydoyfoodclipping.image = "seeds_cooked.tex"
 doydoyfoodclipping.numtogive = 5
 STRINGS.NAMES.DOYDOYFOODCLIPPING = "Toasted Seeds"
-STRINGS.RECIPE_DESC.DOYDOYFOODCLIPPING = "Toasted Seeds x5"
+STRINGS.RECIPE_DESC.DOYDOYFOODCLIPPING = "Toasted Seeds x10"
 
 
 --Recipe("beebox", {Ingredient("boards", 2),Ingredient("honeycomb", 1),Ingredient("bee", 4)}, RECIPETABS.FARM, TECH.SCIENCE_ONE, {RECIPE_GAME_TYPE.VANILLA,RECIPE_GAME_TYPE.ROG,RECIPE_GAME_TYPE.SHIPWRECKED}, "beebox_placer")
