@@ -63,10 +63,10 @@ babybeefalo.image = "brush.tex"
 STRINGS.NAMES.BABYBEEFALO = "Babybeefalo"
 STRINGS.RECIPE_DESC.BABYBEEFALO = ""
 
-local pog = AddModRecipe("pog", {Ingredient("smallmeat", 4),Ingredient("meat", 1),Ingredient("goldnugget", 1)}, RECIPETABS.FARM, TECH.NONE)
-pog.image = "brush.tex"
-STRINGS.NAMES.POG = "Pog"
-STRINGS.RECIPE_DESC.POG = ""
+-- local pog = AddModRecipe("pog", {Ingredient("smallmeat", 4),Ingredient("meat", 1),Ingredient("goldnugget", 1)}, RECIPETABS.FARM, TECH.NONE)
+-- pog.image = "brush.tex"
+-- STRINGS.NAMES.POG = "Pog"
+-- STRINGS.RECIPE_DESC.POG = ""
 
 local peagawk = AddModRecipe("peagawk", {Ingredient("drumstick", 2),Ingredient("meat", 1),Ingredient("doydoyfeather", 5)}, RECIPETABS.FARM, TECH.NONE)
 peagawk.image = "brush.tex"
@@ -77,7 +77,7 @@ local doydoyfoodclipping = AddModRecipe("seeds_cooked", {Ingredient("berries", 1
 doydoyfoodclipping.image = "seeds_cooked.tex"
 doydoyfoodclipping.numtogive = 5
 STRINGS.NAMES.DOYDOYFOODCLIPPING = "Toasted Seeds"
-STRINGS.RECIPE_DESC.DOYDOYFOODCLIPPING = "Toasted Seeds x10"
+STRINGS.RECIPE_DESC.DOYDOYFOODCLIPPING = "Toasted Seeds x5"
 
 
 --Recipe("beebox", {Ingredient("boards", 2),Ingredient("honeycomb", 1),Ingredient("bee", 4)}, RECIPETABS.FARM, TECH.SCIENCE_ONE, {RECIPE_GAME_TYPE.VANILLA,RECIPE_GAME_TYPE.ROG,RECIPE_GAME_TYPE.SHIPWRECKED}, "beebox_placer")
@@ -96,10 +96,10 @@ local turf_foundation = AddModRecipe("turf_foundation", {Ingredient("cutstone", 
 turf_foundation.numtogive = 30
 local turf_cobbleroad = AddModRecipe("turf_cobbleroad", {Ingredient("cutstone", 1), Ingredient("boards", 1)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true)
 turf_cobbleroad.numtogive = 30
-local thulecite = AddModRecipe("thulecite", {Ingredient("rocks", 1), Ingredient("goldnugget", 2)}, RECIPETABS.ANCIENT, TECH.ANCIENT_FOUR, mergedGameTypes, nil, nil, true)
+--local thulecite = AddModRecipe("thulecite", {Ingredient("rocks", 1), Ingredient("goldnugget", 2)}, RECIPETABS.ANCIENT, TECH.ANCIENT_FOUR, mergedGameTypes, nil, nil, true)
 
-local volcano_altar = AddModRecipe("volcano_altar", {Ingredient("cutstone", 10)}, RECIPETABS.TOWN, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.SHIPWRECKED, "beebox_placer")
-volcano_altar.image = "walls.tex"
+local volcano_altar = AddModRecipe("volcano_altar", {Ingredient("cutstone", 10)}, RECIPETABS.TOWN, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.SHIPWRECKED, "dragoonden_placer")
+volcano_altar.image = "skull_wallace.tex"
 STRINGS.NAMES.VOLCANO_ALTAR = "Volcano Altar of Snackrifice"
 STRINGS.RECIPE_DESC.VOLCANO_ALTAR = "Delays or speeds up eruptions."
 

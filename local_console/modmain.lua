@@ -59,6 +59,12 @@ function custom_tuning()
 	TUNING.ORANGEAMULET_ICD = 0.15
 	
 	TUNING.BERRYBUSH_CYCLES = 1000 -- pickable before barren
+	TUNING.BOAT_REPAIR_KIT_USES = 20
+	TUNING.SEWINGKIT_USES = 20
+	TUNING.FERTILIZER_USES = 30
+
+	TUNING.WORMLIGHT_DURATION = 60*8
+	TUNING.WORMLIGHT_RADIUS = 15
 	--TUNING.WALLHAY_WINDBLOWN_DAMAGE = 0 
 	--TUNING.WALLWOOD_WINDBLOWN_DAMAGE = 0 
 		
@@ -93,14 +99,14 @@ function shopinteriorOverwrite(self,inst)
 								--{ "asparagus_seeds",             "oinc", 2  },
 								--{ "dragonfruit_seeds",             "oinc", 10  },
 								--{ "eggplant_seeds",             "oinc", 2  },
-								--{ "acorn",             "oinc", 2  },
+								{ "acorn",             "oinc", 2  },
 								{ "pinecone",          "oinc", 2  },
 								{ "burr",    "oinc", 2  },
 								{ "teatree_nut",    "oinc", 2  },
 								{ "jungletreeseed",    "oinc", 2  },
-								--{ "dug_sapling",     "oinc", 2  },
+								{ "dug_sapling",     "oinc", 4  },
 								--{ "dug_berrybush",     "oinc", 5  },
-								{ "dug_berrybush2",     "oinc", 5  },
+								{ "dug_berrybush2",     "oinc", 30  },
 								--{ "dug_bush_vine",     "oinc", 3  },
 								--{ "dug_bambootree",     "oinc", 3  },
 							},
@@ -122,8 +128,8 @@ function shopinteriorOverwrite(self,inst)
 								--{ "gasmaskhat", "oinc", 40 }, 
 								{ "orangeamulet", "oinc", 30 },       
 								--{ "yellowamulet", "oinc", 30 },       
-								{ "greenamulet", "oinc", 30 },       
-								{ "greenstaff", "oinc", 30 },       
+								--{ "greenamulet", "oinc", 30 },       
+								--{ "greenstaff", "oinc", 30 },       
 								--{ "boards", "oinc", 1 },       
 								{ "cutstone", "oinc", 1 },       
 							},
@@ -149,7 +155,7 @@ function shopinteriorOverwrite(self,inst)
 								{ "iron",              "oinc", 1  },                            
 								--{ "rocks",  "oinc", 0 }, 
 								--{ "rocks",  "oinc", 0 }, 
-								{ "rocks",  "oinc", 1 }, 
+								--{ "rocks",  "oinc", 1 }, 
 								{ "nitre",  "oinc", 1 }, 
 								{ "houndstooth",       "oinc", 1  },							
 								{ "stinger",       "oinc", 1  },							
@@ -377,6 +383,7 @@ AddPrefabPostInit("berrybush", function(inst)
 
 	inst:AddTag("fireimmune") 
 	inst.components.pickable.ontransplantfn = ontransplantfn
+	inst.components.pickable:SetUp("berries", GLOBAL.TUNING.BERRY_REGROW_TIME, 5)
 end)
 
 AddPrefabPostInit("berrybush2", function(inst) 
@@ -507,6 +514,7 @@ AddPrefabPostInit("corn_cooked", function(inst)
 	GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
 end)
 AddPrefabPostInit("seatrap", function(inst) inst:AddTag("noautopickup") end)
+AddPrefabPostInit("lantern", function(inst) inst:AddTag("noautopickup") end)
 
 AddPrefabPostInit("yellowamulet", function(inst) 
 	inst.Light:SetRadius(10)

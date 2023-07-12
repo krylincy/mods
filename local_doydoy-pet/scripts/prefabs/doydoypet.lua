@@ -45,7 +45,6 @@ local adultloot = {'butterfly', 'ash', 'ash'}
 
 local babyfoodprefs = {"SEEDS"}
 local teenfoodprefs = {"SEEDS"}
---local adultfoodprefs = {"SEEDS"}
 local adultfoodprefs = {"VEGGIE", "SEEDS"}
 local adultfoodprefs_female = {"VEGGIE", "SEEDS"}
 
@@ -125,20 +124,20 @@ local function OnEat(inst, food)
 		--print("First Eat")
 		local chance = math.random()
 		--print("Doydoypet female chance: "..chance)
-		if chance < 0.25 then
+		if chance < TUNING.DOYDOYPET_FEMALE_CHANCE then --0.25
 			inst:AddTag("doydoypet_female")	
 			inst.AnimState:SetBuild("doydoypet_baby_tarn")			
 		end
 		
 		setColor(inst)
 	end
-	
+
 	if food.components.edible.foodtype == "VEGGIE" then		
 		if inst:HasTag("doydoypet_female") and inst:HasTag("adult") then	
 			--SpawnPrefab("seeds_cooked").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			
-			
-			if math.random() < TUNING.DOYDOYPET_BREED_CHANCE then 
+			local chance = math.random()
+			if chance < TUNING.DOYDOYPET_BREED_CHANCE then 
 				SpawnPrefab("seeds_cooked").Transform:SetPosition(inst.Transform:GetWorldPosition())
 				SpawnPrefab("doydoypetbaby").Transform:SetPosition(inst.Transform:GetWorldPosition())	
 			end	
@@ -317,11 +316,13 @@ local function ShouldAcceptItem(inst, item)
 end
 
 local function OnGetItemFromPlayer(inst, giver, item)	
-	inst:ClearBufferedAction()
-	
-    if inst.components.sleeper:IsAsleep() then
+	if inst.components.sleeper:IsAsleep() then
         inst.components.sleeper:WakeUp()
     end
+
+	inst:ClearBufferedAction()
+	inst.sg:GoToState("idle")	
+   
 	inst.SoundEmitter:PlaySound(inst.sounds.peck)
 	updateDescription(inst)
 end
@@ -332,6 +333,14 @@ local function OnRefuseItem(inst, item)
     end
 	inst.SoundEmitter:PlaySound("dontstarve/common/dust_blowaway")
     inst:PushEvent("refuseitem")
+end
+
+local function ondropped(inst)
+	if inst.components.sleeper:IsAsleep() then
+        inst.components.sleeper:WakeUp()
+    end
+    inst:ClearBufferedAction()
+	inst.sg:GoToState("idle")	
 end
 
 
@@ -393,6 +402,7 @@ local function commonfn(Sim)
     inst.components.trader:Enable()
 
     inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem:SetOnDroppedFn(ondropped)
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
     inst.components.inventoryitem.longpickup = true	
@@ -409,13 +419,13 @@ local function commonfn(Sim)
 
     inst:ListenForEvent("ondropped", function(inst, data)
         inst.components.knownlocations:RememberLocation("home", Point(inst.Transform:GetWorldPosition()), false)
-		if inst.components.sleeper:IsAsleep() then
-			inst.components.sleeper:WakeUp()
-		end
+		inst.components.sleeper:WakeUp()
     end)
 	
 	inst:ListenForEvent("gotosleep", function(inst) inst.components.inventoryitem.canbepickedup = true end)
     inst:ListenForEvent("onwakeup", function(inst) inst.components.inventoryitem.canbepickedup = false end)
+
+	--MakeFeedablePet(inst, TUNING.TOTAL_DAY_TIME/2)
 
 	
 	inst.OnSave = onsave --set the save

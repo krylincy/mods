@@ -25,7 +25,10 @@ local function makeemptyfn(inst)
 	inst.AnimState:PlayAnimation("picked")
 end
 
-local function dig_up(inst, chopper)	
+local function dig_up(inst, chopper)
+    if inst.components.pickable and inst.components.pickable:CanBePicked() then
+		inst.components.lootdropper:SpawnLootPrefab("seeds")
+	end
 	if inst.components.pickable then
 		local bush = inst.components.lootdropper:SpawnLootPrefab("dug_seed_grass")
 	end
@@ -42,7 +45,7 @@ local function fn(Sim)
 	--minimap:SetIcon( "reeds.png" )
 	
 	local seg_time = 30 --each segment of the clock is 30 seconds
-	local regrow_time = seg_time*14 + math.random() -- one day has 16 segments
+	local regrow_time = seg_time*4 + math.random() -- one day has 16 segments
     
     anim:SetBank("grass")
     anim:SetBuild("seed_grass")
