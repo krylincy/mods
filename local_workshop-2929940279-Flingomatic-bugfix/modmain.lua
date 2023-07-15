@@ -3,7 +3,7 @@ STRINGS = GLOBAL.STRINGS
 modimport('scripts/crop_bugfix.lua')
 modimport('scripts/pickable_bugfix.lua')
 if GLOBAL.IsDLCEnabled(GLOBAL.CAPY_DLC) or GLOBAL.IsDLCEnabled(GLOBAL.PORKLAND_DLC) then
-	modimport('scripts/hackable_bugfix.lua')
+	--modimport('scripts/hackable_bugfix.lua')
 end
 modimport('scripts/firedetector_bugfix.lua')
 modimport('scripts/firesuppressor_bugfix.lua')
@@ -13,7 +13,7 @@ if GLOBAL.IsDLCEnabled(GLOBAL.CAPY_DLC) or GLOBAL.IsDLCEnabled(GLOBAL.PORKLAND_D
 	modimport('scripts/limpetrock_bugfix.lua')
 end
 if GLOBAL.IsDLCEnabled(GLOBAL.PORKLAND_DLC) then
-	modimport('scripts/rock_flippable_bugfix.lua')
+	--modimport('scripts/rock_flippable_bugfix.lua')
 end
 
 local function PlayerControllerPostConstruct(self)
