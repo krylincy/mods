@@ -39,7 +39,7 @@ function VolcanoWidget:UpdateTimer()
 	local timeInSeg = actualTime - (actualSeg * 30)
 	local timeSegs = (segsUntilEruption * 30) - timeInSeg
 
-	if (timeSegs <= 0) then
+	if (timeSegs == nil or timeSegs <= 0) then
 		self:Hide()
 		return
 	end

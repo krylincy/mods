@@ -16,7 +16,7 @@ WidgetService.CreateWidget = function(self, owner, icon)
 	self.bgimage:SetTint(1.0, 1.0, 1.0, 1.0)
 	self.bgimage:SetBlendMode(1)
 	
-	self.label = self:AddChild(Text("stint-ucr", 20))
+	self.label = self:AddChild(Text("stint-ucr", 30))
 	self.label:SetPosition(3.0, -5.0, 0.0)
 	self.label:SetHAlign(ANCHOR_MIDDLE)
 end

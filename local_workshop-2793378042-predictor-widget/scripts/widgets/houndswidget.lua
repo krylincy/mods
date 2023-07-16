@@ -43,18 +43,12 @@ function HoundsWidget:UpdateTimer()
 	end
 
 	local timeToAttack = houndsManager.timetoattack
-	if (timeToAttack <= 0) then
+	if (timeToAttack == nil or timeToAttack <= 0) then
 		self:Hide()
 		return
 	end
 
-	local textToDisplay = TimeManager.TimeToString(timeToAttack)
-	local houndsCount = houndsManager.houndstorelease
-	if (houndsCount ~= nil and houndsCount > 0) then
-		textToDisplay = "Nb spawned : " .. houndsCount .. "\n" .. textToDisplay
-	end
-
-	WidgetService.ChangeLabel(self, textToDisplay)
+	WidgetService.ChangeLabel(self, TimeManager.TimeToString(timeToAttack))
 	self:Show()
 end
 

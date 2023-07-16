@@ -102,7 +102,7 @@ function HasslersWidget:UpdateTimer()
 		shortestTimeToAttack = shortestTimeToAttack + spawnedHasslerWarnDuration
 	end
 
-	if (shortestTimeToAttack <= 0) then
+	if (orshortestTimeToAttack == nil or shortestTimeToAttack <= 0) then
 		self:Hide()
 		return
 	end

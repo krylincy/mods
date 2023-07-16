@@ -40,7 +40,7 @@ function DepthsWormsWidget:UpdateTimer()
 	end
 
 	local timeToAttack = threatsWorm.timer
-	if (timeToAttack <= 0) then
+	if (timeToAttack == nil or timeToAttack <= 0) then
 		self:Hide()
 		return
 	end
