@@ -1,6 +1,7 @@
 STRINGS = GLOBAL.STRINGS
 RECIPETABS = GLOBAL.RECIPETABS
 Recipe = GLOBAL.Recipe
+RECIPE_GAME_TYPE = GLOBAL.RECIPE_GAME_TYPE
 Ingredient = GLOBAL.Ingredient
 TECH = GLOBAL.TECH
 ACTIONS = GLOBAL.ACTIONS
@@ -11,6 +12,7 @@ GetString = GLOBAL.GetString
 GetClock = GLOBAL.GetClock
 Vector3 = GLOBAL.Vector3
 EQUIPSLOTS = GLOBAL.EQUIPSLOTS
+Lerp = GLOBAL.Lerp
 
 
 local function custom_console( inst )
@@ -40,19 +42,15 @@ function custom_tuning()
 	--TUNING.WILSON_RUN_SPEED = 9
 	
 	--WILSON_HUNGER_RATE = calories_per_day/total_day_time, --calories burnt per day
-	--TUNING.WILSON_HUNGER_RATE = 200/480 -- default: 75/480
+	TUNING.WILSON_HUNGER_RATE = 200/480 -- default: 75/480
+	TUNING.WILSON_HUNGER = 200 -- 150, --stomach size
 	
-	TUNING.PIPE_DART_DAMAGE = 800
+	--TUNING.PIPE_DART_DAMAGE = 800
 	TUNING.TORNADOSTAFF_USES = 500
 	--TUNING.TORNADO_DAMAGE = 100
 	
 	TUNING.ABIGAIL_SPEED = 9
 	TUNING.ABIGAIL_DAMAGE_PER_SECOND = 80
-	
-	--TUNING.FLIPPABLE_ROCK_REPOPULATE_TIME = total_day_time*1
-	--TUNING.FLIPPABLE_ROCK_REPOPULATE_INCREASE = 0
-	--TUNING.FLIPPABLE_ROCK_REPOPULATE_VARIANCE = 0
-	--TUNING.FLIPPABLE_ROCK_CYCLES = 999
 	
 	TUNING.ORANGEAMULET_USES = 5000
 	TUNING.ORANGEAMULET_RANGE = 20
@@ -76,21 +74,25 @@ function custom_tuning()
 end
 
 function shopinteriorOverwrite(self,inst)
+	-- Available prices: [1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500]
 	local SHOPTYPES = 
 	{
 		["DEFAULT"] = {"rocks", "flint", "goldnugget"},
 
 		["pig_shop_deli"] = {
 								--{ "tea",     "oinc", 1  },
-								{ "coffee",     "oinc", 1  },
-								{ "coffee",     "oinc", 1  },
+								{ "coffee",     "oinc", 2  },
+								{ "coffee",     "oinc", 2  },
+								{ "taffy",     "oinc", 5  },
 								--{ "spicyvegstinger",     "oinc", 2  },
 								--{ "feijoada",    "oinc", 3  },
 								--{ "snakebonesoup",    "oinc", 3  },
-								{ "lobsterdinner",       "oinc", 3 },
+								{ "lobsterdinner",       "oinc", 20 },
+								{ "tropicalbouillabaisse",       "oinc", 10 },
 								--{ "nettlelosange",       "oinc", 3 },
 								--{ "bonestew",       "oinc", 5 },
-								{ "freshfruitcrepes",       "oinc", 4 },
+								{ "freshfruitcrepes",       "oinc", 30 },
+								--{ "wormlight",         "oinc", 20 },
 							},
 		
 		["pig_shop_florist"] = {								
@@ -126,12 +128,13 @@ function shopinteriorOverwrite(self,inst)
 								{ "multitool_axe_pickaxe", "oinc", 50 },                            
 								--{ "yellowstaff", "oinc", 40 },                            
 								--{ "gasmaskhat", "oinc", 40 }, 
-								{ "orangeamulet", "oinc", 30 },       
+								{ "orangeamulet", "oinc", 50 },       
 								--{ "yellowamulet", "oinc", 30 },       
 								--{ "greenamulet", "oinc", 30 },       
 								--{ "greenstaff", "oinc", 30 },       
 								--{ "boards", "oinc", 1 },       
 								{ "cutstone", "oinc", 1 },       
+								{ "tunacan", "oinc", 1 },       
 							},
 		["pig_shop_general_fiesta"] = {                            
 								{ "firecrackers",  "oinc", 1  },
@@ -181,7 +184,7 @@ function shopinteriorOverwrite(self,inst)
 								{ "honeycomb",             "oinc", 5 },								
 								--{ "blubber",             "oinc", 3 },								
 								--{ "bundlewrap",             "oinc", 10 },	
-								--{ "wormlight",         "oinc", 10 },							
+								{ "wormlight",         "oinc", 20 },							
 							},
 
 		["pig_shop_antiquities"] = {                     
@@ -202,7 +205,7 @@ function shopinteriorOverwrite(self,inst)
 
 		["pig_shop_arcane"] = {	
 								{ "kingfisher",  "oinc", 10 }, 
-								{ "toucan",  "oinc", 20 }, 
+								--{ "toucan",  "oinc", 20 }, 
 								--{ "parrot_blue",  "oinc", 20 }, 
 								--{ "parrot",  "oinc", 20 }, 
 								--{ "peagawk",  "oinc", 20 },  
@@ -212,17 +215,18 @@ function shopinteriorOverwrite(self,inst)
 								--{ "crab",  "oinc", 10 }, 
 								--{ "piko",  "oinc", 5 }, 
 								--{ "piko_orange",  "oinc", 5 }, 
-								{ "spidereggsack",  "oinc", 20 }, 
-								{ "doydoybaby",  "oinc", 50 }, 
+								--{ "spidereggsack",  "oinc", 20 }, 
+								--{ "doydoybaby",  "oinc", 50 }, 
 								{ "butterfly",  "oinc", 1 },
 								{ "butterfly",  "oinc", 1 },
-								{ "butterfly",  "oinc", 1 },
-								{ "butterfly",  "oinc", 1 },
-								{ "fireflies",       "oinc", 5  },	
+								--{ "butterfly",  "oinc", 1 },
+								--{ "butterfly",  "oinc", 1 },
+								{ "fireflies",       "oinc", 3  },	
+								{ "bioluminescence",       "oinc", 3  },	
 							},  
 		["pig_shop_weapons"] = {
 								--{ "footballhat",          "oinc", 5  },
-								{ "halberd",          "oinc", 5  },
+								--{ "halberd",          "oinc", 5  },
 								--{ "armor_metalplate",        "oinc", 20  },
 								--{ "antsuit",        "oinc", 30  },
 								--{ "antmaskhat",        "oinc", 30  },
@@ -230,9 +234,12 @@ function shopinteriorOverwrite(self,inst)
 								--{ "armor_weevole",     "oinc", 10 },
 								{ "ruinshat",        "oinc", 20 },
 								{ "armorruins",        "oinc", 20 },
-								{ "eyeturret_item", "oinc", 200 },
-								{ "cutlass", "oinc", 10 },
+								--{ "eyeturret_item", "oinc", 200 },
+								--{ "cutlass", "oinc", 10 },
 								{ "ruins_bat", "oinc", 10 },
+								{ "blowdart_pipe", "oinc", 10 },
+								{ "blowdart_pipe", "oinc", 10 },
+								{ "blowdart_pipe", "oinc", 10 },
 							},                      
 		["pig_shop_hatshop"] = {                        
 								--{ "tophat",      "oinc", 10 },
@@ -319,12 +326,6 @@ function economyOverwrite(self,inst)
 								   delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_QUEEN_TRADE,		reward = "pedestal_key",   rewardqty=1},
 		pigman_usher =		    { items= {"honey","jammypreserves","icecream","pumpkincookie","waffles","berries","berries_cooked"},                 
 									delay=0, reset=0, current=0, desc=STRINGS.CITY_PIG_USHER_TRADE,  reward = "oinc",   rewardqty=1},
-
-	--	pigman_royalguard = 	{items={"spear","spear_wathgrithr"},
-	--															num=3, current=0,	desc=STRINGS.CITY_PIG_GUARD_TRADE, 		reward = "oinc"},
-	--	pigman_royalguard_2 = 	{items={"spear","spear_wathgrithr"},				
-	--															num=3, current=0,	desc=STRINGS.CITY_PIG_GUARD_TRADE, 		reward = "oinc"},	
-	--	pigman_shopkeep = 		{items={},						num=5, current=0,	desc=STRINGS.CITY_PIG_SHOPKEEP_TRADE, 	reward = "oinc"},
 	}
 
 	for i=1,GLOBAL.NUM_TRINKETS do
@@ -424,17 +425,6 @@ AddPrefabPostInit("tentaclespike", function(inst)
     inst:AddTag("burnable")
 end)
 
--- AddPrefabPostInit("tentacle", function(inst) 
--- GLOBAL.SetSharedLootTable( 'tentacle',
--- {
-    -- {'monstermeat',   1.0},
-    -- {'monstermeat',   1.0},
-    -- {'tentaclespots', 0.5},
--- })
-
-	 -- inst.components.lootdropper:SetChanceLootTable('tentacle')
--- end)
-
 AddPrefabPostInit("multitool_axe_pickaxe", function(inst) 
 	--inst:RemoveComponent("finiteuses") 
 	inst.components.tool:SetAction(ACTIONS.DISLODGE, 20)
@@ -514,7 +504,19 @@ AddPrefabPostInit("corn_cooked", function(inst)
 	GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
 end)
 AddPrefabPostInit("seatrap", function(inst) inst:AddTag("noautopickup") end)
-AddPrefabPostInit("lantern", function(inst) inst:AddTag("noautopickup") end)
+AddPrefabPostInit("hammer", function(inst) inst:AddTag("fixable_crusher") end)
+AddPrefabPostInit("lantern", function(inst) 
+	local function fuelupdate(inst)
+		local fuelpercent = inst.components.fueled:GetPercent()
+		inst.Light:SetIntensity(Lerp(0.4, 0.6, fuelpercent))
+		inst.Light:SetRadius(Lerp(5, 8, fuelpercent))
+		inst.Light:SetFalloff(.9)
+	end
+
+	inst:AddTag("noautopickup") 
+	inst.Light:SetRadius(8)
+	inst.components.fueled:SetUpdateFn(fuelupdate)
+end)
 
 AddPrefabPostInit("yellowamulet", function(inst) 
 	inst.Light:SetRadius(10)
@@ -627,6 +629,20 @@ AddPrefabPostInit("volcano_altar", function(inst)
 	inst.components.workable:SetOnFinishCallback(OnHammered)
 end)
 
+AddPrefabPostInit("tunacan", function(inst) 
+	inst.components.useableitem:SetOnUseFn(function(inst)
+        inst.SoundEmitter:PlaySound("dontstarve_DLC002/common/can_open")
+        local steak = SpawnPrefab("fish_med_cooked")		
+        GetPlayer().components.inventory:GiveItem(steak)
+
+		if inst.components.stackable and inst.components.stackable.stacksize > 1 then
+			inst.components.stackable:Get(1):Remove()
+		else
+			inst:Remove()
+		end
+    end)
+end)
+
 
 --AddSimPostInit(custom_console)
 
@@ -635,4 +651,102 @@ AddGamePostInit(custom_tuning)
 AddSimPostInit(custom_tuning)
 AddComponentPostInit("shopinterior",shopinteriorOverwrite)
 AddComponentPostInit("economy",economyOverwrite)
+
+local mergedGameTypes = {RECIPE_GAME_TYPE.VANILLA,RECIPE_GAME_TYPE.SHIPWRECKED,RECIPE_GAME_TYPE.ROG,RECIPE_GAME_TYPE.PORKLAND}
+local cityRecipeGameTypes = RECIPE_GAME_TYPE.COMMON
+
+local function AddModRecipe(_recName, _ingrList, _tab, _techLevel, _recType, _placer, _spacing, _proxyLock, _amount)
+	if GLOBAL.CAPY_DLC and GLOBAL.IsDLCEnabled(GLOBAL.CAPY_DLC) or GLOBAL.IsDLCEnabled(GLOBAL.PORKLAND_DLC) then
+		return GLOBAL.Recipe(_recName, _ingrList , _tab, _techLevel, _recType, _placer, _spacing, _proxyLock, _amount)
+	else
+		return GLOBAL.Recipe(_recName, _ingrList , _tab, _techLevel, _placer, _spacing, _proxyLock, _amount)
+	end
+end
+
+-- local blowpipemulti = AddModRecipe("blowpipemulti", {Ingredient("twigs", 10)}, RECIPETABS.WAR, TECH.NONE)
+-- blowpipemulti.product = "blowdart_pipe"
+-- blowpipemulti.image = "blowdart_pipe.tex"
+-- blowpipemulti.numtogive = 10
+-- STRINGS.NAMES.BLOWPIPEMULTI = "Blow Darts x 10"
+-- STRINGS.RECIPE_DESC.BLOWPIPEMULTI = "Spit more teeth at your enemies."
+
+local staff_tornado_pay = AddModRecipe("staff_tornado_pay", {Ingredient("goldnugget", 5)}, RECIPETABS.WAR, TECH.NONE)
+staff_tornado_pay.product = "staff_tornado"
+staff_tornado_pay.image = "staff_tornado.tex"
+staff_tornado_pay.numtogive = 1
+STRINGS.NAMES.STAFF_TORNADO_PAY = "Weather Pain"
+STRINGS.RECIPE_DESC.STAFF_TORNADO_PAY = "I Pay for your pain!"
+
+local lightberry = AddModRecipe("lightberry", {Ingredient("lightbulb", 10)}, RECIPETABS.LIGHT, TECH.SCIENCE_TWO)
+lightberry.product = "wormlight"
+lightberry.image = "wormlight.tex"
+lightberry.numtogive = 3
+STRINGS.NAMES.LIGHTBERRY = "Wormlight x 3"
+STRINGS.RECIPE_DESC.LIGHTBERRY = "Now I see you"
+
+-- local key_to_city = AddModRecipe("key_to_city", {Ingredient("goldnugget", 5)}, RECIPETABS.TOOLS,  TECH.SCIENCE_TWO, mergedGameTypes)
+-- key_to_city.product = "key_to_city"
+-- key_to_city.image = "key_to_city.tex"
+-- key_to_city.numtogive = 1
+-- STRINGS.NAMES.KEY_TO_CITY = "Key to the City"
+-- STRINGS.RECIPE_DESC.KEY_TO_CITY = "Now I build my KINGDOM"
+
+-- local city_hammer = AddModRecipe("city_hammer", {Ingredient("goldnugget", 5)}, RECIPETABS.TOOLS,  TECH.SCIENCE_TWO, mergedGameTypes)
+-- city_hammer.product = "city_hammer"
+-- city_hammer.image = "city_hammer.tex"
+-- city_hammer.numtogive = 1
+-- STRINGS.NAMES.CITY_HAMMER = "City Hammer"
+-- STRINGS.RECIPE_DESC.CITY_HAMMER = "Now I destroy my KINGDOM"
+
+-- local cityoinc = AddModRecipe("cityoinc", {Ingredient("goldnugget", 5)}, RECIPETABS.TOOLS,  TECH.SCIENCE_TWO, mergedGameTypes)
+-- cityoinc.product = "oinc"
+-- cityoinc.image = "oinc.tex"
+-- cityoinc.numtogive = 20
+-- STRINGS.NAMES.CITYOINC = "Oinc"
+-- STRINGS.RECIPE_DESC.CITYOINC = "Oinc Oinc x20"
+
+local babybeefalo = AddModRecipe("babybeefalo", {Ingredient("beefalowool", 5),Ingredient("horn", 1)}, RECIPETABS.FARM, TECH.NONE)
+babybeefalo.image = "brush.tex"
+STRINGS.NAMES.BABYBEEFALO = "Babybeefalo"
+STRINGS.RECIPE_DESC.BABYBEEFALO = ""
+
+-- local pog = AddModRecipe("pog", {Ingredient("smallmeat", 4),Ingredient("meat", 1),Ingredient("goldnugget", 1)}, RECIPETABS.FARM, TECH.NONE)
+-- pog.image = "brush.tex"
+-- STRINGS.NAMES.POG = "Pog"
+-- STRINGS.RECIPE_DESC.POG = ""
+
+local peagawk = AddModRecipe("peagawk", {Ingredient("drumstick", 2),Ingredient("meat", 1),Ingredient("doydoyfeather", 5)}, RECIPETABS.FARM, TECH.NONE)
+peagawk.image = "brush.tex"
+STRINGS.NAMES.PEAGAWK = "Peagawk"
+STRINGS.RECIPE_DESC.PEAGAWK = ""
+
+local doydoyfoodclipping = AddModRecipe("seeds_cooked", {Ingredient("berries", 1)}, RECIPETABS.FARM, TECH.NONE)
+doydoyfoodclipping.image = "seeds_cooked.tex"
+doydoyfoodclipping.numtogive = 5
+STRINGS.NAMES.DOYDOYFOODCLIPPING = "Toasted Seeds"
+STRINGS.RECIPE_DESC.DOYDOYFOODCLIPPING = "Toasted Seeds x5"
+
+
+--Recipe("beebox", {Ingredient("boards", 2),Ingredient("honeycomb", 1),Ingredient("bee", 4)}, RECIPETABS.FARM, TECH.SCIENCE_ONE, {RECIPE_GAME_TYPE.VANILLA,RECIPE_GAME_TYPE.ROG,RECIPE_GAME_TYPE.SHIPWRECKED}, "beebox_placer")
+
+local beebox = AddModRecipe("beebox", {Ingredient("boards", 5),Ingredient("honeycomb", 1),Ingredient("stinger", 10)}, RECIPETABS.FARM, TECH.SCIENCE_ONE, mergedGameTypes, "beebox_placer")
+--local living_artifact = AddModRecipe("living_artifact", {Ingredient("infused_iron", 6),Ingredient("waterdrop", 1)}, RECIPETABS.MAGIC, TECH.MAGIC_THREE, mergedGameTypes)
+local pig_shop_antiquities = AddModRecipe("pig_shop_antiquities", {Ingredient("boards", 4), Ingredient("hammer", 3), Ingredient("pigskin", 4)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, "pig_shop_antiquities_placer", nil, true)
+--Recipe("hedge_block_item", {Ingredient("clippings", 9), Ingredient("nitre", 1)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true, 3)
+local hedge_block_item = AddModRecipe("hedge_block_item", {Ingredient("boards", 1), Ingredient("nitre", 1)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true, 3)
+local pig_shop_tinker = AddModRecipe("pig_shop_tinker", {Ingredient("cutstone", 4), Ingredient("pitchfork", 3), Ingredient("pigskin", 4)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, "pig_shop_tinker_placer", nil, true)
+local playerhouse_city = AddModRecipe("playerhouse_city", {Ingredient("boards", 5), Ingredient("cutstone", 5)}, RECIPETABS.CITY, TECH.NONE, mergedGameTypes, "playerhouse_city_placer", nil, true)
+--Recipe("construction_permit", {Ingredient("oinc", 50)}, RECIPETABS.HOME, TECH.HOME_TWO, cityRecipeGameTypes, nil, nil, true)
+local construction_permit = AddModRecipe("construction_permit", {Ingredient("oinc", 10)}, RECIPETABS.HOME, TECH.HOME_TWO, cityRecipeGameTypes, nil, nil, true)
+local city_lamp = AddModRecipe("city_lamp", {Ingredient("cutstone", 2), Ingredient("transistor", 1),Ingredient("lightbulb",5)}, RECIPETABS.CITY, TECH.NONE, cityRecipeGameTypes, "city_lamp_placer", nil, true)
+local turf_foundation = AddModRecipe("turf_foundation", {Ingredient("cutstone", 1)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true)
+turf_foundation.numtogive = 30
+local turf_cobbleroad = AddModRecipe("turf_cobbleroad", {Ingredient("cutstone", 1), Ingredient("boards", 1)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true)
+turf_cobbleroad.numtogive = 30
+--local thulecite = AddModRecipe("thulecite", {Ingredient("rocks", 1), Ingredient("goldnugget", 2)}, RECIPETABS.ANCIENT, TECH.ANCIENT_FOUR, mergedGameTypes, nil, nil, true)
+
+local volcano_altar = AddModRecipe("volcano_altar", {Ingredient("cutstone", 10)}, RECIPETABS.TOWN, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.SHIPWRECKED, "dragoonden_placer")
+volcano_altar.image = "skull_wallace.tex"
+STRINGS.NAMES.VOLCANO_ALTAR = "Volcano Altar of Snackrifice"
+STRINGS.RECIPE_DESC.VOLCANO_ALTAR = "Delays or speeds up eruptions."
 
