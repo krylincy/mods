@@ -75,12 +75,8 @@ function shopinteriorOverwrite(self, inst)
                                 {"dug_berrybush2", "oinc", 30}},
         ["pig_shop_general"] = {{"bandage", "oinc", 3}, {"antivenom", "oinc", 5}, {"multitool_axe_pickaxe", "oinc", 50},
                                 {"orangeamulet", "oinc", 50}, {"cutstone", "oinc", 1}, {"tunacan", "oinc", 1}},
-        ["pig_shop_general_fiesta"] = {{"firecrackers", "oinc", 1}, {"firecrackers", "oinc", 1},
-                                       {"firecrackers", "oinc", 1}, {"firecrackers", "oinc", 1},
-                                       {"magnifying_glass", "oinc", 10}, {"ballpein_hammer", "oinc", 10},
-                                       {"minerhat", "oinc", 20}, {"ox_flute", "oinc", 20}, {"bugnet", "oinc", 10},
-                                       {"shears", "oinc", 10}, {"bugrepellent", "oinc", 10},
-                                       {"multitool_axe_pickaxe", "oinc", 50}, {"gasmaskhat", "oinc", 40}},
+        ["pig_shop_general_fiesta"] = {{"bandage", "oinc", 3}, {"antivenom", "oinc", 5}, {"multitool_axe_pickaxe", "oinc", 50},
+		{"orangeamulet", "oinc", 50}, {"cutstone", "oinc", 1}, {"tunacan", "oinc", 1}},
         ["pig_shop_hoofspa"] = {{"thulecite", "oinc", 5}, {"iron", "oinc", 1}, {"nitre", "oinc", 1},
                                 {"houndstooth", "oinc", 1}, {"stinger", "oinc", 1}, {"boneshard", "oinc", 1}},
         ["pig_shop_produce"] = {{"cave_banana", "oinc", 1}, {"mandrake", "oinc", 20}, {"coconut", "oinc", 1},
@@ -492,9 +488,9 @@ end)
 AddPrefabPostInit("seatrap", function(inst)
     inst:AddTag("noautopickup")
 end)
-AddPrefabPostInit("hammer", function(inst)
-    inst:AddTag("fixable_crusher")
-end)
+-- AddPrefabPostInit("hammer", function(inst)
+--     inst:AddTag("fixable_crusher")
+-- end)
 AddPrefabPostInit("lantern", function(inst)
     local function fuelupdate(inst)
         local fuelpercent = inst.components.fueled:GetPercent()
