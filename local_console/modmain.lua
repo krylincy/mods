@@ -33,7 +33,7 @@ function custom_tuning()
 
     -- WILSON_HUNGER_RATE = calories_per_day/total_day_time, --calories burnt per day
     TUNING.WILSON_HUNGER_RATE = 200 / 480 -- default: 75/480
-    TUNING.WILSON_HUNGER = 200 -- 150, --stomach size
+    TUNING.WILSON_HUNGER = 250 -- 150, --stomach size
 
     -- TUNING.PIPE_DART_DAMAGE = 800
     TUNING.TORNADOSTAFF_USES = 500
@@ -476,6 +476,10 @@ end)
 AddPrefabPostInit("seeds_cooked", function(inst)
     inst:AddTag("noautopickup")
     GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
+	inst.components.edible.hungervalue = 1
+end)
+AddPrefabPostInit("seeds", function(inst)
+    inst.components.edible.hungervalue = 1
 end)
 AddPrefabPostInit("corn", function(inst)
     inst:AddTag("noautopickup")
