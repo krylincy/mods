@@ -26,9 +26,6 @@ local function makeemptyfn(inst)
 end
 
 local function dig_up(inst, chopper)
-    if inst.components.pickable and inst.components.pickable:CanBePicked() then
-		inst.components.lootdropper:SpawnLootPrefab("seeds")
-	end
 	if inst.components.pickable then
 		local bush = inst.components.lootdropper:SpawnLootPrefab("dug_seed_grass")
 	end
