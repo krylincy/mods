@@ -46,7 +46,6 @@ local adultloot = {'butterfly', 'ash', 'ash'}
 local babyfoodprefs = {"SEEDS"}
 local teenfoodprefs = {"SEEDS"}
 local adultfoodprefs = {"VEGGIE", "SEEDS"}
-local adultfoodprefs_female = {"VEGGIE", "SEEDS"}
 
 
 local babysounds = 
@@ -70,6 +69,11 @@ local teensounds =
 	peck = "dontstarve_DLC002/creatures/teen_doy_doy/peck",
 }
 
+local function setPresentation(inst, typ)
+	inst.AnimState:SetBuild("doydoypet_"..typ)
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_"..typ..".xml"
+	inst.components.inventoryitem.imagename = "doydoypet_"..typ
+end
 
 local function setColor(inst)
 	if not inst.color then
@@ -125,8 +129,21 @@ local function OnEat(inst, food)
 		local chance = math.random()
 		--print("Doydoypet female chance: "..chance)
 		if chance < TUNING.DOYDOYPET_FEMALE_CHANCE then --0.25
-			inst:AddTag("doydoypet_female")	
-			inst.AnimState:SetBuild("doydoypet_baby_tarn")			
+			inst:AddTag("doydoypet_female")			
+		end
+
+		if inst:HasTag("doydoypet_female") then
+			setPresentation(inst, "baby_tarn")	
+		end
+
+		if not inst:HasTag("hasWidgetCount") then
+			if inst:HasTag("doydoypet_female") then
+				-- can be female from hatch
+				GetWorld().components.doydoypet:ChangeCounterFemale(1)
+			else
+				GetWorld().components.doydoypet:ChangeCounterMale(1)	
+			end
+			inst:AddTag("hasWidgetCount")
 		end
 		
 		setColor(inst)
@@ -164,9 +181,9 @@ local function SetBaby(inst)
 	inst:RemoveTag("teen")	
 	
 	if inst:HasTag("doydoypet_female") then
-		inst.AnimState:SetBuild("doydoypet_baby_tarn")
+		setPresentation(inst, "baby_tarn")
 	else
-		inst.AnimState:SetBuild("doydoypet_baby_default")
+		setPresentation(inst, "baby_default")
 	end
 	
 	inst.AnimState:SetBank("doydoypet_baby")
@@ -194,13 +211,9 @@ local function SetTeen(inst)
 	inst:RemoveTag("baby")
 	
 	if inst:HasTag("doydoypet_female") then
-		inst.AnimState:SetBuild("doydoypet_teen_tarn")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_teen_tarn.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_teen_tarn"
+		setPresentation(inst, "teen_tarn")
 	else
-		inst.AnimState:SetBuild("doydoypet_teen_default")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_teen_default.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_teen_default"
+		setPresentation(inst, "teen_default")
 	end
 
 	inst.AnimState:SetBank("doydoypet")
@@ -228,16 +241,12 @@ local function SetFullyGrown(inst)
 	inst:RemoveTag("teen")
 
 	if inst:HasTag("doydoypet_female") then
-		inst.AnimState:SetBuild("doydoypet_adult_tarn")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_tarn.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_adult_tarn"
-		inst.components.eater.foodprefs = adultfoodprefs_female	
+		setPresentation(inst, "adult_tarn")
 	else
-		inst.AnimState:SetBuild("doydoypet_adult_default")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_default.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_adult_default"
-		inst.components.eater.foodprefs = adultfoodprefs
+		setPresentation(inst, "adult_default")	
 	end
+
+	inst.components.eater.foodprefs = adultfoodprefs
 	
 	inst.AnimState:SetBank("doydoypet")
 	inst.AnimState:PlayAnimation("idle", true)
@@ -284,11 +293,24 @@ local function OnEntityWake(inst)
 	inst:ClearBufferedAction()	
 end
 
+local function OnDeath(inst)
+	print("doydoypet OnDeath", inst:HasTag("hasWidgetCount"))
+
+	if inst:HasTag("hasWidgetCount") then
+		if inst:HasTag("doydoypet_female") then
+			GetWorld().components.doydoypet:ChangeCounterFemale(-1)
+		else
+			GetWorld().components.doydoypet:ChangeCounterMale(-1)	
+		end
+	end
+end
+
 local function onsave(inst, data)
 	data.eatTimes = inst.eatTimes
 	data.color = inst.color
 	data.inventoryItems = inst.inventoryItems
 	data.female = inst:HasTag("doydoypet_female")
+	data.hasWidgetCount = inst:HasTag("hasWidgetCount")
 end
 
 local function onload(inst, data)
@@ -306,6 +328,37 @@ local function onload(inst, data)
 	
 	if data and data.female then
 		inst:AddTag("doydoypet_female")
+
+		if inst:HasTag("baby") then
+			setPresentation(inst, "baby_tarn")
+		elseif inst:HasTag("teen") then
+			setPresentation(inst, "teen_tarn")
+		else
+			setPresentation(inst, "adult_tarn")
+		end
+	elseif data then
+		if inst:HasTag("baby") then
+			setPresentation(inst, "baby_default")
+		elseif inst:HasTag("teen") then
+			setPresentation(inst, "teen_default")
+		else
+			setPresentation(inst, "adult_default")
+		end
+	end
+
+	if data and not data.hasWidgetCount then
+		if inst.eatTimes > 0 then
+			if inst:HasTag("doydoypet_female") then
+				GetWorld().components.doydoypet:ChangeCounterFemale(1)
+			else
+				GetWorld().components.doydoypet:ChangeCounterMale(1)
+			end
+			inst:AddTag("hasWidgetCount")
+		end
+	end  
+
+	if data and data.hasWidgetCount then
+		inst:AddTag("hasWidgetCount")
 	end
 end
 
@@ -366,12 +419,15 @@ local function commonfn(Sim)
 	inst:AddTag("noautopickup")
 	
 	inst:AddComponent("health")
+	inst.components.health.canmurder = false
 	--inst:AddComponent("combat")
 	inst:AddComponent("sizetweener")
 	inst:AddComponent("sleeper")
 	inst:AddComponent("lootdropper")
 	inst:AddComponent("knownlocations")
 	inst:AddComponent("talker")
+
+	inst:ListenForEvent("death", OnDeath)
 	
 	inst:ListenForEvent("entitysleep", OnEntitySleep)
 	inst:ListenForEvent("entitywake", OnEntityWake)
@@ -405,16 +461,11 @@ local function commonfn(Sim)
 	inst.components.inventoryitem:SetOnDroppedFn(ondropped)
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
-    inst.components.inventoryitem.longpickup = true	
 	
 	if inst:HasTag("doydoypet_female") then
-		inst.AnimState:SetBuild("doydoypet_adult_tarn")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_tarn.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_adult_tarn"
+		setPresentation(inst, "adult_tarn")
 	else
-		inst.AnimState:SetBuild("doydoypet_adult_default")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_default.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_adult_default"
+		setPresentation(inst, "adult_default")
 	end
 
     inst:ListenForEvent("ondropped", function(inst, data)
@@ -438,13 +489,9 @@ local function babyfn(Sim)
 	local inst = commonfn(Sim)
 	
 	if inst:HasTag("doydoypet_female") then
-		inst.AnimState:SetBuild("doydoypet_baby_tarn")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_baby_tarn.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_baby_tarn"
+		setPresentation(inst, "baby_tarn")
 	else
-		inst.AnimState:SetBuild("doydoypet_baby_default")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_baby_default.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_baby_default"
+		setPresentation(inst, "baby_default")
 	end
 
 	inst.AnimState:SetBank("doydoypet_baby")
@@ -481,16 +528,12 @@ local function adultfn(Sim)
 	local inst = commonfn(Sim)
 
 	if inst:HasTag("doydoypet_female") then
-		inst.AnimState:SetBuild("doydoypet_adult_tarn")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_tarn.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_adult_tarn"
-		inst.components.eater.foodprefs = adultfoodprefs_female	
+		setPresentation(inst, "adult_tarn")
 	else
-		inst.AnimState:SetBuild("doydoypet_adult_default")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/doydoypet_adult_default.xml"
-		inst.components.inventoryitem.imagename = "doydoypet_adult_default"
-		inst.components.eater.foodprefs = adultfoodprefs
+		setPresentation(inst, "adult_default")	
 	end
+
+	inst.components.eater.foodprefs = adultfoodprefs
 	
 	setColor(inst)
 

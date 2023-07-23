@@ -33,9 +33,9 @@ function custom_tuning()
 
     -- WILSON_HUNGER_RATE = calories_per_day/total_day_time, --calories burnt per day
     TUNING.WILSON_HUNGER_RATE = 200 / 480 -- default: 75/480
-    TUNING.WILSON_HUNGER = 200 -- 150, --stomach size
+    TUNING.WILSON_HUNGER = 250 -- 150, --stomach size
 
-    -- TUNING.PIPE_DART_DAMAGE = 800
+    TUNING.PIPE_DART_DAMAGE = 250
     TUNING.TORNADOSTAFF_USES = 500
     -- TUNING.TORNADO_DAMAGE = 100
 

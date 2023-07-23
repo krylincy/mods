@@ -1,24 +1,16 @@
-
 RECIPETABS = GLOBAL.RECIPETABS
 RECIPE_GAME_TYPE = GLOBAL.RECIPE_GAME_TYPE
 Recipe = GLOBAL.Recipe
 Ingredient = GLOBAL.Ingredient
 TECH = GLOBAL.TECH
 TUNING = GLOBAL.TUNING
-		
-PrefabFiles = {
-    "doydoypet",
-    "doydoypetegg",
-	"seed_grass",
-	"dug_seed_grass",
-}
 
-Assets = {
-    Asset("IMAGE", "images/doydoypetegg.tex"),
-    Asset("ATLAS", "images/doydoypetegg.xml"),
-    Asset("IMAGE", "images/seed_grass.tex"),
-    Asset("ATLAS", "images/seed_grass.xml"),
-}
+local doydoypetWidget = GLOBAL.require "widgets/doydoypetwidget"
+
+PrefabFiles = {"doydoypet", "doydoypetegg", "seed_grass", "dug_seed_grass"}
+
+Assets = {Asset("IMAGE", "images/doydoypetegg.tex"), Asset("ATLAS", "images/doydoypetegg.xml"),
+          Asset("IMAGE", "images/seed_grass.tex"), Asset("ATLAS", "images/seed_grass.xml")}
 
 GLOBAL.STRINGS.NAMES.DOYDOYPET = "Doydoy Pet"
 GLOBAL.STRINGS.CHARACTERS.GENERIC.DESCRIBE.DOYDOYPET = "I feel oddly protective of this dumb bird."
@@ -45,7 +37,7 @@ GLOBAL.STRINGS.CHARACTERS.GENERIC.DESCRIBE.DOYDOYPETEGG_COOKED = "Your time is o
 GLOBAL.STRINGS.RECIPE_DESC.DOYDOYPETEGG_COOKED = "Your time is over."
 
 local seg_time = 30
-local total_day_time = seg_time*16 --480
+local total_day_time = seg_time * 16 -- 480
 local EAT_INVERVALL = GetModConfigData("DOYDOYPET_EAT_INVERVALL")
 
 TUNING.DOYDOYPET_BABY_HEALTH = 50
@@ -71,7 +63,6 @@ TUNING.DOYDOYPET_DIE_OLD_AGE = GetModConfigData("DOYDOYPET_DIE_OLD_AGE")
 TUNING.DOYDOYPET_BREED_CHANCE = GetModConfigData("DOYDOYPET_BREED_CHANCE")
 TUNING.DOYDOYPET_FEMALE_CHANCE = GetModConfigData("DOYDOYPET_FEMALE_CHANCE")
 
-
 local doydoypeteggMenu
 local doydoypeteggRecipe = {Ingredient("bird_egg", 5), Ingredient("wetgoop", 1)}
 
@@ -79,12 +70,14 @@ local doydoypetfoodMenu
 local doydoypetfoodRecipe = {Ingredient("seeds", 20), Ingredient("poop", 1)}
 
 if GLOBAL.IsDLCEnabled(GLOBAL.CAPY_DLC) or GLOBAL.IsDLCEnabled(GLOBAL.PORKLAND_DLC) then
-	doydoypeteggMenu = Recipe("doydoypetegg",doydoypeteggRecipe , RECIPETABS.FARM, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.COMMON, nil, 1)
-	doydoypetfoodMenu = Recipe("dug_seed_grass",doydoypetfoodRecipe , RECIPETABS.FARM, TECH.SCIENCE_ONE, RECIPE_GAME_TYPE.COMMON, nil, 1)
+    doydoypeteggMenu = Recipe("doydoypetegg", doydoypeteggRecipe, RECIPETABS.FARM, TECH.SCIENCE_ONE,
+        RECIPE_GAME_TYPE.COMMON, nil, 1)
+    doydoypetfoodMenu = Recipe("dug_seed_grass", doydoypetfoodRecipe, RECIPETABS.FARM, TECH.SCIENCE_ONE,
+        RECIPE_GAME_TYPE.COMMON, nil, 1)
     doydoypetfoodMenu.numtogive = 5
 else
-	doydoypeteggMenu = Recipe("doydoypetegg",doydoypeteggRecipe , RECIPETABS.FARM, TECH.SCIENCE_ONE, nil, 1)
-	doydoypetfoodMenu = Recipe("dug_seed_grass",doydoypetfoodRecipe , RECIPETABS.FARM, TECH.SCIENCE_ONE, nil, 1)
+    doydoypeteggMenu = Recipe("doydoypetegg", doydoypeteggRecipe, RECIPETABS.FARM, TECH.SCIENCE_ONE, nil, 1)
+    doydoypetfoodMenu = Recipe("dug_seed_grass", doydoypetfoodRecipe, RECIPETABS.FARM, TECH.SCIENCE_ONE, nil, 1)
     doydoypetfoodMenu.numtogive = 5
 end
 
@@ -93,3 +86,25 @@ doydoypeteggMenu.image = "doydoypetegg.tex"
 
 doydoypetfoodMenu.atlas = "images/seed_grass.xml"
 doydoypetfoodMenu.image = "seed_grass.tex"
+
+local function initWidget(self)
+    self.doydoypetWidget = self:AddChild(doydoypetWidget(self))
+    self.doydoypetWidget:SetHAnchor(GLOBAL.ANCHOR_LEFT)
+    self.doydoypetWidget:SetVAnchor(GLOBAL.ANCHOR_TOP)
+    self.doydoypetWidget:SetClickable(false)
+    self.doydoypetWidget:SetScaleMode(GLOBAL.SCALEMODE_NONE)
+    self.doydoypetWidget:SetPosition(430, -70, 0.0)
+
+    self.doydoypetWidget:UpdateText()
+    
+    self.inst:DoPeriodicTask(1, function()
+        self.doydoypetWidget:UpdateText()
+    end)
+end
+
+
+AddPrefabPostInit("world", function(inst)
+    inst:AddComponent("doydoypet")
+end)
+
+AddClassPostConstruct("widgets/controls", initWidget)
