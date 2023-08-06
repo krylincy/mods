@@ -1,6 +1,5 @@
 require "behaviours/wander"
 require "behaviours/doaction"
-require "behaviours/panic"
 require "behaviours/minperiod"
 
 local FOOD_TAGS = {"edible"}
@@ -196,8 +195,7 @@ function DoydoyBrain:OnStart()
 		
 	local root =
 	PriorityNode(
-	{
-		WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),		 
+	{	 
 		DoAction(self.inst, EatFoodAction),
 		MinPeriod(self.inst, math.random(4,6), checkAgeNode),
 		Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, TUNING.DOYDOYPET_MAX_WANDER_DIST),

@@ -10,7 +10,7 @@ local doydoypetWidget = GLOBAL.require "widgets/doydoypetwidget"
 PrefabFiles = {"doydoypet", "doydoypetegg", "seed_grass", "dug_seed_grass"}
 
 Assets = {Asset("IMAGE", "images/doydoypetegg.tex"), Asset("ATLAS", "images/doydoypetegg.xml"),
-          Asset("IMAGE", "images/seed_grass.tex"), Asset("ATLAS", "images/seed_grass.xml")}
+          Asset("IMAGE", "images/seed_grass.tex"), Asset("ATLAS", "images/seed_grass.xml"), Asset("ATLAS", "images/doydoypetwidget.xml")}
 
 GLOBAL.STRINGS.NAMES.DOYDOYPET = "Doydoy Pet"
 GLOBAL.STRINGS.CHARACTERS.GENERIC.DESCRIBE.DOYDOYPET = "I feel oddly protective of this dumb bird."

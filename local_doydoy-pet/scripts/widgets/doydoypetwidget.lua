@@ -13,7 +13,7 @@ local doydoypetWidget = Class(Widget, function(self, owner)
     self:SetScale(1, 1, 1)
     
     self.bgimage = self:AddChild(Image())
-    self.bgimage:SetTexture("images/doydoypetegg.xml", "doydoypetegg.tex")
+    self.bgimage:SetTexture("images/doydoypetwidget.xml", "doydoypetwidget.tex")
     self.bgimage:ScaleToSize(self.width, self.height)
     self.bgimage:SetTint(1.0, 1.0, 1.0, 1.0)
     self.bgimage:SetBlendMode(1)
@@ -26,8 +26,14 @@ end)
 function doydoypetWidget:UpdateText()
     if GetWorld().components and GetWorld().components.doydoypet then
         local numberAll = GetWorld().components.doydoypet:GetNumber()
-        local femalePercent = math.floor(100 * GetWorld().components.doydoypet:GetNumber("female") / numberAll)
-        self.label:SetString(numberAll.." | ♀ "..femalePercent.."%")
+        local numberFemale = GetWorld().components.doydoypet:GetNumber("female")
+        local femalePercent = 0
+        
+        if numberFemale > 0 then
+            femalePercent = math.floor(100 * numberFemale / numberAll)
+        end
+        
+        self.label:SetString(numberAll.." | "..numberFemale.."\n♀ "..femalePercent.."%")
     else
         print('GetWorld().components.doydoypet not found, show 0')
         self.label:SetString(0)

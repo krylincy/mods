@@ -1,6 +1,5 @@
 require("brains/doydoypetbrain")
-require "stategraphs/SGdoydoy"
-require "behaviours/panic"
+require "stategraphs/SGdoydoypet"
 
 local KEYP1 = KEY_SPACE
 
@@ -202,11 +201,10 @@ local function SetBaby(inst)
 	inst.components.eater.foodprefs = babyfoodprefs
 	
 	inst:ClearBufferedAction()
-
+	inst.sg:GoToState("idle")
 end
 
 local function SetTeen(inst)
-	inst:ClearBufferedAction()
 	inst:AddTag("teen")
 	inst:RemoveTag("baby")
 	
@@ -223,7 +221,7 @@ local function SetTeen(inst)
 	inst.sounds = teensounds
 	--inst.components.combat:SetHurtSound("dontstarve_DLC002/creatures/doy_doy/hit")
 
-	local scale = TUNING.DOYDOY_TEEN_SCALE
+	local scale = 0.7 -- 0.8 default TUNING.DOYDOY_TEEN_SCALE
 	inst.Transform:SetScale(scale, scale, scale)
 
 	inst.components.health:SetMaxHealth(TUNING.DOYDOYPET_TEEN_HEALTH)
@@ -233,10 +231,10 @@ local function SetTeen(inst)
 	inst.components.eater.foodprefs = teenfoodprefs
 	
 	inst:ClearBufferedAction()
+	inst.sg:GoToState("idle")
 end
 
 local function SetFullyGrown(inst)
-	inst:ClearBufferedAction()
 	inst:AddTag("adult")
 	inst:RemoveTag("teen")
 
@@ -262,19 +260,18 @@ local function SetFullyGrown(inst)
 	inst.components.locomotor.runspeed = TUNING.DOYDOYPET_WALK_SPEED
 	inst.components.lootdropper:SetLoot(adultloot)
 	
-	inst.components.growable:StopGrowing()
-
-	
+	inst.components.growable:StopGrowing()	
 	
 	inst:ClearBufferedAction()
+	inst.sg:GoToState("idle")
 end
 
 local function GetBabyGrowTime()
-	return 10
+	return 30*16 -- 1 day
 end
 
 local function GetTeenGrowTime()
-	return 10
+	return 30*16 -- 1 day
 end
 
 local growth_stages =
@@ -469,12 +466,17 @@ local function commonfn(Sim)
 	end
 
     inst:ListenForEvent("ondropped", function(inst, data)
-        inst.components.knownlocations:RememberLocation("home", Point(inst.Transform:GetWorldPosition()), false)
 		inst.components.sleeper:WakeUp()
+        inst.components.knownlocations:RememberLocation("home", Point(inst.Transform:GetWorldPosition()), false)
     end)
 	
-	inst:ListenForEvent("gotosleep", function(inst) inst.components.inventoryitem.canbepickedup = true end)
-    inst:ListenForEvent("onwakeup", function(inst) inst.components.inventoryitem.canbepickedup = false end)
+	inst:ListenForEvent("gotosleep", function(inst) 
+		inst.components.inventoryitem.canbepickedup = true		
+	end)
+    inst:ListenForEvent("onwakeup", function(inst) 
+		inst.components.inventoryitem.canbepickedup = false 
+		inst.components.knownlocations:RememberLocation("home", Point(inst.Transform:GetWorldPosition()), false) 
+	end)
 
 	--MakeFeedablePet(inst, TUNING.TOTAL_DAY_TIME/2)
 
@@ -518,7 +520,7 @@ local function babyfn(Sim)
 	inst:AddComponent("growable")
 	inst.components.growable.stages = growth_stages
 	inst.components.growable:SetStage(1)
-	inst.components.growable.growoffscreen = true
+	inst.components.growable.growoffscreen = false
 	inst.components.growable:StartGrowing()	
 
 	return inst
@@ -539,8 +541,6 @@ local function adultfn(Sim)
 
 	inst.AnimState:SetBank("doydoypet")
 	inst.AnimState:PlayAnimation("idle", true)
-
-	--inst.components.combat:SetHurtSound("dontstarve_DLC002/creatures/doy_doy/hit")
 
 	inst.components.health:SetMaxHealth(TUNING.DOYDOYPET_HEALTH)
 	inst.components.locomotor.walkspeed = TUNING.DOYDOYPET_WALK_SPEED
