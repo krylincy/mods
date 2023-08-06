@@ -26,7 +26,7 @@ local function HitPlants(inst, dist, noextinguish)
 
 	for k,v in pairs(ents) do
 		if v then
-			print("CHECK CHECK",v.prefab)
+			-- print("CHECK CHECK",v.prefab)
 -- If the plant loses makewitherabletask, it will no longer be given the "witherable" tag.
 --[[
 			if v.makewitherabletask then
@@ -156,7 +156,7 @@ local function FireSuppressorPostInit(self)
 		if plant and #inst.protected_plants > 0 then
 			local pickable = plant.components.pickable or plant.components.hackable
 			if pickable == nil then
-				print("This protected plant must be pickable or hackable!!")
+				-- print("This protected plant must be pickable or hackable!!")
 				return
 			end
 			for k,v in ipairs(inst.protected_plants) do

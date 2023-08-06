@@ -21,7 +21,7 @@ local function PlayerControllerPostConstruct(self)
 		if self.controller_target and GLOBAL.GetPlayer():CanExamine() then
 			local pickable = self.controller_target.components.crop or self.controller_target.components.pickable or self.controller_target.components.hackable
 			if pickable then
-				print(self.controller_target, pickable:GetDebugString())
+				-- print(self.controller_target, pickable:GetDebugString())
 			end
 
 			self.inst.components.locomotor:PushAction( GLOBAL.BufferedAction(self.inst, self.controller_target, GLOBAL.ACTIONS.LOOKAT))
