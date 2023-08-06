@@ -14,16 +14,22 @@ Vector3 = GLOBAL.Vector3
 EQUIPSLOTS = GLOBAL.EQUIPSLOTS
 Lerp = GLOBAL.Lerp
 
-local function custom_console(inst)
-    GLOBAL.RunScript("consolecommands")
+-- min spacing mod
+for _,v in pairs(GLOBAL.GetAllRecipes()) do
+    v.min_spacing = 1
 end
 
-GLOBAL.TUNING.EFFIGY_HEALTH_PENALTY = 0
-GLOBAL.TUNING.RESURRECT_HEALTH = 300
-GLOBAL.TUNING.BERRY_REGROW_INCREASE = 0
+local function custom_console(inst) GLOBAL.RunScript("consolecommands") end
+
+
 
 function custom_tuning()
     local total_day_time = 30 * 16
+
+    TUNING.EFFIGY_HEALTH_PENALTY = 0
+    TUNING.RESURRECT_HEALTH = 300
+    TUNING.BERRY_REGROW_INCREASE = 0
+    TUNING.BERRY_REGROW_TIME = total_day_time
 
     TUNING["STACK_SIZE_LARGEITEM"] = 10000
     TUNING["STACK_SIZE_MEDITEM"] = 10000
@@ -35,7 +41,7 @@ function custom_tuning()
     TUNING.WILSON_HUNGER_RATE = 200 / 480 -- default: 75/480
     TUNING.WILSON_HUNGER = 250 -- 150, --stomach size
 
-    TUNING.PIPE_DART_DAMAGE = 250
+    TUNING.PIPE_DART_DAMAGE = 400 -- to onehit terrorbreak
     TUNING.TORNADOSTAFF_USES = 500
     -- TUNING.TORNADO_DAMAGE = 100
 
@@ -67,40 +73,87 @@ function shopinteriorOverwrite(self, inst)
     local SHOPTYPES = {
         ["pig_shop_cityhall"] = {},
         ["DEFAULT"] = {"rocks", "flint", "goldnugget"},
-        ["pig_shop_deli"] = {{"coffee", "oinc", 2}, {"coffee", "oinc", 2}, {"taffy", "oinc", 5},
-                             {"lobsterdinner", "oinc", 20}, {"tropicalbouillabaisse", "oinc", 10},
-                             {"freshfruitcrepes", "oinc", 30}},
-        ["pig_shop_florist"] = {{"acorn", "oinc", 2}, {"pinecone", "oinc", 2}, {"burr", "oinc", 2},
-                                {"teatree_nut", "oinc", 2}, {"jungletreeseed", "oinc", 2}, {"dug_sapling", "oinc", 4},
+        ["pig_shop_deli"] = {{"coffee", "oinc", 2}, 
+                             {"coffee", "oinc", 2},
+                             {"coffee", "oinc", 2},
+                             {"coffee", "oinc", 2},
+                            --  {"taffy", "oinc", 5},
+                             {"tropicalbouillabaisse", "oinc", 5},
+                             {"lobsterdinner", "oinc", 10},
+                             {"freshfruitcrepes", "oinc", 20}},
+        ["pig_shop_florist"] = {{"acorn", "oinc", 2}, 
+                                {"pinecone", "oinc", 2},
+                                {"burr", "oinc", 2}, 
+                                {"teatree_nut", "oinc", 2},
+                                {"jungletreeseed", "oinc", 2},
+                                -- {"dug_sapling", "oinc", 4},
                                 {"dug_berrybush2", "oinc", 30}},
-        ["pig_shop_general"] = {{"bandage", "oinc", 3}, {"antivenom", "oinc", 5}, {"multitool_axe_pickaxe", "oinc", 50},
-                                {"orangeamulet", "oinc", 50}, {"cutstone", "oinc", 1}, {"tunacan", "oinc", 1}},
-        ["pig_shop_general_fiesta"] = {{"bandage", "oinc", 3}, {"antivenom", "oinc", 5}, {"multitool_axe_pickaxe", "oinc", 50},
-		{"orangeamulet", "oinc", 50}, {"cutstone", "oinc", 1}, {"tunacan", "oinc", 1}},
-        ["pig_shop_hoofspa"] = {{"thulecite", "oinc", 5}, {"iron", "oinc", 1}, {"nitre", "oinc", 1},
-                                {"houndstooth", "oinc", 1}, {"stinger", "oinc", 1}, {"boneshard", "oinc", 1}},
-        ["pig_shop_produce"] = {{"cave_banana", "oinc", 1}, {"mandrake", "oinc", 20}, {"coconut", "oinc", 1},
-                                {"venus_stalk", "oinc", 5}, {"waterdrop", "oinc", 100}, {"honeycomb", "oinc", 5},
+        ["pig_shop_general"] = {{"bandage", "oinc", 3},
+                                {"antivenom", "oinc", 5},
+                                {"multitool_axe_pickaxe", "oinc", 50},
+                                {"orangeamulet", "oinc", 50},
+                                -- {"cutstone", "oinc", 1}, 
+                                {"tunacan", "oinc", 2},
+                                {"tunacan", "oinc", 2}},
+        ["pig_shop_general_fiesta"] = {{"bandage", "oinc", 3},
+                                       {"antivenom", "oinc", 5},
+                                       {"multitool_axe_pickaxe", "oinc", 50},
+                                       {"orangeamulet", "oinc", 50},
+                                    --    {"cutstone", "oinc", 1},
+                                       {"tunacan", "oinc", 2}},
+        ["pig_shop_hoofspa"] = {{"thulecite", "oinc", 5}, 
+                                {"iron", "oinc", 1},
+                                -- {"nitre", "oinc", 1},
+                                {"houndstooth", "oinc", 1},
+                                {"stinger", "oinc", 1}, 
+                                {"boneshard", "oinc", 1}},
+        ["pig_shop_produce"] = {{"cave_banana", "oinc", 1},
+                                {"mandrake", "oinc", 20},
+                                {"coconut", "oinc", 1},
+                                {"venus_stalk", "oinc", 5},
+                                {"waterdrop", "oinc", 100},
+                                {"honeycomb", "oinc", 5},
                                 {"wormlight", "oinc", 20}},
-        ["pig_shop_antiquities"] = {{"cutreeds", "oinc", 2}, {"fabric", "oinc", 2}, {"livinglog", "oinc", 10},
-                                    {"lightbulb", "oinc", 2}, {"pigskin", "oinc", 2}, {"pigskin", "oinc", 2},
+        ["pig_shop_antiquities"] = {{"cutreeds", "oinc", 2},
+                                    {"cutreeds", "oinc", 2},
+                                    {"pigskin", "oinc", 2},
+                                    {"pigskin", "oinc", 2},
+                                    {"fabric", "oinc", 2},
+                                    {"livinglog", "oinc", 10},
+                                    {"lightbulb", "oinc", 2},
                                     {"beefalowool", "oinc", 1}},
-        ["pig_shop_arcane"] = {{"kingfisher", "oinc", 10}, {"rabbit", "oinc", 5}, {"butterfly", "oinc", 1},
-                               {"butterfly", "oinc", 1}, {"fireflies", "oinc", 3}, {"bioluminescence", "oinc", 3}},
-        ["pig_shop_weapons"] = {{"ruinshat", "oinc", 20}, {"armorruins", "oinc", 20}, {"ruins_bat", "oinc", 10},
-                                {"blowdart_pipe", "oinc", 10}, {"blowdart_pipe", "oinc", 10},
+        ["pig_shop_arcane"] = {{"kingfisher", "oinc", 10},
+                               {"rabbit", "oinc", 5}, 
+                               {"butterfly", "oinc", 1},
+                               {"butterfly", "oinc", 1},
+                               {"butterfly", "oinc", 1},
+                               {"fireflies", "oinc", 3},
+                               {"bioluminescence", "oinc", 3}},
+        ["pig_shop_weapons"] = {{"ruinshat", "oinc", 20},
+                                {"armorruins", "oinc", 20},
+                                {"cutlass", "oinc", 20},
+                                {"blowdart_pipe", "oinc", 10},
+                                {"blowdart_pipe", "oinc", 10},
                                 {"blowdart_pipe", "oinc", 10}},
-        ["pig_shop_hatshop"] = {{"brainjellyhat", "oinc", 100}, {"blubbersuit", "oinc", 20},
-                                {"beargervest", "oinc", 20}, {"hawaiianshirt", "oinc", 20}, {"pithhat", "oinc", 10},
-                                {"gasmaskhat", "oinc", 20}, {"armor_windbreaker", "oinc", 20},
+        ["pig_shop_hatshop"] = {{"brainjellyhat", "oinc", 100},
+                                {"blubbersuit", "oinc", 20},
+                                {"beargervest", "oinc", 20},
+                                {"hawaiianshirt", "oinc", 20},
+                                {"pithhat", "oinc", 10},
+                                -- {"gasmaskhat", "oinc", 20},
+                                {"armor_windbreaker", "oinc", 20},
                                 {"double_umbrellahat", "oinc", 40}},
-        ["pig_shop_bank"] = {{"goldnugget", "oinc", 20}, {"oinc10", "oinc", 10}, {"oinc100", "oinc", 100}},
-        ["pig_shop_tinker"] = {{"turf_meadow", "oinc", 1}, {"turf_fields", "oinc", 1}, {"turf_lawn", "oinc", 1}},
+        ["pig_shop_bank"] = {{"goldnugget", "oinc", 20}, {"oinc10", "oinc", 10},
+                             {"oinc100", "oinc", 100}},
+        ["pig_shop_tinker"] = {{"turf_meadow", "oinc", 1},
+                               {"turf_fields", "oinc", 1},
+                               {"turf_lawn", "oinc", 1}},
         ["pig_shop_academy"] = {}
     }
 
     function self:GetNewProduct(shoptype)
-        if GLOBAL.GetAporkalypse() and GLOBAL.GetAporkalypse():GetFiestaActive() and SHOPTYPES[shoptype .. "_fiesta"] then
+        if GLOBAL.GetAporkalypse() and GLOBAL.GetAporkalypse():GetFiestaActive() and
+            SHOPTYPES[shoptype .. "_fiesta"] then
             shoptype = shoptype .. "_fiesta"
         end
         local items = SHOPTYPES[shoptype]
@@ -123,8 +176,10 @@ end
 function economyOverwrite(self, inst)
     local TRADER = {
         pigman_collector = {
-            items = {"hippo_antler", "bill_quill", "tallbirdegg", "horn", "dragoonheart", "lureplantbulb", "tigereye",
-                     "spidereggsack", "shark_fin", "turbine_blades", "snakeoil", "shark_gills", "magic_seal", "earring"},
+            items = {"hippo_antler", "bill_quill", "tallbirdegg", "horn",
+                     "dragoonheart", "lureplantbulb", "tigereye",
+                     "spidereggsack", "shark_fin", "turbine_blades", "snakeoil",
+                     "shark_gills", "magic_seal", "earring"},
             delay = 0,
             reset = 0,
             current = 0,
@@ -142,8 +197,8 @@ function economyOverwrite(self, inst)
             rewardqty = 20
         },
         pigman_beautician = {
-            items = {"feather_crow", "feather_robin", "feather_robin_winter", "peagawkfeather", "feather_thunder",
-                     "doydoyfeather"},
+            items = {"feather_crow", "feather_robin", "feather_robin_winter",
+                     "peagawkfeather", "feather_thunder", "doydoyfeather"},
             delay = 0,
             reset = 0,
             current = 0,
@@ -251,7 +306,8 @@ function economyOverwrite(self, inst)
             rewardqty = 1
         },
         pigman_usher = {
-            items = {"honey", "jammypreserves", "icecream", "pumpkincookie", "waffles", "berries", "berries_cooked"},
+            items = {"honey", "jammypreserves", "icecream", "pumpkincookie",
+                     "waffles", "berries", "berries_cooked"},
             delay = 0,
             reset = 0,
             current = 0,
@@ -278,7 +334,8 @@ function economyOverwrite(self, inst)
     end
 
     function self:MakeTrade(traderprefab, city, inst)
-        self.cities[city][traderprefab].GUIDS[inst.GUID] = TRADER[traderprefab].reset
+        self.cities[city][traderprefab].GUIDS[inst.GUID] =
+            TRADER[traderprefab].reset
 
         return TRADER[traderprefab].reward, TRADER[traderprefab].rewardqty
     end
@@ -294,12 +351,7 @@ function economyOverwrite(self, inst)
     end
 end
 
-AddPrefabPostInit("gashat", function(inst)
-    inst:AddTag("gasmask")
-end)
-AddPrefabPostInit("honeycomb", function(inst)
-    inst:AddTag("fireimmune")
-end)
+AddPrefabPostInit("gashat", function(inst) inst:AddTag("gasmask") end)
 AddPrefabPostInit("grass", function(inst)
     local function ontransplantfn(inst)
         if inst.components.pickable then
@@ -307,13 +359,9 @@ AddPrefabPostInit("grass", function(inst)
         end
     end
 
-    inst:AddTag("fireimmune")
     inst.components.pickable.ontransplantfn = ontransplantfn
     inst.components.pickable.max_cycles = 100
     inst.components.pickable.cycles_left = 100
-end)
-AddPrefabPostInit("sapling", function(inst)
-    inst:AddTag("fireimmune")
 end)
 AddPrefabPostInit("berrybush", function(inst)
     local function ontransplantfn(inst)
@@ -322,7 +370,6 @@ AddPrefabPostInit("berrybush", function(inst)
         end
     end
 
-    inst:AddTag("fireimmune")
     inst.components.pickable.ontransplantfn = ontransplantfn
     inst.components.pickable:SetUp("berries", GLOBAL.TUNING.BERRY_REGROW_TIME, 5)
 end)
@@ -334,76 +381,33 @@ AddPrefabPostInit("berrybush2", function(inst)
         end
     end
 
-    inst:AddTag("fireimmune")
     inst.components.pickable.ontransplantfn = ontransplantfn
     inst.components.pickable:SetUp("berries", GLOBAL.TUNING.BERRY_REGROW_TIME, 5)
 end)
 
-AddPrefabPostInit("bush_vine", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("bambootree", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("reeds", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("reeds_water", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("beebox", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("cookpot", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("slow_farmplot", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("fast_farmplot", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("grass_tall", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("flower_cave", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("flower_cave_double", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("flower_cave_triple", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("nettle", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("fence", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("fence_gate", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("wall_wood", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("plant_normal", function(inst)
-    inst:AddTag("fireimmune")
-end)
-AddPrefabPostInit("hedge", function(inst)
-    inst:AddTag("fireimmune")
-end)
+local fireImmunePrefabs = {"bush_vine", "bambootree", "reeds", "reeds_water", "beebox", "cookpot", "slow_farmplot", "fast_farmplot", "grass", "grass_tall", "sapling", "flower_cave", "flower_cave_double", "flower_cave_triple", "nettle", "fence", "fence_gate", "wall_wood", "plant_normal", "hedge", "berrybush", "berrybush2", "honeycomb"}
+for _, prefabName in ipairs(fireImmunePrefabs) do
+    AddPrefabPostInit(prefabName, function(inst) inst:AddTag("fireimmune") end)
+end
 
-AddPrefabPostInit("flower", function(inst)
-    inst:RemoveComponent("blowinwindgust")
-end)
-AddPrefabPostInit("flower_evil", function(inst)
-    inst:RemoveComponent("blowinwindgust")
-end)
+local noAutoPickupPrefabs = {"glommerflower", "chester_eyebone", "clippings", "berries", "seeds_cooked", "corn", "corn_cooked", "seatrap", "lantern"}
+for _, prefabName in ipairs(noAutoPickupPrefabs) do
+    AddPrefabPostInit(prefabName, function(inst) inst:AddTag("noautopickup") end)
+end
 
-AddPrefabPostInit("tentaclespike", function(inst)
-    inst:AddTag("burnable")
-end)
+local heavyPrefabs = {"clippings", "berries", "seeds_cooked", "corn", "corn_cooked"}
+for _, prefabName in ipairs(heavyPrefabs) do
+    AddPrefabPostInit(prefabName, function(inst) GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
+     end)
+end
+
+
+AddPrefabPostInit("flower",
+    function(inst) inst:RemoveComponent("blowinwindgust") end)
+AddPrefabPostInit("flower_evil",
+    function(inst) inst:RemoveComponent("blowinwindgust") end)
+
+AddPrefabPostInit("tentaclespike", function(inst) inst:AddTag("burnable") end)
 
 AddPrefabPostInit("multitool_axe_pickaxe", function(inst)
     -- inst:RemoveComponent("finiteuses") 
@@ -422,27 +426,20 @@ AddPrefabPostInit("lightbulb", function(inst)
     inst:RemoveComponent("edible")
     inst:RemoveComponent("perishable")
 end)
-AddPrefabPostInit("healingsalve", function(inst)
-    inst.components.healer:SetHealthAmount(60)
-end)
-AddPrefabPostInit("bandage", function(inst)
-    inst.components.healer:SetHealthAmount(60)
-end)
-AddPrefabPostInit("wormlight", function(inst)
-    inst.components.fuel.fueltype = "CAVE"
-end)
-AddPrefabPostInit("molehat", function(inst)
-    inst.components.fueled.fueltype = "CAVE"
-end)
+AddPrefabPostInit("healingsalve",
+    function(inst) inst.components.healer:SetHealthAmount(60) end)
+AddPrefabPostInit("bandage",
+    function(inst) inst.components.healer:SetHealthAmount(60) end)
+AddPrefabPostInit("wormlight",
+    function(inst) inst.components.fuel.fueltype = "CAVE" end)
+AddPrefabPostInit("molehat",
+    function(inst) inst.components.fueled.fueltype = "CAVE" end)
 AddPrefabPostInit("shop_buyer", function(inst)
-    inst:ListenForEvent("daytime", function()
-        inst.restock(inst, true)
-    end, GetWorld())
+    inst:ListenForEvent("daytime", function() inst.restock(inst, true) end,
+        GetWorld())
 end)
 
-AddPrefabPostInit("city_lamp", function(inst)
-    inst.Light:SetRadius(12)
-end)
+AddPrefabPostInit("city_lamp", function(inst) inst.Light:SetRadius(12) end)
 
 AddPrefabPostInit("waterdrop", function(inst)
     if inst.components.inventoryitem ~= nil then
@@ -456,45 +453,17 @@ AddPrefabPostInit("tallbirdegg", function(inst)
         inst.components.stackable.maxsize = 9999
     end
 end)
-AddPrefabPostInit("tunacan", function(inst)
-    if inst.components.inventoryitem ~= nil then
-        inst:AddComponent("stackable")
-        inst.components.stackable.maxsize = 9999
-    end
-end)
 AddPrefabPostInit("silvernecklace", function(inst)
     inst.components.equippable.equipslot = EQUIPSLOTS.NECK or EQUIPSLOTS.BODY
 end)
-AddPrefabPostInit("clippings", function(inst)
-    inst:AddTag("noautopickup")
-    GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
-end)
-AddPrefabPostInit("berries", function(inst)
-    inst:AddTag("noautopickup")
-    GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
-end)
 AddPrefabPostInit("seeds_cooked", function(inst)
-    inst:AddTag("noautopickup")
-    GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
-	inst.components.edible.hungervalue = 1
-end)
-AddPrefabPostInit("seeds", function(inst)
     inst.components.edible.hungervalue = 1
 end)
-AddPrefabPostInit("corn", function(inst)
-    inst:AddTag("noautopickup")
-    GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
-end)
-AddPrefabPostInit("corn_cooked", function(inst)
-    inst:AddTag("noautopickup")
-    GLOBAL.MakeBlowInHurricane(inst, 0.00001, 0.00002) -- HEAVY
-end)
-AddPrefabPostInit("seatrap", function(inst)
-    inst:AddTag("noautopickup")
-end)
--- AddPrefabPostInit("hammer", function(inst)
---     inst:AddTag("fixable_crusher")
--- end)
+AddPrefabPostInit("seeds",
+    function(inst) inst.components.edible.hungervalue = 1 end)
+AddPrefabPostInit("honey",
+    function(inst) inst.components.edible.hungervalue = 5 end)
+
 AddPrefabPostInit("lantern", function(inst)
     local function fuelupdate(inst)
         local fuelpercent = inst.components.fueled:GetPercent()
@@ -503,7 +472,6 @@ AddPrefabPostInit("lantern", function(inst)
         inst.Light:SetFalloff(.9)
     end
 
-    inst:AddTag("noautopickup")
     inst.Light:SetRadius(8)
     inst.components.fueled:SetUpdateFn(fuelupdate)
 end)
@@ -537,18 +505,22 @@ AddPrefabPostInit("orangeamulet", function(inst)
             return
         end
 
-        player.components.inventory:GiveItem(item, nil, Vector3(TheSim:GetScreenPos(item.Transform:GetWorldPosition())))
+        player.components.inventory:GiveItem(item, nil, Vector3(
+            TheSim:GetScreenPos(item.Transform:GetWorldPosition())))
     end
 
     local function pickup(inst, owner)
         local pt = owner:GetPosition()
-        local ents = TheSim:FindEntities(pt.x, pt.y, pt.z, TUNING.ORANGEAMULET_RANGE, nil, {"INLIMBO", "NOFORAGE"})
+        local ents = TheSim:FindEntities(pt.x, pt.y, pt.z,
+            TUNING.ORANGEAMULET_RANGE, nil, {"INLIMBO", "NOFORAGE"})
 
         for k, v in pairs(ents) do
-            if v.components.inventoryitem and v.components.inventoryitem.canbepickedup and
-                v.components.inventoryitem.cangoincontainer and not v.components.inventoryitem:IsHeld() and
-                not v:HasTag("projectile") and not v:HasTag("doydoy") and not v:HasTag("trap") and
-                not v:HasTag("noautopickup") then
+            if v.components.inventoryitem and
+                v.components.inventoryitem.canbepickedup and
+                v.components.inventoryitem.cangoincontainer and
+                not v.components.inventoryitem:IsHeld() and
+                not v:HasTag("projectile") and not v:HasTag("doydoy") and
+                not v:HasTag("trap") and not v:HasTag("noautopickup") then
 
                 if not owner.components.inventory:IsFull() then
                     -- Your inventory isn't full, you can pick something up.
@@ -558,9 +530,11 @@ AddPrefabPostInit("orangeamulet", function(inst)
                 elseif v.components.stackable then
                     -- Your inventory is full, but the item you're trying to pick up stacks. Check for an exsisting stack.
                     -- An acceptable stack should: Be of the same item type, not be full already and not be in the "active item" slot of inventory.
-                    local stack = owner.components.inventory:FindItem(function(item)
-                        return (item.prefab == v.prefab and not item.components.stackable:IsFull() and item ~=
-                                   owner.components.inventory.activeitem)
+                    local stack = owner.components.inventory:FindItem(function(
+                        item)
+                        return (item.prefab == v.prefab and
+                                   not item.components.stackable:IsFull() and
+                                   item ~= owner.components.inventory.activeitem)
                     end)
                     if stack then
                         getitem(owner, inst, v)
@@ -572,10 +546,10 @@ AddPrefabPostInit("orangeamulet", function(inst)
     end
 
     local function onequip_orange(inst, owner)
-        owner.AnimState:OverrideSymbol("swap_body", "torso_amulets", "orangeamulet")
-        inst.task = inst:DoPeriodicTask(TUNING.ORANGEAMULET_ICD, function()
-            pickup(inst, owner)
-        end)
+        owner.AnimState:OverrideSymbol("swap_body", "torso_amulets",
+            "orangeamulet")
+        inst.task = inst:DoPeriodicTask(TUNING.ORANGEAMULET_ICD,
+            function() pickup(inst, owner) end)
     end
 
     inst.components.equippable:SetOnEquip(onequip_orange)
@@ -626,6 +600,11 @@ AddPrefabPostInit("volcano_altar", function(inst)
 end)
 
 AddPrefabPostInit("tunacan", function(inst)
+    if inst.components.inventoryitem ~= nil then
+        inst:AddComponent("stackable")
+        inst.components.stackable.maxsize = 9999
+    end
+
     inst.components.useableitem:SetOnUseFn(function(inst)
         inst.SoundEmitter:PlaySound("dontstarve_DLC002/common/can_open")
         local steak = SpawnPrefab("fish_med_cooked")
@@ -647,15 +626,19 @@ AddSimPostInit(custom_tuning)
 AddComponentPostInit("shopinterior", shopinteriorOverwrite)
 AddComponentPostInit("economy", economyOverwrite)
 
-local mergedGameTypes = {RECIPE_GAME_TYPE.VANILLA, RECIPE_GAME_TYPE.SHIPWRECKED, RECIPE_GAME_TYPE.ROG,
-                         RECIPE_GAME_TYPE.PORKLAND}
+local mergedGameTypes = {RECIPE_GAME_TYPE.VANILLA, RECIPE_GAME_TYPE.SHIPWRECKED,
+                         RECIPE_GAME_TYPE.ROG, RECIPE_GAME_TYPE.PORKLAND}
 local cityRecipeGameTypes = RECIPE_GAME_TYPE.COMMON
 
-local function AddModRecipe(_recName, _ingrList, _tab, _techLevel, _recType, _placer, _spacing, _proxyLock, _amount)
-    if GLOBAL.CAPY_DLC and GLOBAL.IsDLCEnabled(GLOBAL.CAPY_DLC) or GLOBAL.IsDLCEnabled(GLOBAL.PORKLAND_DLC) then
-        return GLOBAL.Recipe(_recName, _ingrList, _tab, _techLevel, _recType, _placer, _spacing, _proxyLock, _amount)
+local function AddModRecipe(_recName, _ingrList, _tab, _techLevel, _recType,
+    _placer, _spacing, _proxyLock, _amount)
+    if GLOBAL.CAPY_DLC and GLOBAL.IsDLCEnabled(GLOBAL.CAPY_DLC) or
+        GLOBAL.IsDLCEnabled(GLOBAL.PORKLAND_DLC) then
+        return GLOBAL.Recipe(_recName, _ingrList, _tab, _techLevel, _recType,
+            _placer, _spacing, _proxyLock, _amount)
     else
-        return GLOBAL.Recipe(_recName, _ingrList, _tab, _techLevel, _placer, _spacing, _proxyLock, _amount)
+        return GLOBAL.Recipe(_recName, _ingrList, _tab, _techLevel, _placer,
+            _spacing, _proxyLock, _amount)
     end
 end
 
@@ -666,14 +649,16 @@ end
 -- STRINGS.NAMES.BLOWPIPEMULTI = "Blow Darts x 10"
 -- STRINGS.RECIPE_DESC.BLOWPIPEMULTI = "Spit more teeth at your enemies."
 
-local staff_tornado_pay = AddModRecipe("staff_tornado_pay", {Ingredient("goldnugget", 5)}, RECIPETABS.WAR, TECH.NONE)
+local staff_tornado_pay = AddModRecipe("staff_tornado_pay",
+    {Ingredient("goldnugget", 5)}, RECIPETABS.WAR, TECH.NONE)
 staff_tornado_pay.product = "staff_tornado"
 staff_tornado_pay.image = "staff_tornado.tex"
 staff_tornado_pay.numtogive = 1
 STRINGS.NAMES.STAFF_TORNADO_PAY = "Weather Pain"
 STRINGS.RECIPE_DESC.STAFF_TORNADO_PAY = "I Pay for your pain!"
 
-local lightberry = AddModRecipe("lightberry", {Ingredient("lightbulb", 10)}, RECIPETABS.LIGHT, TECH.SCIENCE_TWO)
+local lightberry = AddModRecipe("lightberry", {Ingredient("lightbulb", 10)},
+    RECIPETABS.LIGHT, TECH.SCIENCE_TWO)
 lightberry.product = "wormlight"
 lightberry.image = "wormlight.tex"
 lightberry.numtogive = 3
@@ -701,8 +686,9 @@ STRINGS.RECIPE_DESC.LIGHTBERRY = "Now I see you"
 -- STRINGS.NAMES.CITYOINC = "Oinc"
 -- STRINGS.RECIPE_DESC.CITYOINC = "Oinc Oinc x20"
 
-local babybeefalo = AddModRecipe("babybeefalo", {Ingredient("beefalowool", 5), Ingredient("horn", 1)}, RECIPETABS.FARM,
-    TECH.NONE)
+local babybeefalo = AddModRecipe("babybeefalo", {Ingredient("beefalowool", 5),
+                                                 Ingredient("horn", 1)},
+    RECIPETABS.FARM, TECH.NONE)
 babybeefalo.image = "brush.tex"
 STRINGS.NAMES.BABYBEEFALO = "Babybeefalo"
 STRINGS.RECIPE_DESC.BABYBEEFALO = ""
@@ -713,12 +699,14 @@ STRINGS.RECIPE_DESC.BABYBEEFALO = ""
 -- STRINGS.RECIPE_DESC.POG = ""
 
 local peagawk = AddModRecipe("peagawk",
-    {Ingredient("drumstick", 2), Ingredient("meat", 1), Ingredient("doydoyfeather", 5)}, RECIPETABS.FARM, TECH.NONE)
+    {Ingredient("drumstick", 2), Ingredient("meat", 1),
+     Ingredient("doydoyfeather", 5)}, RECIPETABS.FARM, TECH.NONE)
 peagawk.image = "brush.tex"
 STRINGS.NAMES.PEAGAWK = "Peagawk"
 STRINGS.RECIPE_DESC.PEAGAWK = ""
 
-local doydoyfoodclipping = AddModRecipe("seeds_cooked", {Ingredient("berries", 1)}, RECIPETABS.FARM, TECH.NONE)
+local doydoyfoodclipping = AddModRecipe("seeds_cooked",
+    {Ingredient("berries", 1)}, RECIPETABS.FARM, TECH.NONE)
 doydoyfoodclipping.image = "seeds_cooked.tex"
 doydoyfoodclipping.numtogive = 5
 STRINGS.NAMES.DOYDOYFOODCLIPPING = "Toasted Seeds"
@@ -726,35 +714,46 @@ STRINGS.RECIPE_DESC.DOYDOYFOODCLIPPING = "Toasted Seeds x5"
 
 -- Recipe("beebox", {Ingredient("boards", 2),Ingredient("honeycomb", 1),Ingredient("bee", 4)}, RECIPETABS.FARM, TECH.SCIENCE_ONE, {RECIPE_GAME_TYPE.VANILLA,RECIPE_GAME_TYPE.ROG,RECIPE_GAME_TYPE.SHIPWRECKED}, "beebox_placer")
 
-local beebox = AddModRecipe("beebox", {Ingredient("boards", 5), Ingredient("honeycomb", 1), Ingredient("stinger", 10)},
+local beebox = AddModRecipe("beebox", {Ingredient("boards", 5),
+                                       Ingredient("honeycomb", 1),
+                                       Ingredient("stinger", 10)},
     RECIPETABS.FARM, TECH.SCIENCE_ONE, mergedGameTypes, "beebox_placer")
 -- local living_artifact = AddModRecipe("living_artifact", {Ingredient("infused_iron", 6),Ingredient("waterdrop", 1)}, RECIPETABS.MAGIC, TECH.MAGIC_THREE, mergedGameTypes)
-local pig_shop_antiquities = AddModRecipe("pig_shop_antiquities",
-    {Ingredient("boards", 4), Ingredient("hammer", 3), Ingredient("pigskin", 4)}, RECIPETABS.CITY, TECH.CITY,
-    cityRecipeGameTypes, "pig_shop_antiquities_placer", nil, true)
+local pig_shop_antiquities = AddModRecipe("pig_shop_antiquities", {Ingredient(
+    "boards", 4), Ingredient("hammer", 3), Ingredient("pigskin", 4)},
+    RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes,
+    "pig_shop_antiquities_placer", nil, true)
 -- Recipe("hedge_block_item", {Ingredient("clippings", 9), Ingredient("nitre", 1)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true, 3)
-local hedge_block_item = AddModRecipe("hedge_block_item", {Ingredient("boards", 1), Ingredient("nitre", 1)},
-    RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true, 3)
+local hedge_block_item = AddModRecipe("hedge_block_item", {Ingredient("boards",
+    1), Ingredient("nitre", 1)}, RECIPETABS.CITY, TECH.CITY,
+    cityRecipeGameTypes, nil, nil, true, 3)
 local pig_shop_tinker = AddModRecipe("pig_shop_tinker",
-    {Ingredient("cutstone", 4), Ingredient("pitchfork", 3), Ingredient("pigskin", 4)}, RECIPETABS.CITY, TECH.CITY,
-    cityRecipeGameTypes, "pig_shop_tinker_placer", nil, true)
-local playerhouse_city = AddModRecipe("playerhouse_city", {Ingredient("boards", 5), Ingredient("cutstone", 5)},
-    RECIPETABS.CITY, TECH.NONE, mergedGameTypes, "playerhouse_city_placer", nil, true)
+    {Ingredient("cutstone", 4), Ingredient("pitchfork", 3),
+     Ingredient("pigskin", 4)}, RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes,
+    "pig_shop_tinker_placer", nil, true)
+local playerhouse_city = AddModRecipe("playerhouse_city", {Ingredient("boards",
+    5), Ingredient("cutstone", 5)}, RECIPETABS.CITY, TECH.NONE, mergedGameTypes,
+    "playerhouse_city_placer", nil, true)
 -- Recipe("construction_permit", {Ingredient("oinc", 50)}, RECIPETABS.HOME, TECH.HOME_TWO, cityRecipeGameTypes, nil, nil, true)
-local construction_permit = AddModRecipe("construction_permit", {Ingredient("oinc", 10)}, RECIPETABS.HOME,
-    TECH.HOME_TWO, cityRecipeGameTypes, nil, nil, true)
+local construction_permit = AddModRecipe("construction_permit",
+    {Ingredient("oinc", 10)}, RECIPETABS.HOME, TECH.HOME_TWO,
+    cityRecipeGameTypes, nil, nil, true)
 local city_lamp = AddModRecipe("city_lamp",
-    {Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("lightbulb", 5)}, RECIPETABS.CITY, TECH.NONE,
+    {Ingredient("cutstone", 2), Ingredient("transistor", 1),
+     Ingredient("lightbulb", 5)}, RECIPETABS.CITY, TECH.NONE,
     cityRecipeGameTypes, "city_lamp_placer", nil, true)
-local turf_foundation = AddModRecipe("turf_foundation", {Ingredient("cutstone", 1)}, RECIPETABS.CITY, TECH.CITY,
+local turf_foundation = AddModRecipe("turf_foundation",
+    {Ingredient("cutstone", 1)}, RECIPETABS.CITY, TECH.CITY,
     cityRecipeGameTypes, nil, nil, true)
 turf_foundation.numtogive = 30
-local turf_cobbleroad = AddModRecipe("turf_cobbleroad", {Ingredient("cutstone", 1), Ingredient("boards", 1)},
-    RECIPETABS.CITY, TECH.CITY, cityRecipeGameTypes, nil, nil, true)
+local turf_cobbleroad = AddModRecipe("turf_cobbleroad", {Ingredient("cutstone",
+    1), Ingredient("boards", 1)}, RECIPETABS.CITY, TECH.CITY,
+    cityRecipeGameTypes, nil, nil, true)
 turf_cobbleroad.numtogive = 30
 -- local thulecite = AddModRecipe("thulecite", {Ingredient("rocks", 1), Ingredient("goldnugget", 2)}, RECIPETABS.ANCIENT, TECH.ANCIENT_FOUR, mergedGameTypes, nil, nil, true)
 
-local volcano_altar = AddModRecipe("volcano_altar", {Ingredient("cutstone", 10)}, RECIPETABS.TOWN, TECH.SCIENCE_ONE,
+local volcano_altar = AddModRecipe("volcano_altar",
+    {Ingredient("cutstone", 10)}, RECIPETABS.TOWN, TECH.SCIENCE_ONE,
     RECIPE_GAME_TYPE.SHIPWRECKED, "dragoonden_placer")
 volcano_altar.image = "skull_wallace.tex"
 STRINGS.NAMES.VOLCANO_ALTAR = "Volcano Altar of Snackrifice"
