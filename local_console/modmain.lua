@@ -19,17 +19,20 @@ for _,v in pairs(GLOBAL.GetAllRecipes()) do
     v.min_spacing = 1
 end
 
-local function custom_console(inst) GLOBAL.RunScript("consolecommands") end
+local function customSimPostInit(inst) 
+    GLOBAL.TheCamera:SetDistance(40)
+ end
 
 
 
-function custom_tuning()
+local function custom_tuning()
     local total_day_time = 30 * 16
 
     TUNING.EFFIGY_HEALTH_PENALTY = 0
     TUNING.RESURRECT_HEALTH = 300
     TUNING.BERRY_REGROW_INCREASE = 0
     TUNING.BERRY_REGROW_TIME = total_day_time
+    TUNING.FLOWER_CAVE_REGROW_TIME = total_day_time
 
     TUNING["STACK_SIZE_LARGEITEM"] = 10000
     TUNING["STACK_SIZE_MEDITEM"] = 10000
@@ -38,12 +41,18 @@ function custom_tuning()
     -- TUNING.WILSON_RUN_SPEED = 9
 
     -- WILSON_HUNGER_RATE = calories_per_day/total_day_time, --calories burnt per day
+    local stormachSize = 250
     TUNING.WILSON_HUNGER_RATE = 200 / 480 -- default: 75/480
-    TUNING.WILSON_HUNGER = 250 -- 150, --stomach size
+    TUNING.WILSON_HUNGER = stormachSize
+    TUNING.WALANI_HUNGER = stormachSize
+    TUNING.WATHGRITHR_HUNGER = stormachSize 
+    TUNING.WILBA_HUNGER = stormachSize
 
     TUNING.PIPE_DART_DAMAGE = 400 -- to onehit terrorbreak
     TUNING.TORNADOSTAFF_USES = 500
     -- TUNING.TORNADO_DAMAGE = 100
+    TUNING.ARMORRUINS_ABSORPTION = 1 -- 100%
+    TUNING.ARMOR_RUINSHAT_ABSORPTION = 1 -- 100%
 
     TUNING.ABIGAIL_SPEED = 9
     TUNING.ABIGAIL_DAMAGE_PER_SECOND = 80
@@ -57,6 +66,8 @@ function custom_tuning()
     TUNING.SEWINGKIT_USES = 20
     TUNING.FERTILIZER_USES = 30
 
+    TUNING.FOOD_SPEED_LONG = total_day_time + 10 -- coffee effects
+
     TUNING.WORMLIGHT_DURATION = 60 * 8
     TUNING.WORMLIGHT_RADIUS = 15
     -- TUNING.WALLHAY_WINDBLOWN_DAMAGE = 0 
@@ -65,7 +76,7 @@ function custom_tuning()
     -- local world = GetWorld()
     -- if world.components.cityalarms then
     -- world:RemoveComponent("cityalarms") 		
-    -- end
+    -- end    
 end
 
 function shopinteriorOverwrite(self, inst)
@@ -92,15 +103,12 @@ function shopinteriorOverwrite(self, inst)
                                 {"antivenom", "oinc", 5},
                                 {"multitool_axe_pickaxe", "oinc", 50},
                                 {"orangeamulet", "oinc", 50},
+                                -- {"blueprint", "oinc", 100},
                                 -- {"cutstone", "oinc", 1}, 
                                 {"tunacan", "oinc", 2},
+                                {"tunacan", "oinc", 2},
+                                {"tunacan", "oinc", 2},
                                 {"tunacan", "oinc", 2}},
-        ["pig_shop_general_fiesta"] = {{"bandage", "oinc", 3},
-                                       {"antivenom", "oinc", 5},
-                                       {"multitool_axe_pickaxe", "oinc", 50},
-                                       {"orangeamulet", "oinc", 50},
-                                    --    {"cutstone", "oinc", 1},
-                                       {"tunacan", "oinc", 2}},
         ["pig_shop_hoofspa"] = {{"thulecite", "oinc", 5}, 
                                 {"iron", "oinc", 1},
                                 -- {"nitre", "oinc", 1},
@@ -111,7 +119,7 @@ function shopinteriorOverwrite(self, inst)
                                 {"mandrake", "oinc", 20},
                                 {"coconut", "oinc", 1},
                                 {"venus_stalk", "oinc", 5},
-                                {"waterdrop", "oinc", 100},
+                                {"waterdrop", "oinc", 300},
                                 {"honeycomb", "oinc", 5},
                                 {"wormlight", "oinc", 20}},
         ["pig_shop_antiquities"] = {{"cutreeds", "oinc", 2},
@@ -120,7 +128,7 @@ function shopinteriorOverwrite(self, inst)
                                     {"pigskin", "oinc", 2},
                                     {"fabric", "oinc", 2},
                                     {"livinglog", "oinc", 10},
-                                    {"lightbulb", "oinc", 2},
+                                    -- {"lightbulb", "oinc", 2},
                                     {"beefalowool", "oinc", 1}},
         ["pig_shop_arcane"] = {{"kingfisher", "oinc", 10},
                                {"rabbit", "oinc", 5}, 
@@ -152,10 +160,6 @@ function shopinteriorOverwrite(self, inst)
     }
 
     function self:GetNewProduct(shoptype)
-        if GLOBAL.GetAporkalypse() and GLOBAL.GetAporkalypse():GetFiestaActive() and
-            SHOPTYPES[shoptype .. "_fiesta"] then
-            shoptype = shoptype .. "_fiesta"
-        end
         local items = SHOPTYPES[shoptype]
         if items then
             local itemset = GLOBAL.GetRandomItem(items)
@@ -385,12 +389,12 @@ AddPrefabPostInit("berrybush2", function(inst)
     inst.components.pickable:SetUp("berries", GLOBAL.TUNING.BERRY_REGROW_TIME, 5)
 end)
 
-local fireImmunePrefabs = {"bush_vine", "bambootree", "reeds", "reeds_water", "beebox", "cookpot", "slow_farmplot", "fast_farmplot", "grass", "grass_tall", "sapling", "flower_cave", "flower_cave_double", "flower_cave_triple", "nettle", "fence", "fence_gate", "wall_wood", "plant_normal", "hedge", "berrybush", "berrybush2", "honeycomb"}
+local fireImmunePrefabs = {"bush_vine", "bambootree", "reeds", "reeds_water", "beebox", "cookpot", "slow_farmplot", "fast_farmplot", "grass", "grass_tall", "sapling", "flower_cave", "flower_cave_double", "flower_cave_triple", "nettle", "fence", "fence_gate", "wall_wood", "plant_normal", "hedge", "berrybush", "berrybush2", "honeycomb", "red_mushroom", "blue_mushroom", "green_mushroom"}
 for _, prefabName in ipairs(fireImmunePrefabs) do
     AddPrefabPostInit(prefabName, function(inst) inst:AddTag("fireimmune") end)
 end
 
-local noAutoPickupPrefabs = {"glommerflower", "chester_eyebone", "clippings", "berries", "seeds_cooked", "corn", "corn_cooked", "seatrap", "lantern"}
+local noAutoPickupPrefabs = {"glommerflower", "chester_eyebone", "packim_fishbone", "ro_bin_gizzard_stone", "roc_robin_egg", "clippings", "berries", "seeds_cooked", "corn", "corn_cooked", "seatrap", "lantern", "powcake"}
 for _, prefabName in ipairs(noAutoPickupPrefabs) do
     AddPrefabPostInit(prefabName, function(inst) inst:AddTag("noautopickup") end)
 end
@@ -406,6 +410,8 @@ AddPrefabPostInit("flower",
     function(inst) inst:RemoveComponent("blowinwindgust") end)
 AddPrefabPostInit("flower_evil",
     function(inst) inst:RemoveComponent("blowinwindgust") end)
+AddPrefabPostInit("rock_flippable",
+    function(inst) inst:RemoveComponent("workable") end)
 
 AddPrefabPostInit("tentaclespike", function(inst) inst:AddTag("burnable") end)
 
@@ -423,9 +429,57 @@ AddPrefabPostInit("multitool_axe_pickaxe", function(inst)
     inst:AddComponent("disarming")
 end)
 AddPrefabPostInit("lightbulb", function(inst)
+    local function ondeploy(inst, pt, deployer)
+        local sapling = SpawnPrefab("flower_cave_triple")
+        sapling.Transform:SetPosition(pt:Get())
+        sapling.SoundEmitter:PlaySound("dontstarve/wilson/plant_tree")
+        inst:Remove()
+    end
+
     inst:RemoveComponent("edible")
     inst:RemoveComponent("perishable")
+
+    inst:AddComponent("deployable")
+    inst.components.deployable.ondeploy = ondeploy	
+    inst.components.deployable.placer = "marblebean_placer"
 end)
+
+AddPrefabPostInit("flower_cave_triple", function(inst)
+    local function digup(inst, digger)
+        inst:Remove()
+    end
+
+    inst:AddComponent("workable")
+    inst.components.workable:SetWorkAction(ACTIONS.DIG)
+    inst.components.workable:SetOnFinishCallback(digup)
+    inst.components.workable:SetWorkLeft(1)
+end)
+
+local mushroomColors = {"red", "green", "blue"}
+for _, color in ipairs(mushroomColors) do
+    AddPrefabPostInit(color.."_cap", function(inst) 
+        local function ondeploy(inst, pt, deployer)
+            local sapling = SpawnPrefab(color.."_mushroom")
+            sapling.Transform:SetPosition(pt:Get())
+            sapling.SoundEmitter:PlaySound("dontstarve/wilson/plant_tree")
+            inst:Remove()
+        end
+
+        inst:AddTag("noautopickup")
+        inst:AddComponent("deployable")
+        inst.components.deployable.ondeploy = ondeploy	
+        inst.components.deployable.placer = "marblebean_placer"
+        inst.components.deployable.min_spacing = .5
+    end)
+    AddPrefabPostInit(color.."_cap_cooked", function(inst) 
+        inst:AddTag("noautopickup")
+    end)
+end
+
+AddPrefabPostInit("coffee", function(inst)
+	inst.components.perishable:SetPerishTime(480000) -- 1000 days
+end)
+
 AddPrefabPostInit("healingsalve",
     function(inst) inst.components.healer:SetHealthAmount(60) end)
 AddPrefabPostInit("bandage",
@@ -546,13 +600,18 @@ AddPrefabPostInit("orangeamulet", function(inst)
     end
 
     local function onequip_orange(inst, owner)
-        owner.AnimState:OverrideSymbol("swap_body", "torso_amulets",
-            "orangeamulet")
+        -- owner.AnimState:OverrideSymbol("swap_body", "torso_amulets","orangeamulet")
         inst.task = inst:DoPeriodicTask(TUNING.ORANGEAMULET_ICD,
             function() pickup(inst, owner) end)
     end
 
-    inst.components.equippable:SetOnEquip(onequip_orange)
+    local function onunequip_orange(inst, owner) 
+        -- owner.AnimState:ClearOverrideSymbol("swap_body")
+        if inst.task then inst.task:Cancel() inst.task = nil end
+    end
+
+    inst.components.equippable:SetOnEquip(onequip_orange)    
+    inst.components.equippable:SetOnUnequip(onunequip_orange)
     -- inst:RemoveComponent("finiteuses") 
 end)
 
@@ -573,6 +632,10 @@ AddPrefabPostInit("bundle", function(inst)
                     description = description .. v.prefab
                 else
                     description = description .. stringName
+                end
+
+                if v.data.stackable and v.data.stackable.stack ~= nil and v.data.stackable.stack > 0 then
+                    description = description .. ' (' .. v.data.stackable.stack .. ')'
                 end
 
             end
@@ -618,11 +681,12 @@ AddPrefabPostInit("tunacan", function(inst)
     end)
 end)
 
--- AddSimPostInit(custom_console)
+AddSimPostInit(customSimPostInit)
 
 custom_tuning()
 AddGamePostInit(custom_tuning)
 AddSimPostInit(custom_tuning)
+
 AddComponentPostInit("shopinterior", shopinteriorOverwrite)
 AddComponentPostInit("economy", economyOverwrite)
 
@@ -706,9 +770,9 @@ STRINGS.NAMES.PEAGAWK = "Peagawk"
 STRINGS.RECIPE_DESC.PEAGAWK = ""
 
 local doydoyfoodclipping = AddModRecipe("seeds_cooked",
-    {Ingredient("berries", 1)}, RECIPETABS.FARM, TECH.NONE)
+    {Ingredient("berries", 5)}, RECIPETABS.FARM, TECH.NONE)
 doydoyfoodclipping.image = "seeds_cooked.tex"
-doydoyfoodclipping.numtogive = 5
+doydoyfoodclipping.numtogive = 25
 STRINGS.NAMES.DOYDOYFOODCLIPPING = "Toasted Seeds"
 STRINGS.RECIPE_DESC.DOYDOYFOODCLIPPING = "Toasted Seeds x5"
 

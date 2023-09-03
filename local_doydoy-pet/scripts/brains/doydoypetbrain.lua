@@ -144,7 +144,7 @@ local function checkAgeAction(inst)
 		--GetPlayer().components.talker:Say("I suddenly feel sad …")
 		--inst.components.lootdropper:SetLoot({'meat', 'meat', 'trinket_19'})
 		-- earring trinket_19(cloud pill)
-		inst.components.lootdropper:SetLoot({'earring'})
+		inst.components.lootdropper:SetLoot({'earring', "meat"})
 
 		if not inst:HasTag("doydoypet_female") then
 			local gem_prefab = {
@@ -171,7 +171,7 @@ local function checkAgeAction(inst)
 			
 			--SpawnPrefab(gem_prefab[selectGem]).Transform:SetPosition(inst.Transform:GetWorldPosition())	
 			--inst.SoundEmitter:PlaySound("dontstarve/common/dropGeneric")		
-			inst.components.lootdropper:SetLoot({gem_prefab[selectGem]})			
+			inst.components.lootdropper:SetLoot({gem_prefab[selectGem], "meat", "drumstick"})			
 		end
 		
 		inst.components.health:DoDelta(-1 * TUNING.DOYDOYPET_HEALTH)

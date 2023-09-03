@@ -86,6 +86,11 @@ local SNAP_INFO = {
 	{OnlyPrefab('wildborehouse'), 'wildborehouse_placer', 'wildborehouse'},
 	{OnlyPrefab('primeapebarrel'), 'primeapebarrel_placer', 'primeapebarrel'},
 	{OnlyPrefab('dragoonden'), 'dragoonden_placer', 'dragoonden'},
+	-- {OnlyPrefab('red_mushroom'), 'marblebean_placer', 'red_mushroom'},
+	-- {OnlyPrefab('blue_mushroom'), 'marblebean_placer', 'blue_mushroom'},
+	-- {OnlyPrefab('green_mushroom'), 'marblebean_placer', 'green_mushroom'},
+	{OnlyPrefab('flower_cave_triple'), 'marblebean_placer', 'flower_cave_triple'},
+	-- {OnlyPrefab('trap_teeth'), 'trap_teeth_placer', 'trap_teeth'},
 
 	{PrefabStatus('pinecone', 'PLANTED'), 'pinecone_placer', 'pinecone'},
 	{PrefabStatus('acorn', 'PLANTED'), 'acorn_placer', 'acorn'},

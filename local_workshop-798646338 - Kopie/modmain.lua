@@ -32,6 +32,9 @@ Recipe("bearger_fur", { Ingredient("beefalowool", 20), Ingredient("nightmarefuel
 STRINGS.RECIPE_DESC.HORN = "Soft, light and HONK"
 Recipe("horn", { Ingredient("boneshard", 10), Ingredient("nightmarefuel", 1), Ingredient("beefalowool", 10) }, RECIPETABS.MAGIC, TECH.MAGIC_THREE )
 
+STRINGS.RECIPE_DESC.WALRUS_TUSK = "A pretty impressive tooth."
+Recipe("walrus_tusk", { Ingredient("boneshard", 10), Ingredient("nightmarefuel", 1), Ingredient("houndstooth", 10) }, RECIPETABS.MAGIC, TECH.MAGIC_THREE )
+
 STRINGS.RECIPE_DESC.GOOSE_FEATHER = "Soft, light and HONK"
 Recipe("goose_feather", { Ingredient("feather_crow", 5), Ingredient("nightmarefuel", 5), Ingredient("goldnugget", 5) }, RECIPETABS.MAGIC, TECH.MAGIC_THREE )
 
