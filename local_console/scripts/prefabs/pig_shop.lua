@@ -846,7 +846,7 @@ local function creatInterior(inst, name)
 
                     { name = "shop_buyer", x_offset = 1.5, z_offset = 5,     startAnim = "idle_barrel" },
                     { name = "shop_buyer", x_offset = 1.5, z_offset = 2.5,   startAnim = "idle_barrel" },                    
-                    { name = "shop_buyer", x_offset =  4,   z_offset = -4,   startAnim = "idle_marble_dome", saleitem={"blueprint","oinc",50},},
+                    { name = "shop_buyer", x_offset =  4,   z_offset = -4,   startAnim = "idle_marble_dome", saleitem={"blueprint","oinc",50}},
                 } 
             elseif inst:HasTag("pig_shop_produce") then
                 
@@ -926,9 +926,9 @@ local function creatInterior(inst, name)
 
                     { name = "swinging_light_basic_metal", x_offset = -1.3, z_offset = -width/6+0.5 }, 
 
-                    { name = "shop_buyer", x_offset = -1.8, z_offset = -5.1,  startAnim = "idle_cakestand_dome" },
-                    { name = "shop_buyer", x_offset = -1.8, z_offset = -2.4,  startAnim = "idle_cakestand_dome" },
-                    { name = "shop_buyer", x_offset = -2,   z_offset =  0.3,  startAnim = "idle_cakestand_dome" },
+                    { name = "shop_buyer", x_offset = -1.8, z_offset = -5.1,  startAnim = "idle_cakestand_dome", saleitem={"coffee","oinc",2} },
+                    { name = "shop_buyer", x_offset = -1.8, z_offset = -2.4,  startAnim = "idle_cakestand_dome", saleitem={"tropicalbouillabaisse","oinc",5} },
+                    { name = "shop_buyer", x_offset = -2,   z_offset =  0.3,  startAnim = "idle_cakestand_dome", saleitem={"freshfruitcrepes","oinc",20} },
                     { name = "shop_buyer", x_offset = 3.1,  z_offset = -5.4,  startAnim = "idle_ice_box" },
                     { name = "shop_buyer", x_offset = 1,    z_offset = -4.6,  startAnim = "idle_ice_box" },
                     { name = "shop_buyer", x_offset = 2.1,  z_offset = -2,    startAnim = "idle_ice_bucket" },

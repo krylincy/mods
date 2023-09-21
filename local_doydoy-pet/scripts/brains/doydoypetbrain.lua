@@ -144,34 +144,34 @@ local function checkAgeAction(inst)
 		--GetPlayer().components.talker:Say("I suddenly feel sad …")
 		--inst.components.lootdropper:SetLoot({'meat', 'meat', 'trinket_19'})
 		-- earring trinket_19(cloud pill)
-		inst.components.lootdropper:SetLoot({'earring', "meat"})
+		inst.components.lootdropper:SetLoot({'earring'})
 
 		if not inst:HasTag("doydoypet_female") then
-			local gem_prefab = {
-				"goldnugget",
-				"goldnugget",
-				"goldnugget",
-				"goldnugget",
-				"redgem",
-				"redgem",
-				"redgem",
-				"redgem",
-				"bluegem",
-				"bluegem",
-				"bluegem",
-				"bluegem",
-				"purplegem",
-				"greengem",
-				"greengem",
-				"orangegem",
-				"yellowgem",
-			}
-			
-			local selectGem = math.random(1, 17)
-			
-			--SpawnPrefab(gem_prefab[selectGem]).Transform:SetPosition(inst.Transform:GetWorldPosition())	
-			--inst.SoundEmitter:PlaySound("dontstarve/common/dropGeneric")		
-			inst.components.lootdropper:SetLoot({gem_prefab[selectGem], "meat", "drumstick"})			
+			if math.random() < 0.2 then
+				local gem_prefab = {
+					"goldnugget",
+					"goldnugget",
+					"goldnugget",
+					"goldnugget",
+					"redgem",
+					"redgem",
+					"redgem",
+					"bluegem",
+					"bluegem",
+					"bluegem",
+					"purplegem",
+					"greengem",
+					"greengem",
+					"orangegem",
+					"yellowgem",
+				}
+				
+				local selectGem = math.random(1, #gem_prefab)
+				
+				--SpawnPrefab(gem_prefab[selectGem]).Transform:SetPosition(inst.Transform:GetWorldPosition())	
+				--inst.SoundEmitter:PlaySound("dontstarve/common/dropGeneric")		
+				inst.components.lootdropper:SetLoot({gem_prefab[selectGem]})	
+			end						
 		end
 		
 		inst.components.health:DoDelta(-1 * TUNING.DOYDOYPET_HEALTH)

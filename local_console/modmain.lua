@@ -85,10 +85,10 @@ function shopinteriorOverwrite(self, inst)
         ["pig_shop_cityhall"] = {},
         ["DEFAULT"] = {"rocks", "flint", "goldnugget"},
         ["pig_shop_deli"] = {{"coffee", "oinc", 2}, 
+                            --  {"coffee", "oinc", 2},
+                            --  {"coffee", "oinc", 2},
                              {"coffee", "oinc", 2},
-                             {"coffee", "oinc", 2},
-                             {"coffee", "oinc", 2},
-                            --  {"taffy", "oinc", 5},
+                             {"taffy", "oinc", 5},
                              {"tropicalbouillabaisse", "oinc", 5},
                              {"lobsterdinner", "oinc", 10},
                              {"freshfruitcrepes", "oinc", 20}},
@@ -105,7 +105,7 @@ function shopinteriorOverwrite(self, inst)
                                 {"orangeamulet", "oinc", 50},
                                 -- {"blueprint", "oinc", 100},
                                 -- {"cutstone", "oinc", 1}, 
-                                {"tunacan", "oinc", 2},
+                                -- {"tunacan", "oinc", 2},
                                 {"tunacan", "oinc", 2},
                                 {"tunacan", "oinc", 2},
                                 {"tunacan", "oinc", 2}},
@@ -122,11 +122,12 @@ function shopinteriorOverwrite(self, inst)
                                 {"waterdrop", "oinc", 300},
                                 {"honeycomb", "oinc", 5},
                                 {"wormlight", "oinc", 20}},
-        ["pig_shop_antiquities"] = {{"cutreeds", "oinc", 2},
-                                    {"cutreeds", "oinc", 2},
+        ["pig_shop_antiquities"] = {{"cutreeds", "oinc", 1},
+                                    {"cutreeds", "oinc", 1},
                                     {"pigskin", "oinc", 2},
                                     {"pigskin", "oinc", 2},
                                     {"fabric", "oinc", 2},
+                                    {"silk", "oinc", 1},
                                     {"livinglog", "oinc", 10},
                                     -- {"lightbulb", "oinc", 2},
                                     {"beefalowool", "oinc", 1}},
@@ -298,7 +299,7 @@ function economyOverwrite(self, inst)
             current = 0,
             desc = STRINGS.CITY_PIG_HATMAKER_TRADE,
             reward = "oinc",
-            rewardqty = 3
+            rewardqty = 1
         },
         pigman_queen = {
             items = {"pigcrownhat", "pig_scepter", "relic_4", "relic_5"},
@@ -367,27 +368,20 @@ AddPrefabPostInit("grass", function(inst)
     inst.components.pickable.max_cycles = 100
     inst.components.pickable.cycles_left = 100
 end)
-AddPrefabPostInit("berrybush", function(inst)
-    local function ontransplantfn(inst)
-        if inst.components.pickable then
-            inst.components.pickable:MakeEmpty()
+
+local berrybushes = {"berrybush", "berrybush2"}
+for _, prefabName in ipairs(berrybushes) do
+    AddPrefabPostInit(prefabName, function(inst)
+        local function ontransplantfn(inst)
+            if inst.components.pickable then
+                inst.components.pickable:MakeEmpty()
+            end
         end
-    end
-
-    inst.components.pickable.ontransplantfn = ontransplantfn
-    inst.components.pickable:SetUp("berries", GLOBAL.TUNING.BERRY_REGROW_TIME, 5)
-end)
-
-AddPrefabPostInit("berrybush2", function(inst)
-    local function ontransplantfn(inst)
-        if inst.components.pickable then
-            inst.components.pickable:MakeEmpty()
-        end
-    end
-
-    inst.components.pickable.ontransplantfn = ontransplantfn
-    inst.components.pickable:SetUp("berries", GLOBAL.TUNING.BERRY_REGROW_TIME, 5)
-end)
+    
+        inst.components.pickable.ontransplantfn = ontransplantfn
+        inst.components.pickable:SetUp("berries", GLOBAL.TUNING.BERRY_REGROW_TIME, 10)
+    end)
+end
 
 local fireImmunePrefabs = {"bush_vine", "bambootree", "reeds", "reeds_water", "beebox", "cookpot", "slow_farmplot", "fast_farmplot", "grass", "grass_tall", "sapling", "flower_cave", "flower_cave_double", "flower_cave_triple", "nettle", "fence", "fence_gate", "wall_wood", "plant_normal", "hedge", "berrybush", "berrybush2", "honeycomb", "red_mushroom", "blue_mushroom", "green_mushroom"}
 for _, prefabName in ipairs(fireImmunePrefabs) do
@@ -513,10 +507,13 @@ end)
 AddPrefabPostInit("seeds_cooked", function(inst)
     inst.components.edible.hungervalue = 1
 end)
-AddPrefabPostInit("seeds",
-    function(inst) inst.components.edible.hungervalue = 1 end)
-AddPrefabPostInit("honey",
-    function(inst) inst.components.edible.hungervalue = 5 end)
+
+local lowHungerValue = {"seeds", "seeds_cooked", "honey", "berries", "berries_cooked"}
+for _, prefabName in ipairs(lowHungerValue) do
+    AddPrefabPostInit(prefabName, function(inst) 
+        inst.components.edible.hungervalue = 1 
+    end)
+end
 
 AddPrefabPostInit("lantern", function(inst)
     local function fuelupdate(inst)
@@ -762,19 +759,19 @@ STRINGS.RECIPE_DESC.BABYBEEFALO = ""
 -- STRINGS.NAMES.POG = "Pog"
 -- STRINGS.RECIPE_DESC.POG = ""
 
-local peagawk = AddModRecipe("peagawk",
-    {Ingredient("drumstick", 2), Ingredient("meat", 1),
-     Ingredient("doydoyfeather", 5)}, RECIPETABS.FARM, TECH.NONE)
-peagawk.image = "brush.tex"
-STRINGS.NAMES.PEAGAWK = "Peagawk"
-STRINGS.RECIPE_DESC.PEAGAWK = ""
+-- local peagawk = AddModRecipe("peagawk",
+--     {Ingredient("drumstick", 2), Ingredient("meat", 1),
+--      Ingredient("doydoyfeather", 5)}, RECIPETABS.FARM, TECH.NONE)
+-- peagawk.image = "brush.tex"
+-- STRINGS.NAMES.PEAGAWK = "Peagawk"
+-- STRINGS.RECIPE_DESC.PEAGAWK = ""
 
 local doydoyfoodclipping = AddModRecipe("seeds_cooked",
     {Ingredient("berries", 5)}, RECIPETABS.FARM, TECH.NONE)
 doydoyfoodclipping.image = "seeds_cooked.tex"
 doydoyfoodclipping.numtogive = 25
 STRINGS.NAMES.DOYDOYFOODCLIPPING = "Toasted Seeds"
-STRINGS.RECIPE_DESC.DOYDOYFOODCLIPPING = "Toasted Seeds x5"
+STRINGS.RECIPE_DESC.DOYDOYFOODCLIPPING = "Toasted Seeds x25"
 
 -- Recipe("beebox", {Ingredient("boards", 2),Ingredient("honeycomb", 1),Ingredient("bee", 4)}, RECIPETABS.FARM, TECH.SCIENCE_ONE, {RECIPE_GAME_TYPE.VANILLA,RECIPE_GAME_TYPE.ROG,RECIPE_GAME_TYPE.SHIPWRECKED}, "beebox_placer")
 
@@ -814,6 +811,9 @@ local turf_cobbleroad = AddModRecipe("turf_cobbleroad", {Ingredient("cutstone",
     1), Ingredient("boards", 1)}, RECIPETABS.CITY, TECH.CITY,
     cityRecipeGameTypes, nil, nil, true)
 turf_cobbleroad.numtogive = 30
+local earringOinc = AddModRecipe("oinc", {Ingredient("earring", 5)}, RECIPETABS.TOOLS, TECH.NONE,
+    cityRecipeGameTypes, nil, nil, true)
+earringOinc.numtogive = 100
 -- local thulecite = AddModRecipe("thulecite", {Ingredient("rocks", 1), Ingredient("goldnugget", 2)}, RECIPETABS.ANCIENT, TECH.ANCIENT_FOUR, mergedGameTypes, nil, nil, true)
 
 local volcano_altar = AddModRecipe("volcano_altar",

@@ -158,7 +158,7 @@ local function OnEat(inst, food)
 				SpawnPrefab("doydoypetbaby").Transform:SetPosition(inst.Transform:GetWorldPosition())	
 			end	
 		else			
-			if math.random() < 0.2 then
+			if math.random() < 0.1 then
 				SpawnPrefab("poop").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			end	
 			if math.random() < 0.4 then
