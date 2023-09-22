@@ -16,7 +16,9 @@ Lerp = GLOBAL.Lerp
 
 -- min spacing mod
 for _,v in pairs(GLOBAL.GetAllRecipes()) do
-    v.min_spacing = 1
+    if v.name ~= "tar_extractor" then
+        v.min_spacing = 1
+    end
 end
 
 local function customSimPostInit(inst) 
