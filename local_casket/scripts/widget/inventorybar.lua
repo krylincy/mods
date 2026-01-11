@@ -184,10 +184,8 @@ function Inv:Rebuild()
 		local item = self.owner.components.inventory:GetItemInSlot(k)
 		if item then
 			slot:SetTile(ItemTile(item))
-		end
-        
+		end        
     end
-
 
 	local old_backpack = self.backpack
 	if self.backpack then
@@ -205,9 +203,8 @@ function Inv:Rebuild()
 	overflow = (overflow ~= nil and overflow:IsOpenedBy(self.owner)) and overflow or nil
 
 	local do_integrated_backpack = overflow ~= nil and self.integrated_backpack
-		local num = new_backpack.components.container.numslots
-
-
+	if do_integrated_backpack then
+        local num = new_backpack.components.container.numslots
 
 		local x = - (num * (W+SEP) / 2)
 		--local offset = #self.inv >= num and 1 or 0 --math.ceil((#self.inv - num)/2)
