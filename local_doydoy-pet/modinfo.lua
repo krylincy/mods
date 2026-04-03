@@ -36,6 +36,8 @@ configuration_options = {
 		name = "DOYDOYPET_BREED_CHANCE",
 		label = "Chance for a Baby:",
 		options = {
+			{description = "2%", data = 0.02},
+			{description = "5%", data = 0.05},
 			{description = "10%", data = 0.1},
 			{description = "20%", data = 0.2},
 			{description = "30%", data = 0.3},
@@ -52,6 +54,8 @@ configuration_options = {
 		name = "DOYDOYPET_FEMALE_CHANCE",
 		label = "Female Baby:",
 		options = {
+			{description = "2%", data = 0.02},
+			{description = "5%", data = 0.05},
 			{description = "10%", data = 0.1},
 			{description = "15%", data = 0.15},
 			{description = "20%", data = 0.2},

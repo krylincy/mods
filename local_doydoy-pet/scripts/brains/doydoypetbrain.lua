@@ -5,210 +5,212 @@ require "behaviours/minperiod"
 local FOOD_TAGS = {"edible"}
 local NO_TAGS = {"FX", "NOCLICK", "DECOR", "INLIMBO"}
 
-local function EatFoodAction(inst)  --Look for food to eat
-	local target = nil
-	local action = nil
-	local hasEaten = false
+local function EatFoodAction(inst) -- Look for food to eat
+    local target = nil
+    local action = nil
+    local hasEaten = false
 
-	if inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("wantstoeat") then
-		return
-	end	
-	
-	local time_since_eat = inst.components.eater:TimeSinceLastEating()	
-	--print('time_since_eat ', time_since_eat)
-	--print('TUNING.DOYDOYPET_EAT_INVERVALL '..TUNING.DOYDOYPET_EAT_INVERVALL)
-	if time_since_eat == nil or time_since_eat > TUNING.DOYDOYPET_EAT_INVERVALL then
-	
-		if inst.components.inventory and inst.components.eater then	
-			
-			target = inst.components.inventory:FindItem(function(item) return inst.components.eater:CanEat(item) end)
-			if target then 
-				return BufferedAction(inst,target,ACTIONS.EAT) 
-			end
-		end
-	
-		local pt = inst:GetPosition()
-		local ents = TheSim:FindEntities(pt.x, pt.y, pt.z, TUNING.DOYDOYPET_SEE_FOOD_DIST, FOOD_TAGS, NO_TAGS) 
+    if inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("wantstoeat") then
+        return
+    end
 
-		
-		local otherTarget = nil
-		if not target then
-			for k,v in pairs(ents) do
-				if v and v:IsOnValidGround() and 
-				inst.components.eater:CanEat(v) and
-				v:GetTimeAlive() > 5 then
-					-- find veggie first
-					if v.components.edible.foodtype == "VEGGIE" then
-						target = v
-						break
-					else
-						otherTarget = v
-					end
-				end
-			end
-			
-			-- if no verggie found, take other food
-			if not target then
-				target = otherTarget
-			end			
-		end
-		
-	
+    local time_since_eat = inst.components.eater:TimeSinceLastEating()
+    -- print('time_since_eat ', time_since_eat)
+    -- print('TUNING.DOYDOYPET_EAT_INVERVALL '..TUNING.DOYDOYPET_EAT_INVERVALL)
+    if time_since_eat == nil or time_since_eat > TUNING.DOYDOYPET_EAT_INVERVALL then
 
-		if target then
-			local action = BufferedAction(inst,target,ACTIONS.EAT)
-			return action 
-		else			
-			local ents = TheSim:FindEntities(pt.x, pt.y, pt.z,  TUNING.DOYDOYPET_SEE_FOOD_DIST, nil, NO_TAGS) 
-			-- eat from seed grass
-			for k,item in pairs(ents) do		
-				if item.components.pickable and 
-				item.components.pickable.caninteractwith and 
-				item.components.pickable:CanBePicked() and
-				item:HasTag("doydoypetfood") then
-					target = item
-					break
-				end
-			end
-		end
+        if inst.components.inventory and inst.components.eater then
 
-		if target then
-			return BufferedAction(inst, target, ACTIONS.PICK)
-		end
-		
-		if time_since_eat == nil or time_since_eat > (TUNING.DOYDOYPET_EAT_INVERVALL * 2) then	
-			if inst.components.health.currenthealth > 35 then
-				inst.components.talker:Say("Hungry", 3)
-			else
-				inst.components.talker:Say("Starving", 3)
-			end
-			
-			inst.components.health:DoDelta(-2)	
-			return
-		end
-	end	
+            target = inst.components.inventory:FindItem(function(item)
+                return inst.components.eater:CanEat(item)
+            end)
+            if target then
+                return BufferedAction(inst, target, ACTIONS.EAT)
+            end
+        end
+
+        local pt = inst:GetPosition()
+        local ents = TheSim:FindEntities(pt.x, pt.y, pt.z,
+            TUNING.DOYDOYPET_SEE_FOOD_DIST, FOOD_TAGS, NO_TAGS)
+
+        local otherTarget = nil
+        local otherVeggieTarget = nil
+        if not target then
+            local preferred_tag = inst:HasTag("doydoypet_female") and
+                                      "doydoypetfood_pink" or
+                                      "doydoypetfood_blue"
+            local wrong_tag = inst:HasTag("doydoypet_female") and
+                                  "doydoypetfood_blue" or "doydoypetfood_pink"
+
+            for k, v in pairs(ents) do
+                if v and v:IsOnValidGround() and inst.components.eater:CanEat(v) and
+                    v:GetTimeAlive() > 5 and not v:HasTag(wrong_tag) then
+                    -- find veggie first
+                    if v.components.edible.foodtype == "VEGGIE" then
+                        if v:HasTag(preferred_tag) then
+                            target = v
+                            break
+                        end
+                        otherVeggieTarget = v
+                    else
+                        otherTarget = v
+                    end
+                end
+            end
+
+            -- if no verggie found, take other food
+            if not target then
+                target = otherVeggieTarget
+            end
+
+            if not target then
+                target = otherTarget
+            end
+        end
+
+        if target then
+            local action = BufferedAction(inst, target, ACTIONS.EAT)
+            return action
+        else
+            local ents = TheSim:FindEntities(pt.x, pt.y, pt.z,
+                TUNING.DOYDOYPET_SEE_FOOD_DIST, nil, NO_TAGS)
+            -- eat from seed grass
+            for k, item in pairs(ents) do
+                if item.components.pickable and
+                    item.components.pickable.caninteractwith and
+                    item.components.pickable:CanBePicked() and
+                    item:HasTag("doydoypetfood") then
+                    target = item
+                    break
+                end
+            end
+        end
+
+        if target then
+            return BufferedAction(inst, target, ACTIONS.PICK)
+        end
+
+        if time_since_eat == nil or time_since_eat >
+            (TUNING.DOYDOYPET_EAT_INVERVALL * 2) then
+            if inst.components.health.currenthealth > 35 then
+                inst.components.talker:Say("Hungry", 3)
+            else
+                inst.components.talker:Say("Starving", 3)
+            end
+
+            inst.components.health:DoDelta(-2)
+            return
+        end
+    end
 end
 
 local function updateDescription(inst)
-	local items = inst.components.inventory:FindItems(function(item) return inst.components.eater:CanEat(item) end)
-	local inventoryItems = 0
-	local lifespan = ''
-	local sex = ' | M'
-	
-	if inst:HasTag("doydoypet_female") then
-		 sex = ' | F'
-	end
+    local items = inst.components.inventory:FindItems(function(item)
+        return inst.components.eater:CanEat(item)
+    end)
+    local inventoryItems = 0
+    local lifespan = ''
+    local sex = ' | M'
 
-	
-	if inst.eatTimes > 0 then
-		lifespan = math.floor(inst.eatTimes / TUNING.DOYDOYPET_EAT_PER_DAY / TUNING.DOYDOYPET_DIE_OLD_AGE * 10)
-	end	
-	
-	if #items > 0 then
-		for index, data in ipairs(items) do
-			--print(data.name)					
-			
-			if data.components.stackable ~= nil then
-				inventoryItems = inventoryItems + data.components.stackable:StackSize()
-				--print("stacksize: "..data.components.stackable:StackSize())
-			else
-				inventoryItems = inventoryItems + 1
-			end
-		end
-		inventoryItems = ' | '..inventoryItems
-	else
-		inventoryItems = ' | 0'
-	end
-	
-	inst.inventoryItems = inventoryItems
-	
-	inst.components.inspectable:SetDescription(lifespan.."0% of Lifespan"..sex..inst.inventoryItems)
+    if inst:HasTag("doydoypet_female") then
+        sex = ' | F'
+    end
+
+    if inst.eatTimes > 0 then
+        lifespan = math.floor(inst.eatTimes / TUNING.DOYDOYPET_EAT_PER_DAY /
+                                  TUNING.DOYDOYPET_DIE_OLD_AGE * 10)
+    end
+
+    if #items > 0 then
+        for index, data in ipairs(items) do
+            -- print(data.name)					
+
+            if data.components.stackable ~= nil then
+                inventoryItems = inventoryItems +
+                                     data.components.stackable:StackSize()
+                -- print("stacksize: "..data.components.stackable:StackSize())
+            else
+                inventoryItems = inventoryItems + 1
+            end
+        end
+        inventoryItems = ' | ' .. inventoryItems
+    else
+        inventoryItems = ' | 0'
+    end
+
+    inst.inventoryItems = inventoryItems
+
+    inst.components.inspectable:SetDescription(
+        lifespan .. "0% of Lifespan" .. sex .. inst.inventoryItems)
 end
 
-local function checkAgeAction(inst)		
+local function checkAgeAction(inst)
 
-	if inst.eatTimes > TUNING.DOYDOYPET_TO_TEEN and inst:HasTag("baby") then
-		inst.components.growable:DoGrowth()
-		inst.components.growable:SetStage(2)
-	end
-	
-	if inst.eatTimes > TUNING.DOYDOYPET_TO_ADULT and inst:HasTag("teen") then
-		inst.components.growable:DoGrowth()
-		inst.components.growable:SetStage(3)
-	end 
-	
-	local calculateLimit = (inst.eatTimes / TUNING.DOYDOYPET_EAT_PER_DAY) - TUNING.DOYDOYPET_DIE_OLD_AGE
-	--print('calculateLimit '..calculateLimit)
-	if calculateLimit > math.random(0, 5) then
-		--inst.components.talker:Say("It's time to go", 3)
-		--GetPlayer().components.talker:Say("I suddenly feel sad …")
-		--inst.components.lootdropper:SetLoot({'meat', 'meat', 'trinket_19'})
-		-- earring trinket_19(cloud pill)
-		inst.components.lootdropper:SetLoot({'earring'})
+    if inst.eatTimes > TUNING.DOYDOYPET_TO_TEEN and inst:HasTag("baby") then
+        inst.components.growable:DoGrowth()
+        inst.components.growable:SetStage(2)
+    end
 
-		if not inst:HasTag("doydoypet_female") then
-			if math.random() < 0.2 then
-				local gem_prefab = {
-					"goldnugget",
-					"goldnugget",
-					"goldnugget",
-					"goldnugget",
-					"redgem",
-					"redgem",
-					"redgem",
-					"bluegem",
-					"bluegem",
-					"bluegem",
-					"purplegem",
-					"greengem",
-					"greengem",
-					"orangegem",
-					"yellowgem",
-				}
-				
-				local selectGem = math.random(1, #gem_prefab)
-				
-				--SpawnPrefab(gem_prefab[selectGem]).Transform:SetPosition(inst.Transform:GetWorldPosition())	
-				--inst.SoundEmitter:PlaySound("dontstarve/common/dropGeneric")		
-				inst.components.lootdropper:SetLoot({gem_prefab[selectGem]})	
-			end						
-		end
-		
-		inst.components.health:DoDelta(-1 * TUNING.DOYDOYPET_HEALTH)
-	end 
-	
-	updateDescription(inst)
+    if inst.eatTimes > TUNING.DOYDOYPET_TO_ADULT and inst:HasTag("teen") then
+        inst.components.growable:DoGrowth()
+        inst.components.growable:SetStage(3)
+    end
+
+    local calculateLimit = (inst.eatTimes / TUNING.DOYDOYPET_EAT_PER_DAY) -
+                               TUNING.DOYDOYPET_DIE_OLD_AGE
+    -- print('calculateLimit '..calculateLimit)
+    if calculateLimit > math.random(0, 5) then
+        -- inst.components.talker:Say("It's time to go", 3)
+        -- GetPlayer().components.talker:Say("I suddenly feel sad …")
+        -- inst.components.lootdropper:SetLoot({'meat', 'meat', 'trinket_19'})
+        -- earring trinket_19(cloud pill)
+        inst.components.lootdropper:SetLoot({'earring'})
+
+        if not inst:HasTag("doydoypet_female") then
+            if math.random() < 0.2 then
+                local gem_prefab = {"goldnugget", "goldnugget", "goldnugget",
+                                    "goldnugget", "redgem", "redgem", "redgem",
+                                    "bluegem", "bluegem", "bluegem",
+                                    "purplegem", "greengem", "greengem",
+                                    "orangegem", "yellowgem"}
+
+                local selectGem = math.random(1, #gem_prefab)
+
+                -- SpawnPrefab(gem_prefab[selectGem]).Transform:SetPosition(inst.Transform:GetWorldPosition())	
+                -- inst.SoundEmitter:PlaySound("dontstarve/common/dropGeneric")		
+                inst.components.lootdropper:SetLoot({gem_prefab[selectGem]})
+            end
+        end
+
+        inst.components.health:DoDelta(-1 * TUNING.DOYDOYPET_HEALTH)
+    end
+
+    updateDescription(inst)
 end
 
-local DoydoyBrain = Class(Brain, function(self, inst)
-	Brain._ctor(self, inst)
-end)
+local DoydoyBrain = Class(Brain,
+    function(self, inst) Brain._ctor(self, inst) end)
 
 function DoydoyBrain:OnStart()
 
-	local clock = GetClock()
-	local checkAgeNode =
-	PriorityNode(
-	{
-		DoAction(self.inst, checkAgeAction),
-	}, 25)	
-		
-	local root =
-	PriorityNode(
-	{	 
-		DoAction(self.inst, EatFoodAction),
-		MinPeriod(self.inst, math.random(4,6), checkAgeNode),
-		Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, TUNING.DOYDOYPET_MAX_WANDER_DIST),
-	},1)
-	
-	self.bt = BT(self.inst, root) 
-		
+    local clock = GetClock()
+    local checkAgeNode = PriorityNode({DoAction(self.inst, checkAgeAction)}, 25)
+
+    local root = PriorityNode({DoAction(self.inst, EatFoodAction),
+                               MinPeriod(self.inst, math.random(4, 6),
+        checkAgeNode), Wander(self.inst, function()
+        return self.inst.components.knownlocations:GetLocation("home")
+    end, TUNING.DOYDOYPET_MAX_WANDER_DIST)}, 1)
+
+    self.bt = BT(self.inst, root)
+
 end
 
 function DoydoyBrain:OnInitializationComplete()
-	if self.inst.components.knownlocations:GetLocation("home") == nil then
-		self.inst.components.knownlocations:RememberLocation("home", Point(self.inst.Transform:GetWorldPosition()), true)
-	end	
+    if self.inst.components.knownlocations:GetLocation("home") == nil then
+        self.inst.components.knownlocations:RememberLocation("home", Point(
+            self.inst.Transform:GetWorldPosition()), true)
+    end
 end
 
 return DoydoyBrain

@@ -44,10 +44,6 @@ function goHome(inst)
 		if caster.components.sanity then
 			caster.components.sanity:DoDelta(-TUNING.SANITY_HUGE)
 		end
-		
-		if ground.components.seasonmanager then
-			ground.components.seasonmanager:ForcePrecip()
-		end
 
 		teleportee.Transform:SetPosition(t_loc.x, 0, t_loc.z)
 
