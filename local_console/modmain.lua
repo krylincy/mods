@@ -79,6 +79,10 @@ local function custom_tuning()
     -- TUNING.WALLHAY_WINDBLOWN_DAMAGE = 0 
     -- TUNING.WALLWOOD_WINDBLOWN_DAMAGE = 0 
 
+    TUNING.TRAP_TEETH_USES = 25 -- 10
+    TUNING.TRAP_TEETH_DAMAGE = 300 -- 60
+    TUNING.TRAP_TEETH_RADIUS = 2 -- 1.5
+
     -- local world = GetWorld()
     -- if world.components.cityalarms then
     -- world:RemoveComponent("cityalarms") 		
@@ -816,8 +820,8 @@ peagawk.image = "brush.tex"
 STRINGS.NAMES.PEAGAWK = "Peagawk"
 STRINGS.RECIPE_DESC.PEAGAWK = ""
 
-local doydoyfoodclipping = AddModRecipe("seeds_cooked",
-    {Ingredient("oinc", 5)}, RECIPETABS.FARM, TECH.NONE)
+local doydoyfoodclipping = AddModRecipe("seeds_cooked", {Ingredient("oinc", 5)},
+    RECIPETABS.FARM, TECH.NONE)
 doydoyfoodclipping.image = "seeds_cooked.tex"
 doydoyfoodclipping.numtogive = 25
 STRINGS.NAMES.DOYDOYFOODCLIPPING = "Toasted Seeds"
