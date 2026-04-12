@@ -12,71 +12,74 @@ api_version = 6
 dont_starve_compatible = true
 reign_of_giants_compatible = true
 shipwrecked_compatible = true
-porkland_compatable = true
+hamlet_compatible = true
 
 priority = 1
 
-configuration_options = {
-	{
-		name = "pinecone",
-		label = "Pinecone",
-		options =	{
-						{description = "be ignored", data = true},
-                        {description = "yummie!!", data = false},
-						
-					},
+configuration_options = {{
+    name = "pinecone",
+    label = "Pinecone",
+    options = {{
+        description = "be ignored",
+        data = true
+    }, {
+        description = "yummie!!",
+        data = false
+    }},
 
-		default = true,
-	
-	},{
-		name = "livinglog",
-		label = "Livinglog",
-		options =	{
-						{description = "be ignored", data = true},
-                        {description = "yummie!!", data = false},
-						
-					},
+    default = true
 
-		default = true,
-	
-	},{
-		name = "boards",
-		label = "Boards",
-		options =	{
-						{description = "be ignored", data = true},
-                        {description = "yummie!!", data = false},
-						
-					},
+}, {
+    name = "livinglog",
+    label = "Livinglog",
+    options = {{
+        description = "be ignored",
+        data = true
+    }, {
+        description = "yummie!!",
+        data = false
+    }},
 
-		default = true,
-	
-	},{
-		name = "jungletreeseed",
-		label = "Jungletreeseed (SW)",
-		options =	{
-						{description = "be ignored", data = true},
-                        {description = "yummie!!", data = false},
-						
-					},
+    default = true
 
-		default = true,
-	
-	},{
-		name = "palmleaf",
-		label = "Palmleaf (SW)",
-		options =	{
-						{description = "be ignored", data = true},
-                        {description = "yummie!!", data = false},
-						
-					},
+}, {
+    name = "boards",
+    label = "Boards",
+    options = {{
+        description = "be ignored",
+        data = true
+    }, {
+        description = "yummie!!",
+        data = false
+    }},
 
-		default = true,
-	
-	}
-}
+    default = true
 
+}, {
+    name = "jungletreeseed",
+    label = "Jungletreeseed (SW)",
+    options = {{
+        description = "be ignored",
+        data = true
+    }, {
+        description = "yummie!!",
+        data = false
+    }},
 
+    default = true
 
+}, {
+    name = "palmleaf",
+    label = "Palmleaf (SW)",
+    options = {{
+        description = "be ignored",
+        data = true
+    }, {
+        description = "yummie!!",
+        data = false
+    }},
 
+    default = true
 
+}}
 

@@ -1,5 +1,6 @@
 name = "No Quick Pick local"
-description = "Disable keyboard quick picking of flowers, ferns, carrots and mandrakes."
+description =
+    "Disable keyboard quick picking of flowers, ferns, carrots and mandrakes."
 author = "justjasper"
 version = "1"
 -- credit to Mouse for their original work
@@ -14,4 +15,4 @@ icon = "modicon.tex"
 dont_starve_compatible = true
 reign_of_giants_compatible = true
 shipwrecked_compatible = true
-porkland_compatable = true
+hamlet_compatible = true

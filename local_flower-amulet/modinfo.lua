@@ -6,7 +6,7 @@ seeds everywhere.
 
 Will you discover the other traits?
 
-]]..version
+]] .. version
 
 forumthread = ""
 
@@ -18,16 +18,17 @@ icon_atlas = "icon.xml"
 dont_starve_compatible = true
 reign_of_giants_compatible = true
 shipwrecked_compatible = true
-porkland_compatable = true
+hamlet_compatible = true
 
-configuration_options = {
-	{
-		name = "DURABILITY",
-		label = "Durability:",
-		options = {
-			{description = "infinity", data = 0},
-			{description = "8 min", data = 1},
-		},
-		default = 1,
-	}
-}
+configuration_options = {{
+    name = "DURABILITY",
+    label = "Durability:",
+    options = {{
+        description = "infinity",
+        data = 0
+    }, {
+        description = "8 min",
+        data = 1
+    }},
+    default = 1
+}}
